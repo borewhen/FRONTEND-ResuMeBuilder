@@ -1,5 +1,5 @@
 import Image from "next/image";
-import UserProfile from "./components/user-profile/user-profile";
+import UserProfile from "./user-profile/user-profile";
 
 const Page = () => {
   return (
