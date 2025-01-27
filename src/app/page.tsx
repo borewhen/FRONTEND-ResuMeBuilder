@@ -1,9 +1,8 @@
-import Image from "next/image";
-import UserProfile from "./user-profile/user-profile";
+import UserProfile from "./_components/user-profile";
 
 const Page = () => {
   return (
-    <div>
+    <div className="w-full h-full">
       <UserProfile />
     </div>
   );

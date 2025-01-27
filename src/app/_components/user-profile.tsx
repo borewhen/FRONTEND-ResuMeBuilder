@@ -22,7 +22,7 @@ const UserProfile: React.FC = () => {
 
           {/* Profile Info */}
           <div className="mt-16 space-y-2">
-            <h1 className="text-3xl font-bold text-gray-900">John Doe</h1>
+            <h1 className="font-bold text-gray-900 text-[2.5rem]">John Doe</h1>
             <p className="text-lg text-gray-600">Software Engineer</p>
           </div>
         </div>
