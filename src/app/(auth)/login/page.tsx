@@ -6,9 +6,16 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Link from 'next/link';
 
+interface UserLoginData {
+    email: string;
+    password: string;
+}
 
 export default function LoginPage() {
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState<UserLoginData>({
+        email: '',
+        password: ''
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
@@ -43,7 +50,7 @@ export default function LoginPage() {
                             type='password' 
                             name='password'
                             onChange={handleChange}/>
-                        <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-blue-500'> Forget Password?</Link>
+                        <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-blue-500'> Forgot Password?</Link>
 
                         <Button className='w-full rounded-full mt-4 font-bold' type='submit'>Login</Button>
                         <div className='flex justify-center my-2'>

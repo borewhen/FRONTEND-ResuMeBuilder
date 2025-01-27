@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-interface UserLoginData {
+interface UserRegisterData {
     email: string;
     password: string;
     cfmPassword: string;
 }
 
 export default function RegisterPage() {
-    const [userData, setUserData] = useState<UserLoginData>({
+    const [userData, setUserData] = useState<UserRegisterData>({
         email: '',
         password: '',
         cfmPassword: ''
