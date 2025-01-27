@@ -43,7 +43,7 @@ export default function LoginPage() {
                             type='password' 
                             name='password'
                             onChange={handleChange}/>
-                        <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-gray-500'> Forget Password?</Link>
+                        <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-blue-500'> Forget Password?</Link>
 
                         <Button className='w-full rounded-full mt-4 font-bold' type='submit'>Login</Button>
                         <div className='flex justify-center my-2'>
