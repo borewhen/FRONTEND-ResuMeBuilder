@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import login from '@/lib/app/user/api/login';
 import Link from 'next/link';
 
 interface UserLoginData {
@@ -12,6 +14,7 @@ interface UserLoginData {
 }
 
 export default function LoginPage() {
+    const router = useRouter();
     const [userData, setUserData] = useState<UserLoginData>({
         email: '',
         password: ''
@@ -24,9 +27,14 @@ export default function LoginPage() {
         })
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(userData);
+        const response = await login.test(userData);
+
+        console.log(response);
+        if (response.token){
+            router.push('/');
+        }
     }
 
     return (
