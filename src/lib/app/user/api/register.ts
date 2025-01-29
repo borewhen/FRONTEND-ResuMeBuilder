@@ -1,5 +1,5 @@
 import FetchClient from "@/lib/utils/fetcher";
-import { UserData } from "@/lib/app/user/types";
+import { UserRegister, UserRegisterResponse } from "@/lib/app/user/types";
 import { USER_API_URL } from "@/lib/app/user/constants";
 
 type FetchClientType = typeof FetchClient;
@@ -13,7 +13,7 @@ class UserRegisterApi {
         this.serverUrl = USER_API_URL;
     }
 
-    async post(userData: UserData){
+    async post(userData: UserRegister): Promise<UserRegisterResponse> {
         try{
             const response = await this.httpClient.post(
                 `${this.serverUrl}/register`,

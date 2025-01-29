@@ -4,24 +4,29 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
+import { UserRegister } from '@/lib/app/user/types';
+import { useRouter } from 'next/navigation';
+import register from '@/lib/app/user/api/register';
 import Link from 'next/link';
-interface UserRegisterData {
-    email: string;
-    password: string;
-    cfmPassword: string;
-}
 
 export default function RegisterPage() {
-    const [userData, setUserData] = useState<UserRegisterData>({
+    const route = useRouter();
+    const [userData, setUserData] = useState<UserRegister>({
         email: '',
+        username: '',
+        first_name: '',
+        last_name: '',
+        role: '',
+        profile_picture_url: '',
+        summary: '',
         password: '',
-        cfmPassword: ''
     });
-    const [error, setError] = useState<Boolean>(false);
+    const [error, setError] = useState<boolean>(false);
+    const [cfmPassword, setCfmPassword] = useState<string>('');
 
     useEffect(() => {
-        setError(userData.password !== userData.cfmPassword);
-    }, [userData]);
+        setError(userData.password !== cfmPassword);
+    }, [userData, cfmPassword]);
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
@@ -32,6 +37,8 @@ export default function RegisterPage() {
 
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        await register.post(userData);
+        route.push('/login');
     }
 
     return (
@@ -61,10 +68,10 @@ export default function RegisterPage() {
                             placeholder='Confirm Password' 
                             type='password' 
                             name='cfmPassword'
-                            onChange={handleChange}/>
+                            onChange={(e) => {setCfmPassword(e.target.value)}}/>
                         
                         <div className='text-xs text-red-500'>{error && 'Passwords do not match!'}</div>
-                        <Button className='w-full rounded-full mt-8 font-bold' type='submit'>Register</Button>
+                        <Button className='w-full rounded-full mt-8 font-bold' type='submit' disabled={error || userData.email==='' || userData.password===''}>Register</Button>
                         <span className='text-xs font-semibold pl-1 text-gray-500'> Already registered?</span>
                         <Link href='/login' className='text-xs font-semibold hover:underline pl-1 text-blue-500'>Login</Link>
                     </form>
