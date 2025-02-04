@@ -1,7 +1,6 @@
 import FetchClient from "@/lib/utils/fetcher";
 import { UserLogin, UserLoginResponse } from "@/lib/app/user/types";
 import { USER_API_URL } from "@/lib/app/user/constants";
-
 type FetchClientType = typeof FetchClient;
 
 class UserLoginApi {
@@ -23,8 +22,6 @@ class UserLoginApi {
 
             const data: UserLoginResponse = await response.data
             document.cookie = `access_token=${data.access_token}; path=/; max-age=1800`;
-
-            
             return data;
         }
         catch(error: unknown){

@@ -1,6 +1,12 @@
+"use client";
+
 import React from 'react';
+import { useUserStore } from '@/store/useUserStore';
+import withAuth from '../_components/withAuth';
 
 const UserProfile: React.FC = () => {
+  const { username } = useUserStore();
+
   return (
     <div className="min-h-screen bg-[#f5f3ef] py-8">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -22,7 +28,7 @@ const UserProfile: React.FC = () => {
 
           {/* Profile Info */}
           <div className="mt-16 space-y-2">
-            <h1 className="font-bold text-gray-900 text-[2.5rem]">John Doe</h1>
+            <h1 className="font-bold text-gray-900 text-[2.5rem]">{ username }</h1>
             <p className="text-lg text-gray-600">Software Engineer</p>
           </div>
         </div>
@@ -73,4 +79,4 @@ const UserProfile: React.FC = () => {
   );
 };
 
-export default UserProfile;
+export default withAuth(UserProfile);

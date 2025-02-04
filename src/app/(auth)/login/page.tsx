@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import login from '@/lib/app/user/api/login';
 import Link from 'next/link';
+import { useUserStore } from '@/store/useUserStore';
 
 interface UserLoginData {
     email: string;
@@ -20,7 +21,7 @@ export default function LoginPage() {
         password: ''
     });
     const [error, setError] = useState<string>('');
-
+    const { setRole } = useUserStore();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
             ...userData,
@@ -38,6 +39,7 @@ export default function LoginPage() {
         const response = await login.post(userData);
 
         if (response.access_token){
+            setRole("unregistered");
             router.push('/');
         }
         else{
