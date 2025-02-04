@@ -24,6 +24,7 @@ class UserLoginApi {
             const data: UserLoginResponse = await response.data
             document.cookie = `access_token=${data.access_token}; path=/; max-age=1800`;
 
+            
             return data;
         }
         catch(error: unknown){
