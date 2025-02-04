@@ -26,6 +26,7 @@ class UserRegisterApi {
             return data;
         }
         catch(error: unknown){
+            console.log(error);
             throw error;
         }
     }
