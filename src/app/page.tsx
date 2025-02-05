@@ -1,4 +1,4 @@
-import UserProfile from "./(protected)/user-profile";
+import UserProfile from "@/app/_components/user-profile";
 
 const Page = () => {
   return (

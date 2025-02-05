@@ -3,6 +3,8 @@
 import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import JobSeekerForm from "@/app/(protected)/_components/job-seeker-form";
 import clsx from "clsx";
 
 export default function DetailsFormPage() {  
@@ -17,8 +19,7 @@ export default function DetailsFormPage() {
 
     return (
         <div className="w-full h-full flex items-center justify-center">
-            <div className="w-3/5 border rounded-md p-4 shadow-md">
-                <div className="text-xl font-bold">Details Form</div>
+            <div className="w-3/5 border rounded-lg p-4 shadow-md">
                 <div className="flex w-full mt-2">
                     <button 
                         className={
@@ -32,10 +33,11 @@ export default function DetailsFormPage() {
                         onClick={() => setChosenRole('recruiter')}>Recruiter</button>
                 </div>
                 { chosenRole == 'jobseeker'?
-                    <div>Register as Jobseeker</div>:
+                    <div>
+                        <JobSeekerForm />
+                    </div>:
                     <div>Register as Recruiter</div>
                 }
-                <button onClick={handleClick} className="mt-2 bg-blue-400 py-2 px-6 text-sm rounded-lg text-white hover:bg-blue-500">Submit</button>
             </div>
         </div>
     );
