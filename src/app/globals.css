@@ -64,6 +64,7 @@ body {
   }
 }
 
+
 @layer base {
   * {
     @apply border-border;
@@ -72,3 +73,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+} */
