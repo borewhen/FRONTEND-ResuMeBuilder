@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import login from '@/lib/app/user/api/login';
 import Link from 'next/link';
 
 interface UserLoginData {
@@ -12,10 +14,12 @@ interface UserLoginData {
 }
 
 export default function LoginPage() {
+    const router = useRouter();
     const [userData, setUserData] = useState<UserLoginData>({
         email: '',
         password: ''
     });
+    const [error, setError] = useState<string>('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
@@ -24,14 +28,26 @@ export default function LoginPage() {
         })
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(userData);
+        if (!userData.email || !userData.password){
+            setError('Please fill in all fields');
+            return;
+        }
+
+        const response = await login.post(userData);
+
+        if (response.access_token){
+            router.push('/');
+        }
+        else{
+            setError('Invalid email or password');
+        }
     }
 
     return (
         <div className='h-full w-full flex justify-center items-center'>
-            <Card className="w-96 h-96 border-transparent shadow-xl">
+            <Card className="w-96 border-transparent shadow-xl">
                 <CardHeader>
                     <h1 className='text-2xl font-bold'>Login</h1>
                     <div className='text-sm'>Keep pace with your industry landscape!</div>
@@ -50,7 +66,10 @@ export default function LoginPage() {
                             type='password' 
                             name='password'
                             onChange={handleChange}/>
-                        <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-blue-500'> Forgot Password?</Link>
+                        {
+                            error && <div className='text-red-500 text-xs pl-1 font-bold mt-1'>{error}</div>
+                        }
+                        
 
                         <Button className='w-full rounded-full mt-4 font-bold' type='submit'>Login</Button>
                         <div className='flex justify-center my-2'>
@@ -63,6 +82,10 @@ export default function LoginPage() {
                                 Register
                             </Button>
                         </Link>
+                        <div className='w-full mt-2'>
+                            <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-gray-400'> Forgot Password?</Link>
+                        </div>
+                        
                     </form>
                 </CardContent>
 

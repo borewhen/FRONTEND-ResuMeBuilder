@@ -11,6 +11,6 @@ export function middleware(req: NextRequest){
 }
 
 export const config = {
-    matcher: ["/((?!api|_next/static|login$|register$|reset$).*)"],
+    matcher: ["/((?!_next/static|login$|register$|reset$).*)"],
 };
   
