@@ -3,13 +3,18 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils/helpers'; // Ensure you have the cn utility for class merging
 import Link from 'next/link'; // Import the Link component from Next.js
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 const Navbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname(); // Get the current pathname
+    const isLoginPage = pathname === '/login'; // Check if the current path is the login page
 
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
     };
+
+    if (isLoginPage) return null; // Do not render if on the login page
 
     return (
         <div>

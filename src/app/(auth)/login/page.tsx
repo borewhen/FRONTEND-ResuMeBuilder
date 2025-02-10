@@ -46,11 +46,11 @@ export default function LoginPage() {
     }
 
     return (
-        <div className='h-full w-full flex justify-center items-center'>
-            <Card className="w-96 border-transparent shadow-xl">
+        <div className='h-full w-full bg-dip-40 flex justify-center items-center'>
+            <Card className="w-96 bg-dip-20 border-transparent shadow-xl">
                 <CardHeader>
-                    <h1 className='text-2xl font-bold'>Login</h1>
-                    <div className='text-sm'>Keep pace with your industry landscape!</div>
+                    <h1 className='text-2xl font-bold text-dip-100'>Login</h1>
+                    <div className='text-sm text-dip-blk'>Keep pace with your industry landscape!</div>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit}>
@@ -71,18 +71,18 @@ export default function LoginPage() {
                         }
                         
 
-                        <Button className='w-full rounded-full mt-4 font-bold' type='submit'>Login</Button>
+                        <Button className='w-full rounded-full mt-4 font-bold text-dip-100' type='submit'>Login</Button>
                         <div className='flex justify-center my-2'>
                             <div className='w-36 h-3 border-b-2'></div>
                             <div className='text-sm mx-3'>or</div>
                             <div className='w-36 h-3 border-b-2'></div>
                         </div>
                         <Link href='/register' className='h-full w-full'>
-                            <Button className='w-full rounded-full font-bold' type='button'>
+                            <Button className='w-full rounded-full font-bold text-dip-100' type='button'>
                                 Register
                             </Button>
                         </Link>
-                        <div className='w-full mt-2'>
+                        <div className='w-full mt-2 text-dip-100'>
                             <Link href='/reset' className='text-xs font-semibold hover:underline pl-1 text-gray-400'> Forgot Password?</Link>
                         </div>
                         
