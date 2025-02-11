@@ -7,9 +7,21 @@ export interface UserLogin {
     email: string,
     password: string,
 }
-export interface UserLoginResponse {
-    access_token: string | null,
+
+interface UserLoginSucess {
+    message: string,
+    user: {
+        email: string,
+        username: string,
+        user_id: number,
+        role: string,
+    }
 }
+
+interface UserLoginError {
+    detail: string
+}
+export type UserLoginResponse = UserLoginSucess | UserLoginError;
 export interface UserRegister {
     email: string,
     username: string,

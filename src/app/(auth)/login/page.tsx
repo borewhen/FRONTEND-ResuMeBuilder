@@ -38,7 +38,7 @@ export default function LoginPage() {
 
         const response = await login.post(userData);
 
-        if (response.access_token){
+        if ('user' in response){
             setRole("unregistered");
             router.push('/');
         }

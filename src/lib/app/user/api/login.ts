@@ -22,11 +22,9 @@ class UserLoginApi {
 
             const data: UserLoginResponse = await response.data;
             return data;
-        }
-        catch(error: unknown){
-            return {
-                access_token: null
-            }
+        } 
+        catch(error: any){
+            return error.response.data;
         }
     }
 }

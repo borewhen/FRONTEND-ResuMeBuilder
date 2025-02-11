@@ -6,8 +6,6 @@ export function middleware(req: NextRequest){
     if(!token){
         return NextResponse.redirect(new URL("/login", req.url).toString());
     }
-    
-    const role = req
     return NextResponse.next();
 }
 
