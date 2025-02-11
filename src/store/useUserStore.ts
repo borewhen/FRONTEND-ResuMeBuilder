@@ -15,6 +15,7 @@ interface UserState {
     setRole: (role: string) => void,
     setProfilePictureUrl: (profile_picture_url: string) => void,
     setUserId: (user_id: number) => void,
+    setUserData: (username: string, first_name: string, last_name: string, role: string, profile_picture_url: string) => void,
 }
 
 const initialState = {
@@ -38,6 +39,7 @@ export const useUserStore = create<UserState>()(
             setRole: (role: string) => set({ role }),
             setProfilePictureUrl: (profile_picture_url: string) => set({ profile_picture_url }),
             setUserId: (user_id: number) => set({ user_id }),
+            setUserData: (username: string, first_name: string, last_name: string, role: string, profile_picture_url: string) => set({ username, first_name, last_name, role, profile_picture_url }),
         }),
         {
             name: "user-storage",

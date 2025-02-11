@@ -20,8 +20,7 @@ class UserLoginApi {
                 false
             );
 
-            const data: UserLoginResponse = await response.data
-            document.cookie = `access_token=${data.access_token}; path=/; max-age=1800`;
+            const data: UserLoginResponse = await response.data;
             return data;
         }
         catch(error: unknown){
