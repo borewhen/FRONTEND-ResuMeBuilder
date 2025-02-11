@@ -2,6 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useUserStore } from '@/store/useUserStore';
 import Image from "next/image";
 
 interface JobSeekerFormData {
@@ -23,6 +24,7 @@ const initialFormData: JobSeekerFormData = {
 export default function JobSeekerForm() {
     const [formData, setFormData] = useState<JobSeekerFormData>(initialFormData);
     const [image, setImage] = useState<string | null>(null);
+    const {setUserData} = useUserStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -54,7 +56,7 @@ export default function JobSeekerForm() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
+        setUserData(formData.username, formData.first_name, formData.last_name, formData.role, formData.profile_picture_url);
         router.push('/');
     }
 
