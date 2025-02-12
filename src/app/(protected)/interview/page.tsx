@@ -2,25 +2,58 @@
 
 import React from 'react';
 import { RxUpload } from 'react-icons/rx'; // Import the upload icon
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import uploadVideo from '@/lib/app/video/api/upload_video'; // Import the video upload API
 import clsx from 'clsx';
+import { Typewriter } from "react-simple-typewriter";
 
 const InterviewPage: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
+  const [transcript, setTranscript] = useState<string | null>(null);
+  const [analysis, setAnalysis] = useState<string | null>(null);
 
   const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const url = URL.createObjectURL(file);
       setVideoSrc(url);
+      setVideoFile(file);
     }
   }
 
-  const handleAnalyzeVideo = () => {
+  const handleAnalyzeVideo = async () => {
+    if (!videoFile) return;
     setIsSubmitted(true);
-    // Call the API to analyze the video
   }
+ 
+  useEffect(() => {
+    if (!videoFile || !isSubmitted) return;
+    const analyzeVideo = async() => {
+      setLoadingResponse(true);
+      const formData = new FormData();
+      formData.append('file', videoFile);
+
+      try{
+        const response = await uploadVideo.post(formData);
+        if(response.success){
+          setTranscript(response.transcript);
+          setAnalysis(response.analysis);
+        }
+        else throw new Error(response.message);
+      } catch (err) {
+        console.log(err)
+        throw new Error(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoadingResponse(false);
+        setIsSubmitted(false);
+      }
+    }
+
+    analyzeVideo();
+  }, [isSubmitted, videoFile]);
   return (
     <div className="w-screen min-h-screen bg-[#f5f3ef] py-8">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -39,7 +72,14 @@ const InterviewPage: React.FC = () => {
                 />
               </div>
               {
-                !isSubmitted?
+                loadingResponse && (
+                  <div>
+                    Loading...
+                  </div>
+                )
+              }
+              {
+                !transcript || !analysis || loadingResponse?
                 (
                   <div className='flex justify-center'>
                     <input 
@@ -48,10 +88,12 @@ const InterviewPage: React.FC = () => {
                       className="hidden" 
                       id="video-upload"
                       onChange={handleVideoUpload}
+                      disabled={loadingResponse}
                     />
                     <label 
                       htmlFor="video-upload" 
-                      className="bg-dip-80 inline-block cursor-pointer text-white font-bold py-2 px-4 rounded-xl mr-6 hover:bg-dip-100"
+                      className={clsx(loadingResponse? "bg-dip-60" : "bg-dip-80 hover:bg-dip-100"
+                        ," inline-block text-white font-bold py-2 px-4 rounded-xl mr-6")}
                     >
                       <div className="flex items-center">
                         <RxUpload className="w-4 h-4 mr-2" />
@@ -59,12 +101,12 @@ const InterviewPage: React.FC = () => {
                       </div>
                     </label>
                     <button 
-                      className="bg-dip-80 text-white font-bold py-2 px-4 rounded-xl hover:bg-dip-100"
+                      className={clsx(loadingResponse? "bg-dip-60":"bg-dip-80 hover:bg-dip-100", "text-white font-bold py-2 px-4 rounded-xl")}
                       onClick={() => {handleAnalyzeVideo()}}
+                      disabled={loadingResponse}
                     >
                       Analyze Video
                     </button>
-                  
                   </div>
                 ):
                 (
@@ -72,13 +114,19 @@ const InterviewPage: React.FC = () => {
                     <div className="bg-white rounded-xl shadow-sm p-6">
                       <h2 className="text-2xl font-semibold text-gray-900 mb-4">Video Transcript</h2>
                       <p className="text-gray-600 leading-relaxed">
-                        Hi, my name is Gi Hun
+                        {transcript}
                       </p>
                     </div>
                     <div className="bg-white rounded-xl shadow-sm p-6">
                       <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your AI Coach says...</h2>
                       <p className="text-gray-600 leading-relaxed">
-                        Lorem ipsum something something try harder get better thanks.
+                        <Typewriter
+                          words={[analysis]}
+                          loop={1}
+                          cursor={false}
+                          typeSpeed={40}
+                          deleteSpeed={0}
+                        />
                       </p>
                     </div>
                   </div>
