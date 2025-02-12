@@ -4,7 +4,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import JobSeekerForm from "@/app/(protected)/_components/job-seeker-form";
+import JobSeekerForm from "@/app/(protected)/_components/details-form/job-seeker-form";
 import clsx from "clsx";
 
 export default function DetailsFormPage() {  

@@ -5,7 +5,8 @@ import { RxUpload } from 'react-icons/rx'; // Import the upload icon
 import { useState, useEffect } from 'react';
 import uploadVideo from '@/lib/app/video/api/upload_video'; // Import the video upload API
 import clsx from 'clsx';
-import { Typewriter } from "react-simple-typewriter";
+import LoadingAnimation from '@/app/(protected)/_components/loading';
+import InterviewAnalysis from '@/app/(protected)/_components/interview/interview-analysis';
 
 const InterviewPage: React.FC = () => {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -54,12 +55,13 @@ const InterviewPage: React.FC = () => {
 
     analyzeVideo();
   }, [isSubmitted, videoFile]);
+
   return (
     <div className="w-screen min-h-screen bg-[#f5f3ef] py-8">
       <div className="max-w-4xl mx-auto space-y-6">
         <h1 className='text-4xl font-bold text-dip-100 w-80 border-dip-60 border-b-4'>Interview</h1>
         <div className='italic'>
-          This section is used to analyze your interview video. Please upload your video to get started.
+          {!videoSrc && "This section is used to analyze your interview video. Please upload your video to get started."}
         </div>
         {
           videoSrc? (
@@ -72,10 +74,9 @@ const InterviewPage: React.FC = () => {
                 />
               </div>
               {
+                // Loading animation if the response is still loading...
                 loadingResponse && (
-                  <div>
-                    Loading...
-                  </div>
+                  <LoadingAnimation />
                 )
               }
               {
@@ -108,29 +109,7 @@ const InterviewPage: React.FC = () => {
                       Analyze Video
                     </button>
                   </div>
-                ):
-                (
-                  <div className='bg-white rounded-xl'>
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                      <h2 className="text-2xl font-semibold text-gray-900 mb-4">Video Transcript</h2>
-                      <p className="text-gray-600 leading-relaxed">
-                        {transcript}
-                      </p>
-                    </div>
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                      <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your AI Coach says...</h2>
-                      <p className="text-gray-600 leading-relaxed">
-                        <Typewriter
-                          words={[analysis]}
-                          loop={1}
-                          cursor={false}
-                          typeSpeed={40}
-                          deleteSpeed={0}
-                        />
-                      </p>
-                    </div>
-                  </div>
-                )
+                ): <InterviewAnalysis transcript={transcript} analysis={analysis} />
               }
             </div>
           )
@@ -153,29 +132,6 @@ const InterviewPage: React.FC = () => {
             </div>
           )
         }
-        {/* <div className="bg-dip-80 rounded-xl shadow-sm p-6 flex items-center">
-          <input 
-            type="file" 
-            accept="video/*" 
-            className="hidden" 
-            id="video-upload" 
-          />
-          <label 
-            htmlFor="video-upload" 
-            className="flex items-center cursor-pointer text-white"
-          >
-            <RxUpload className="w-6 h-6 mr-2" />
-            <h2 className="font-bold">Upload Video</h2>
-          </label>
-        </div> */}
-
-        {/* AI Output Card */}
-        {/* <div className="bg-white rounded-xl shadow-sm p-6">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Your AI Coach says...</h2>
-          <p className="text-gray-600 leading-relaxed">
-            Lorem ipsum something something try harder get better thanks.
-          </p>
-        </div> */}
       </div>
     </div>
   );
