@@ -1,14 +1,19 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils/helpers'; // Ensure you have the cn utility for class merging
 import Link from 'next/link'; // Import the Link component from Next.js
 import { usePathname } from 'next/navigation'; // Import usePathname
 
-const Navbar: React.FC = () => {
+export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname(); // Get the current pathname
     const isLoginPage = pathname === '/login'; // Check if the current path is the login page
+
+    // Close menu when pathname changes (i.e., when a link is clicked)
+    useEffect(() => {
+        setIsOpen(false);
+    }, [pathname]);
 
     const toggleNavbar = () => {
         setIsOpen(!isOpen);
@@ -22,13 +27,24 @@ const Navbar: React.FC = () => {
             <button
                 onClick={toggleNavbar}
                 className={cn(
-                    "fixed top-4 left-4 z-50 p-2 bg-dip-60 text-white rounded transition-transform duration-400 ease-in-out",
-                    isOpen ? "translate-x-64" : "translate-x-0"
+                    "fixed top-4 left-4 z-50 p-2 text-dip-80 rounded transition-all duration-300 ease-in-out flex items-center justify-center",
+                    isOpen ? "translate-x-44" : "translate-x-0"
                 )}
             >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
+                <div className="relative w-6 h-6 flex items-center justify-center">
+                    <span className={cn(
+                        "absolute block h-[3px] w-6 bg-current transform transition-all duration-300 ease-in-out",
+                        isOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
+                    )} />
+                    <span className={cn(
+                        "absolute block h-[3px] w-6 bg-current transform transition-all duration-300 ease-in-out",
+                        isOpen ? "opacity-0" : "opacity-100"
+                    )} />
+                    <span className={cn(
+                        "absolute block h-[3px] w-6 bg-current transform transition-all duration-300 ease-in-out",
+                        isOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
+                    )} />
+                </div>
             </button>
 
             {/* Navbar */}
@@ -39,7 +55,6 @@ const Navbar: React.FC = () => {
                 )}
             >
                 <div className="p-4">
-                    <h2 className="text-xl font-bold">Navbar</h2>
                     <ul>
                         <li className="py-2">
                             <Link href="/user/profile" className="text-dip-100 font-bold hover:underline">Profile</Link>
@@ -55,6 +70,4 @@ const Navbar: React.FC = () => {
             </div>
         </div>
     );
-};
-
-export default Navbar;
+}
