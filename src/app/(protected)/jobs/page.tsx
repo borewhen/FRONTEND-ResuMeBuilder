@@ -1,96 +1,131 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
+import { link } from "fs";
+import JobDisplay from "./(components)/jobdisplay";
+import { useState } from "react";
+interface Job {
+    title: string;
+    company: string;
+    location: string;
+    description: string;
+    skills: string[];
+    id: string;
+}
 
-const initialSkills = [
-    { id: 1, name: 'JavaScript' },
-    { id: 2, name: 'React' },
-    { id: 3, name: 'Node.js' },
+const jobs: Job[] = [
+    // {
+    //     title: "Software Engineer",
+    //     company: "TechNova Inc.",
+    //     location: "San Francisco, CA",
+    //     description: "Develop and maintain scalable web applications using modern frameworks.",
+    //     skills: ["JavaScript", "React", "Node.js", "MongoDB"],
+    //     id: "1"
+    // },
+    // {
+    //     title: "Data Scientist",
+    //     company: "AI Solutions",
+    //     location: "New York, NY",
+    //     description: "Analyze large datasets and build predictive models to improve business decisions.",
+    //     skills: ["Python", "TensorFlow", "SQL", "Machine Learning"],
+    //     id: "2"
+    // },
+    // {
+    //     title: "Cybersecurity Analyst",
+    //     company: "SecureNet",
+    //     location: "Austin, TX",
+    //     description: "Monitor and secure network infrastructure against cyber threats and vulnerabilities.",
+    //     skills: ["Network Security", "Penetration Testing", "Python", "SIEM"],
+    //     id: "3"
+    // },
+    // {
+    //     title: "Frontend Developer",
+    //     company: "CreativeWeb",
+    //     location: "Los Angeles, CA",
+    //     description: "Design and develop interactive and responsive user interfaces.",
+    //     skills: ["HTML", "CSS", "JavaScript", "Vue.js"],
+    //     id: "4"
+    // },
+    // {
+    //     title: "Cloud Engineer",
+    //     company: "CloudSphere",
+    //     location: "Seattle, WA",
+    //     description: "Deploy and manage cloud-based applications with high availability.",
+    //     skills: ["AWS", "Kubernetes", "Docker", "Terraform"],
+    //     id: "5"
+    // },
+    // {
+    //     title: "Machine Learning Engineer",
+    //     company: "DeepAI Labs",
+    //     location: "Boston, MA",
+    //     description: "Develop and optimize ML models for image and text processing applications.",
+    //     skills: ["PyTorch", "TensorFlow", "NLP", "Computer Vision"],
+    //     id: "6"
+    // },
+    // {
+    //     title: "Backend Developer",
+    //     company: "CodeForge",
+    //     location: "Chicago, IL",
+    //     description: "Design and implement server-side applications and APIs.",
+    //     skills: ["Java", "Spring Boot", "PostgreSQL", "REST API"],
+    //     id: "7"
+    // },
+    // {
+    //     title: "Game Developer",
+    //     company: "PixelPlay Studios",
+    //     location: "Orlando, FL",
+    //     description: "Create engaging 2D and 3D game experiences using Unity.",
+    //     skills: ["C#", "Unity", "Game Physics", "Shader Programming"],
+    //     id: "8"
+    // },
+    // {
+    //     title: "DevOps Engineer",
+    //     company: "FastDeploy",
+    //     location: "Denver, CO",
+    //     description: "Automate CI/CD pipelines and ensure system reliability.",
+    //     skills: ["Jenkins", "Kubernetes", "Docker", "Linux"],
+    //     id: "9"
+    // },
+    // {
+    //     title: "Full Stack Developer",
+    //     company: "InnovateTech",
+    //     location: "Remote",
+    //     description: "Work on both frontend and backend development for web applications.",
+    //     skills: ["React", "Node.js", "GraphQL", "TypeScript"],
+    //     id: "10"
+    // }
 ];
 
+// position
+// link
+// job_id
+// company_name
+// company_logo_url
+
 const JobsPage: React.FC = () => {
-    const [skills, setSkills] = useState(initialSkills);
-    const [newSkill, setNewSkill] = useState('');
-
-    const handleAddSkill = () => {
-        if (newSkill.trim()) {
-            setSkills([...skills, { id: skills.length + 1, name: newSkill }]);
-            setNewSkill('');
-        }
-    };
-
-    const handleDeleteSkill = (id: number) => {
-        setSkills(skills.filter(skill => skill.id !== id));
-    };
+    const [jobs, setJobs] = useState<Job[]>([]);
+    const [search, setSearch] = useState<string>('');
+    const [searchDisplay, setSearchDisplay] = useState<string>('');
 
     return (
-        <div className="min-h-screen bg-[#f5f3ef] py-8">
-            <div className="max-w-4xl mx-auto space-y-6">
-                <h1 className="text-2xl font-bold">My Skills</h1>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h2 className="text-xl font-semibold mb-4">Skills List</h2>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {skills.map(skill => (
-                            <div key={skill.id} className="flex items-center bg-dip-80 text-white rounded-full px-4 py-2">
-                                <span>{skill.name}</span>
-                                <button 
-                                    onClick={() => handleDeleteSkill(skill.id)} 
-                                    className="ml-2 text-white hover:text-red-400"
-                                >
-                                    &times; {/* Close icon */}
-                                </button>
-                            </div>
-                        ))}
+        <div className="bg-dip-20 w-full min-h-screen py-8">
+            <div className='w-[56rem] mx-auto flex justify-between'>
+                <div className='w-64'>
+                    <div className='w-full bg-white shadow-xl rounded-lg py-2 px-4'>
+                        <h2 className='text-lg font-bold'>Your Applied Jobs</h2>
+                        <div className='text-gray-600 italic text-sm mt-4'>No jobs applied</div>
+                        <div className='w-full bg-dip-40 rounded-full text-center mt-4 mb-2 text-sm py-1 font-semibold text-dip-blk hover:bg-dip-60'>View All</div>
                     </div>
-                    <div className="flex items-center border-2 border-dip-80 text-dip-100 rounded-full px-4 py-2">
-                        <input 
-                            type="text" 
-                            value={newSkill} 
-                            onChange={(e) => setNewSkill(e.target.value)} 
-                            placeholder="Add a new skill" 
-                            className="bg-transparent border-none outline-none text-dip-100 flex-1"
-                        />
-                        <button 
-                            onClick={handleAddSkill} 
-                            className="ml-2 bg-dip-80 text-white rounded-full px-4 py-1"
-                        >
-                            Add
-                        </button>
+                    <div className='w-full bg-white shadow-xl rounded-lg mt-8 py-2 px-4 font-bold text-lg'>
+                        <h2>Preferences</h2>
                     </div>
                 </div>
-
-                {/* Job Listings */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Job Listings</h2>
-                <div className="space-y-6">
-                    {/* Sample Item 1 */}
-                    <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                        <div className="w-12 h-12 bg-[#e6e0d4] rounded-lg flex items-center justify-center">
-                        <span className="text-[#8b7355] font-semibold">C1</span>
-                        </div>
+                <div className='w-[36rem] bg-white shadow-xl rounded-xl py-4 px-4'>
+                    <div className="flex justify-between">
+                        <input type="text" placeholder="Search for jobs" className='w-4/5 bg-dip-20 rounded-full py-2 px-4 mb-4 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))}/>
+                        <button className=" bg-dip-100 rounded-full py-2 px-6 text-white font-bold h-10" onClick={()=>setSearchDisplay(search)}>Search</button>
                     </div>
-                    <div>
-                        <h3 className="text-xl font-semibold text-gray-900">Company 1</h3>
-                        <p className="text-lg text-gray-700">Floor Cleaner</p>
-                        <p className="text-sm text-gray-500 mt-1">Wipe that down</p>
-                    </div>
-                    </div>
-
-                    {/* Sample Item 2 */}
-                    <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                        <div className="w-12 h-12 bg-[#e6e0d4] rounded-lg flex items-center justify-center">
-                        <span className="text-[#8b7355] font-semibold">C2</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-semibold text-gray-900">Company 2</h3>
-                        <p className="text-lg text-gray-700">Chicken Rice Eater</p>
-                        <p className="text-sm text-gray-500 mt-1">Gobble Gobble</p>
-                    </div>
-                    </div>
-                </div>
+                    <div>{searchDisplay && `Search for: ${searchDisplay}`}</div>
+                    {jobs.map((job, index) => (<JobDisplay key={index} job={job} />))}
                 </div>
             </div>
         </div>
