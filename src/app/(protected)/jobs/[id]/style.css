@@ -1,0 +1,9 @@
+h1, h2{
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+li{
+    list-style-type: bullet;
+    margin-left: 1.5rem;
+}
