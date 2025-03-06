@@ -52,6 +52,15 @@ export default function InterviewCard({setShowPopup, interviewDetails}) {
         }
     }
 
+    const handleSubmit = () => {
+        setInterviewBubble([...interviewBubble, transcript]);
+        setIsRecording(false);
+        setIsAudioLoaded(false);
+        setTranscript("");
+        setAudioUrl("");
+        setAudioBlob(null);
+    }
+
     useEffect(() => {
         if (!isAudioLoaded || !audioBlob) return;
         const fetchData = async() => {
@@ -86,9 +95,12 @@ export default function InterviewCard({setShowPopup, interviewDetails}) {
                 </div>
                 {
                     interviewBubble.map((bubble, index) => {
+                        if (index%3 === 0 || index%3 === 1) return;
                         return (
-                            <div className="w-full border-black border-2 rounded-lg px-4 py-2 mt-2" key={index}>
+                            <div className="w-full border-black border-2 rounded-lg px-4 py-2 mt-2 text-sm" key={index}>
                                 {bubble}
+                                {interviewBubble[index+1] && <div className="mt-8"><div className="font-bold">Your Response: </div>{interviewBubble[index+1]}</div>}
+                                {interviewBubble[index+2] && <div className="mt-8"><div className="font-bold">Feedback: </div>{interviewBubble[index+2]}</div>}
                             </div>
                     )
                     })
@@ -98,6 +110,7 @@ export default function InterviewCard({setShowPopup, interviewDetails}) {
                     <div className="mr-4"><FaMicrophone className={clsx(isRecording? "bg-dip-80" : "", "h-20 w-20 p-4 rounded-full border-black border-2 hover:cursor-pointer")} onClick={()=> {isRecording? stopRecording(): startRecording()}}/></div>
                     {isRecording? <div>Listening ...</div> : transcript? <div>{transcript}</div> : isLoading? <div>Loading...</div> : <div>Press and Speak to Answer</div>}
                 </div>
+                <button className="border-2 font-bold px-4 py-2 rounded-full mt-2 border-black disabled:text-gray-300 disabled:border-gray-300" onClick={handleSubmit} disabled={transcript===""}>Submit Answer</button>
             </div>
         </div>
     )
