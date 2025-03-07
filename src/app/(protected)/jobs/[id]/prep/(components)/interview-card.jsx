@@ -2,84 +2,92 @@ import { useCompanyStore } from "@/store/useCompanyStore";
 import clsx from "clsx";
 import { useState, useRef, useEffect } from "react";
 import { FaMicrophone } from "react-icons/fa";
-import transcriptapi from "@/lib/app/mock_interview/api/transcript";
 
-export default function InterviewCard({setShowPopup, interviewDetails}) {
+const getResponse = async (subCategoryid, questions, answers, feedbacks) => {
+    return {
+        questions: ["Explain more about yourself"],
+        feedbacks: ["Looks good. You can add more details about your experience and projects."],
+        answers: ["I am a software engineer with 5 years of experience in web development. I have worked on multiple projects and have experience in both frontend and backend technologies. I am proficient in JavaScript, React, Node.js, and MongoDB. I have a strong understanding of data structures and algorithms and have worked on multiple projects that require problem-solving skills. I am a quick learner and can adapt to new technologies quickly. I am passionate about coding and always looking for new challenges to improve my skills."],
+        status: "in-progress"
+    }
+}
+
+export default function InterviewCard({setShowPopup, interviewDetails, subCategoryid}) {
     const {category, item} = interviewDetails;
     const {companyName, positionName} = useCompanyStore();
-    const [interviewBubble, setInterviewBubble] = useState(["Explain about yourself!"]);
-    const [isRecording, setIsRecording] = useState(false);
-    const [isAudioLoaded, setIsAudioLoaded] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+
+    const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
     const [transcript, setTranscript] = useState("");
-    const [audioUrl, setAudioUrl] = useState("");
-    const [audioBlob, setAudioBlob] = useState(null);
-    const mediaRecorderRef = useRef(null);
-    const audioChunksRef = useRef([]);
 
-    const startRecording = async() => {
-        try{
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-            const mediaRecorder = new MediaRecorder(stream, {mimeType: "audio/webm"});
-            audioChunksRef.current = [];
-            mediaRecorderRef.current = mediaRecorder;
-            mediaRecorder.ondataavailable = (e) => {
-                if (e.data.size > 0) {
-                    audioChunksRef.current.push(e.data);
-                }
-            }
-            mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(audioChunksRef.current, {type: "audio/webm"});
-                const audioUrl = URL.createObjectURL(audioBlob);
-                setAudioUrl(audioUrl);
-                setAudioBlob(audioBlob);
-                setIsAudioLoaded(true);
-            };
-            mediaRecorder.start();
-            setIsRecording(true);
-        } catch (err) {
-            console.log("Error accessing microphone:", err);
-        }
-    }
+    const [isLoading, setIsLoading] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const recognitionRef = useRef(null);
 
-    const stopRecording = () => {
-        if (mediaRecorderRef.current) {
-            mediaRecorderRef.current.stop();
-            setIsRecording(false);
-        }
-        if (mediaRecorderRef.current?.stream) {
-            mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
-        }
-    }
-
-    const handleSubmit = () => {
-        setInterviewBubble([...interviewBubble, transcript]);
-        setIsRecording(false);
-        setIsAudioLoaded(false);
+    const handleSubmit = async () => {
+        setAnswers([...answers, transcript]);
+        setIsListening(false);
         setTranscript("");
-        setAudioUrl("");
-        setAudioBlob(null);
+
+        const response = await getResponse(subCategoryid, questions, answers, feedbacks);
+        setQuestions(response.questions);
+        setAnswers(response.answers);
+        setFeedbacks(response.feedbacks);
     }
 
     useEffect(() => {
-        if (!isAudioLoaded || !audioBlob) return;
-        const fetchData = async() => {
-            setIsLoading(true);
-            try{
-                const formData = new FormData();
-                formData.append("file", audioBlob, "recording.webm");
-                const response = await transcriptapi.post(formData);
-                setTranscript(response.transcript.transcript);
-                console.log("Transcript:", response);
-            } catch(err) {
-                console.log("Error getting transcript:", err);
-            } finally {
-                setIsLoading(false);
-                setIsAudioLoaded(false);
+        const initSpeechRecognition = async () => {
+            if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
+                const recognition = new window.webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = "en-US";
+
+                recognition.onresult = (event) => {
+                let text = "";
+                for (let i = 0; i < event.results.length; i++) {
+                    text += event.results[i][0].transcript + " ";
+                }
+                setTranscript(text);
+                };
+
+                recognition.onerror = (event) => console.error("Speech recognition error:", event);
+
+                recognitionRef.current = recognition;
             }
+        };
+
+        const getSubcategoryDetails = async () => {
+            const response = await getResponse(subCategoryid, [], [], []);
+            setQuestions(response.questions);
+            setAnswers(response.answers);
+            setFeedbacks(response.feedbacks);
         }
-        fetchData();
-    }, [isAudioLoaded, audioBlob])
+
+        initSpeechRecognition();
+        getSubcategoryDetails();
+
+    }, []);
+
+    useEffect(() => {
+
+    }, [])
+
+    const startListening = () => {
+        if (recognitionRef.current) {
+            setTranscript("");
+            recognitionRef.current.start();
+            setIsListening(true);
+        }
+    };
+
+    const stopListening = () => {
+        if (recognitionRef.current) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+        }
+    };
 
 
     return (
@@ -94,21 +102,21 @@ export default function InterviewCard({setShowPopup, interviewDetails}) {
                     <button className="rounded-full border-white border-[1px] px-4 py-1 ">Start Now!</button>
                 </div>
                 {
-                    interviewBubble.map((bubble, index) => {
-                        if (index%3 === 0 || index%3 === 1) return;
+                    questions.map((bubble, index) => {
                         return (
                             <div className="w-full border-black border-2 rounded-lg px-4 py-2 mt-2 text-sm" key={index}>
                                 {bubble}
-                                {interviewBubble[index+1] && <div className="mt-8"><div className="font-bold">Your Response: </div>{interviewBubble[index+1]}</div>}
-                                {interviewBubble[index+2] && <div className="mt-8"><div className="font-bold">Feedback: </div>{interviewBubble[index+2]}</div>}
+                                {answers[index] && <div className="mt-8"><div className="font-bold">Your Response: </div>{answers[index]}</div>}
+                                {feedbacks[index] && <div className="mt-8"><div className="font-bold">Feedback: </div>{feedbacks[index]}</div>}
                             </div>
                     )
                     })
                 }                            
                 
                 <div className="flex items-center mt-4">
-                    <div className="mr-4"><FaMicrophone className={clsx(isRecording? "bg-dip-80" : "", "h-20 w-20 p-4 rounded-full border-black border-2 hover:cursor-pointer")} onClick={()=> {isRecording? stopRecording(): startRecording()}}/></div>
-                    {isRecording? <div>Listening ...</div> : transcript? <div>{transcript}</div> : isLoading? <div>Loading...</div> : <div>Press and Speak to Answer</div>}
+                    <div className="mr-4"><FaMicrophone className={clsx(isListening? "bg-dip-80" : "", "h-20 w-20 p-4 rounded-full border-black border-2 hover:cursor-pointer")} onClick={isListening? stopListening: startListening}/></div>
+                    {/* {isListening? <div>Listening ...</div> : transcript? <div>{transcript}</div> : isLoading? <div>Loading...</div> : <div>Press and Speak to Answer</div>} */}
+                    {transcript}
                 </div>
                 <button className="border-2 font-bold px-4 py-2 rounded-full mt-2 border-black disabled:text-gray-300 disabled:border-gray-300" onClick={handleSubmit} disabled={transcript===""}>Submit Answer</button>
             </div>

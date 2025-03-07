@@ -1,9 +1,9 @@
 import FetchClient from "@/lib/utils/fetcher";
-import { MockInterviewTranscriptResponse } from "@/lib/app/mock_interview/types";
+import { MockInterviewInterviewTopicList } from "@/lib/app/mock_interview/types";
 import { MOCK_INTERVIEW_API_URL } from "@/lib/app/mock_interview/constants";
 type FetchClientType = typeof FetchClient;
 
-class MockInterviewTranscriptApi {
+class GetInterviewTopicsApi {
     httpClient: FetchClientType;
     serverUrl: string;
 
@@ -12,13 +12,14 @@ class MockInterviewTranscriptApi {
         this.serverUrl = MOCK_INTERVIEW_API_URL;
     }
 
-    async post(file: FormData): Promise<MockInterviewTranscriptResponse> {
+    async post(job_id: string): Promise<MockInterviewInterviewTopicList> {
         try{
             const response = await this.httpClient.post(
-                `${this.serverUrl}/transcript`,
-                file,
+                `${this.serverUrl}/${job_id}`,
+                {},
             );
-            const data: MockInterviewTranscriptResponse = await response.data;
+            const data: MockInterviewInterviewTopicList = await response.data;
+            console.log(data)
             return data;
         } 
         catch(error: any){
@@ -27,5 +28,5 @@ class MockInterviewTranscriptApi {
     }
 }
 
-const transcriptapi = new MockInterviewTranscriptApi(FetchClient);
-export default transcriptapi;
+const topicsapi = new GetInterviewTopicsApi(FetchClient);
+export default topicsapi;
