@@ -10,3 +10,19 @@ interface MockInterviewTopic {
 }
 
 export type MockInterviewInterviewTopicList=MockInterviewTopic[];
+
+export interface InterviewSessionRequest {
+    /* Only for Put Request */
+    answer: string;
+}
+
+export interface InterviewSessionResponse {
+    questions: string[];
+    answers: string[];
+    feedbacks: string[];
+    status: "not-attempted" | "in-progress" | "completed";
+}
+
+export interface InterviewSummaryResponse {
+    summary: string;
+}
