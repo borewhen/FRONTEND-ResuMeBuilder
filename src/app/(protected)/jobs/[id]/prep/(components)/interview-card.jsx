@@ -18,31 +18,41 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
     const [isLoading, setIsLoading] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const recognitionRef = useRef(null);
-    const maxQuestions = 3;
+    const maxQuestions = 5;
 
     const setDetails = (questions, answers, feedbacks, status) => {
         setQuestions(questions);
         setAnswers(answers);
         setFeedbacks(feedbacks);
-        setStatus(status);
+        setStatus(status == true? questions.length == 0? "not-attempted" : "in-progress" : "completed");
     }
 
     const handleStartInterview = async () => {
         setIsLoading(true);
-        const response = await interviewsessionapi.dummyPost(subcategoryId);
-        const {questions, answers, feedbacks, status} = response;
-        setDetails(questions, answers, feedbacks, status);
-        setIsLoading(false);
+        await interviewsessionapi.post(subcategoryId)
+        .then( async () => {
+            const response = await interviewsessionapi.get(subcategoryId);
+            const {questions, answers, feedbacks, status} = response;
+            setDetails(questions, answers, feedbacks, status);
+        })
+        .catch((error) => console.error("Error starting interview:", error))
+        .finally(() => setIsLoading(false));
     }
 
     const handleSubmit = async () => {
         setTranscript("");
         setIsLoading(true);
-        const response = await interviewsessionapi.dummyPut(subcategoryId, {answer: transcript});
-        const {questions, answers, feedbacks, status} = response;
-        setDetails(questions, answers, feedbacks, status);
-        setIsListening(false);
-        setIsLoading(false);
+        await interviewsessionapi.put(subcategoryId, {answer: transcript})
+        .then( async () => {
+            const response = await interviewsessionapi.get(subcategoryId);
+            const {questions, answers, feedbacks, status} = response;
+            setDetails(questions, answers, feedbacks, status);
+        })
+        .catch((error) => console.error("Error submitting answer:", error))
+        .finally(() => {
+            setIsLoading(false);
+            setIsListening(false);
+        });
 
         if (status === "completed") {
             setIsLoading(true);
@@ -61,11 +71,11 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                 recognition.lang = "en-US";
 
                 recognition.onresult = (event) => {
-                let text = "";
-                for (let i = 0; i < event.results.length; i++) {
-                    text += event.results[i][0].transcript + " ";
-                }
-                setTranscript(text);
+                    let text = "";
+                    for (let i = 0; i < event.results.length; i++) {
+                        text += event.results[i][0].transcript + " ";
+                    }
+                    setTranscript(text);
                 };
 
                 recognition.onerror = (event) => console.error("Speech recognition error:", event);
@@ -74,10 +84,11 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
         };
 
         const getSubcategoryDetails = async () => {
-            const response = await interviewsessionapi.dummyGet(subcategoryId);
+            const response = await interviewsessionapi.get(subcategoryId);
             const {questions, answers, feedbacks, status} = response;
             setDetails(questions, answers, feedbacks, status);
         }
+
         initSpeechRecognition();
         getSubcategoryDetails();
     }, []);

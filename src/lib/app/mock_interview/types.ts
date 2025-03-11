@@ -16,7 +16,7 @@ export interface InterviewSessionRequest {
     answer: string;
 }
 
-export interface InterviewSessionResponse {
+export interface InterviewSessionGetResponse {
     questions: string[];
     answers: string[];
     feedbacks: string[];
