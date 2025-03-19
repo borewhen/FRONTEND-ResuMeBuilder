@@ -1,5 +1,5 @@
 // get
-interface Chapter {
+export interface Chapter {
     chapter_id: number;
     chapter_name: string;
     video_thumbnail: string;
@@ -7,7 +7,7 @@ interface Chapter {
     video_transcript: string;
 }
 
-interface Unit {
+export interface Unit {
     unit_id: number;
     course_id: number;
     unit_name: string;
