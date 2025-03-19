@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { FaMicrophone } from "react-icons/fa";
 import interviewsessionapi from "@/lib/app/mock_interview/api/session";
 import summaryapi from "@/lib/app/mock_interview/api/summary";
+import { get } from "http";
 
 export default function InterviewCard({setShowPopup, subcategoryDetail}) {
     const {subcategoryId, categoryName, subcategoryName} = subcategoryDetail;
@@ -18,7 +19,6 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
     const [isLoading, setIsLoading] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const recognitionRef = useRef(null);
-    const maxQuestions = 5;
 
     const setDetails = (questions, answers, feedbacks, status) => {
         setQuestions(questions);
@@ -53,13 +53,6 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
             setIsLoading(false);
             setIsListening(false);
         });
-
-        if (status === "completed") {
-            setIsLoading(true);
-            const summary = (await summaryapi.dummyGet(subcategoryId)).summary;
-            setInterviewSummary(summary);
-            setIsLoading(false);
-        }
     }
 
     useEffect(() => {
@@ -88,10 +81,21 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
             const {questions, answers, feedbacks, status} = response;
             setDetails(questions, answers, feedbacks, status);
         }
-
         initSpeechRecognition();
         getSubcategoryDetails();
     }, []);
+
+    useEffect(() => {
+        const getSummary = async () => {
+            setIsLoading(true);
+            const summary = (await summaryapi.subcategoryGet(subcategoryId)).summary;
+            setInterviewSummary(summary);
+            setIsLoading(false);
+        }
+        if(status === "completed"){
+            getSummary();
+        }
+    }, [status]);
 
     const startListening = () => {
         if (recognitionRef.current) {

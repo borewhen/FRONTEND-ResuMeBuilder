@@ -23,6 +23,11 @@ export interface InterviewSessionGetResponse {
     status: "not-attempted" | "in-progress" | "completed";
 }
 
-export interface InterviewSummaryResponse {
+export interface SubcategorySummaryResponse {
     summary: string;
+}
+
+export interface MockInterviewSummaryResponse{
+    summary: string;
+    failed_topics: string[];
 }

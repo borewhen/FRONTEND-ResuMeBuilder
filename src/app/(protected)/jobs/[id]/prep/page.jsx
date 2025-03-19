@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import InterviewCard from "./(components)/interview-card";
 import { useParams } from "next/navigation";
 import topicsapi from "@/lib/app/mock_interview/api/getInterviewTopics";
-import { set } from "zod";
+import summaryapi from "@/lib/app/mock_interview/api/summary";
 import clsx from "clsx";
 
 export default function JobPrepPage() {
@@ -11,6 +11,10 @@ export default function JobPrepPage() {
   const [interviewList, setInterviewList] = useState([]);
   const [subcategoryDetail, setSubcategoryDetail] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [summary, setSummary] = useState();
+  const [failedTopics, setFailed] = useState([]);
+
   const { id } = useParams();
 
   const handleClick = (subcategoryId, categoryName, subcategoryName) => {
@@ -21,16 +25,29 @@ export default function JobPrepPage() {
       subcategoryId
     })
   }
+  const getSummary = async () => {
+    const response = await summaryapi.mockinterviewGet(id);
+    setSummary(response.summary);
+    setFailed(response.failed_topics);  
+  }
 
   useEffect(() => {
     const getInterviewList = async () => {
       setIsLoading(true);
-      const response = await topicsapi.post(id);
+      const response = await topicsapi.post(id)
       setInterviewList(response);
       setIsLoading(false);
     }
     getInterviewList();
   }, []);
+
+  useEffect(() => {
+    const completed = interviewList.every(category => category.subcategories.every(subcategory => !subcategory.status));
+    if(completed){
+      setIsCompleted(true);
+      getSummary();
+    }
+  }, [interviewList]);
 
   return (
     <div className="bg-dip-20 w-full min-h-screen py-8">
@@ -39,7 +56,6 @@ export default function JobPrepPage() {
         {!isLoading && interviewList.map((category, index) => {
           const { category_name, subcategories } = category;
           const percentage = 100 - (subcategories.reduce((sum, subcategory) => sum + subcategory.status, 0) / subcategories.length) * 100;
-
           return (
             <div className="w-[27rem] h-72 mt-4 bg-white rounded-lg shadow-xl" key={index}>
               <div className="px-4 py-4 flex justify-between items-center">
@@ -61,11 +77,11 @@ export default function JobPrepPage() {
           )
         })
         }
-
         {
           showPopup && <InterviewCard setShowPopup={setShowPopup} subcategoryDetail={subcategoryDetail} />
         }
       </div>
+      {isCompleted && <div className="w-[56rem] mx-auto mt-8 text-center text-2xl font-bold"> {summary} </div>}
     </div>
   );
 }   

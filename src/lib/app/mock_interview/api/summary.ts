@@ -1,12 +1,7 @@
 import FetchClient from "@/lib/utils/fetcher";
-import { InterviewSummaryResponse } from "@/lib/app/mock_interview/types";
+import { SubcategorySummaryResponse, MockInterviewSummaryResponse } from "@/lib/app/mock_interview/types";
 import { MOCK_INTERVIEW_API_URL } from "@/lib/app/mock_interview/constants";
 type FetchClientType = typeof FetchClient;
-
-const dummyResponseGet: InterviewSummaryResponse = {
-    summary: "This is a summary.",
-};
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 class InterviewSummaryApi {
     httpClient: FetchClientType;
@@ -17,12 +12,12 @@ class InterviewSummaryApi {
         this.serverUrl = MOCK_INTERVIEW_API_URL;
     }
 
-    async get(subcategory_id: string): Promise<InterviewSummaryResponse> {
+    async subcategoryGet(subcategory_id: string): Promise<SubcategorySummaryResponse> {
         try{
             const response = await this.httpClient.get(
-                `${this.serverUrl}/summary/${subcategory_id}`,
+                `${this.serverUrl}/${subcategory_id}/summary`,
             );
-            const data: InterviewSummaryResponse = await response.data;
+            const data: SubcategorySummaryResponse = await response.data;
             return data;
         } 
         catch(error: any){
@@ -30,10 +25,19 @@ class InterviewSummaryApi {
         }
     }
 
-    async dummyGet(subcategory_id: string): Promise<InterviewSummaryResponse> {
-        await delay(2000);
-        return dummyResponseGet;
+    async mockinterviewGet(mockinterview_id: string): Promise<MockInterviewSummaryResponse> {
+        try{
+            const response = await this.httpClient.get(
+                `${this.serverUrl}/summary/${mockinterview_id}`,
+            );
+            const data: MockInterviewSummaryResponse = await response.data;
+            return data;
+        } 
+        catch(error: any){
+            return error.response.data;
+        }
     }
+
 }
 
 const summaryapi = new InterviewSummaryApi(FetchClient);
