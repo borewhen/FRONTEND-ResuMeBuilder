@@ -4,6 +4,7 @@ import InterviewCard from "./(components)/interview-card";
 import { useParams } from "next/navigation";
 import topicsapi from "@/lib/app/mock_interview/api/getInterviewTopics";
 import summaryapi from "@/lib/app/mock_interview/api/summary";
+import coursegeneratorapi from "@/lib/app/course/api/generate";
 import clsx from "clsx";
 
 export default function JobPrepPage() {
@@ -14,7 +15,8 @@ export default function JobPrepPage() {
   const [isCompleted, setIsCompleted] = useState(false);
   const [summary, setSummary] = useState();
   const [failedTopics, setFailed] = useState([]);
-
+  const [courseId, setCourseId] = useState(-1);
+  const [startUpdatingCourse, setStartUpdatingCourse] = useState(false);
   const { id } = useParams();
 
   const handleClick = (subcategoryId, categoryName, subcategoryName) => {
@@ -25,11 +27,30 @@ export default function JobPrepPage() {
       subcategoryId
     })
   }
-  const getSummary = async () => {
-    const response = await summaryapi.mockinterviewGet(id);
-    setSummary(response.summary);
-    setFailed(response.failed_topics);  
-  }
+
+  useEffect(() => {
+    if(interviewList.length === 0) return;
+    const completed = interviewList.every(category => category.subcategories.every(subcategory => !subcategory.status));
+
+    const getSummary = async () => {
+      const response = await summaryapi.mockinterviewGet(id);
+      setSummary(response.summary);
+      setFailed(response.failed_topics);  
+    }
+
+    const generateCourse = async() => {
+      const mockInterviewId = interviewList[0].mock_interview_id;
+      const generatedCourseId = (await coursegeneratorapi.generate(mockInterviewId)).course_id;
+      setStartUpdatingCourse(true);
+      setCourseId(generatedCourseId);
+    }
+ 
+    if(completed){
+      setIsCompleted(true);
+      getSummary();
+      generateCourse();
+    }
+  }, [interviewList]);
 
   useEffect(() => {
     const getInterviewList = async () => {
@@ -42,12 +63,13 @@ export default function JobPrepPage() {
   }, []);
 
   useEffect(() => {
-    const completed = interviewList.every(category => category.subcategories.every(subcategory => !subcategory.status));
-    if(completed){
-      setIsCompleted(true);
-      getSummary();
+    if(!startUpdatingCourse || courseId === -1) return;
+    const updateCourse = async () => {
+      await coursegeneratorapi.update(courseId);
+      setStartUpdatingCourse(false);
     }
-  }, [interviewList]);
+    updateCourse();
+  }, [courseId, startUpdatingCourse]);
 
   return (
     <div className="bg-dip-20 w-full min-h-screen py-8">

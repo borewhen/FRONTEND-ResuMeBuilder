@@ -1,0 +1,1 @@
+export const COURSE_API_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/course`;

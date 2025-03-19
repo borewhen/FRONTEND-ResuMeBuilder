@@ -1,3 +1,4 @@
+// getInterviewTopics
 interface MockInterviewSubcategory {
     subcategory_id: number;
     status: boolean;
@@ -6,11 +7,13 @@ interface MockInterviewSubcategory {
 interface MockInterviewTopic {
     category_id: number;
     category_name: string;
+    mock_interview_id: number;
     subcategories: MockInterviewSubcategory[];
 }
 
 export type MockInterviewInterviewTopicList=MockInterviewTopic[];
 
+// session
 export interface InterviewSessionRequest {
     /* Only for Put Request */
     answer: string;
@@ -22,7 +25,7 @@ export interface InterviewSessionGetResponse {
     feedbacks: string[];
     status: "not-attempted" | "in-progress" | "completed";
 }
-
+// summary
 export interface SubcategorySummaryResponse {
     summary: string;
 }
