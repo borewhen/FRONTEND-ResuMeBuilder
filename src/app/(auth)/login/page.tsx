@@ -40,7 +40,7 @@ export default function LoginPage() {
 
         if ('user' in response){
             setRole("unregistered");
-            router.push('/');
+            router.push('/home');
         }
         else{
             setError('Invalid email or password');

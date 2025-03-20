@@ -57,6 +57,9 @@ export default function Navbar() {
                 <div className="p-4">
                     <ul>
                         <li className="py-2">
+                            <Link href="/home" className="text-dip-100 font-bold hover:underline">Home</Link>
+                        </li>
+                        <li className="py-2">
                             <Link href="/user/profile" className="text-dip-100 font-bold hover:underline">Profile</Link>
                         </li>
                         <li className="py-2">
