@@ -68,6 +68,9 @@ export default function Navbar() {
                         <li className="py-2">
                             <Link href="/activity" className="text-dip-100 font-bold hover:underline">Activity</Link>
                         </li>
+                        <li className="py-2">
+                            <Link href="/course" className="text-dip-100 font-bold hover:underline">Course</Link>
+                        </li>
                     </ul>
                 </div>
             </div>
