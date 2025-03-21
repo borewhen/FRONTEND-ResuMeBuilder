@@ -19,7 +19,6 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
     const [loading, setLoading] = useState(true);
     const [description, setDescription] = useState<string | null>(null)
     const [descriptionLoading, setDescriptionLoading] = useState(true);
-    const router = useRouter();
 
     useEffect(() => {
         const fetchJobDetail = async () => {
