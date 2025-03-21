@@ -20,7 +20,7 @@ export default function JobPrepPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [summary, setSummary] = useState();
-  const [failedTopics, setFailed] = useState([]);
+  const [failedTopics, setFailed] = useState("");
   const [courseId, setCourseId] = useState(-1);
   const [startUpdatingCourse, setStartUpdatingCourse] = useState(false);
   const { id } = useParams();
@@ -30,6 +30,7 @@ export default function JobPrepPage() {
     "completed": 0
   });
   const [isLoadingJob, setIsLoadingJob] = useState(true);
+  const [isSummaryLoading, setIsSummaryLoading] = useState(true);
 
   const handleClick = (subcategoryId, categoryName, subcategoryName) => {
     setShowPopup(true);
@@ -58,8 +59,10 @@ export default function JobPrepPage() {
     }
  
     if(completed){
+      setIsSummaryLoading(true);
       setIsCompleted(true);
       getSummary();
+      setIsSummaryLoading(false);
     }
   }, [interviewList]);
 
@@ -214,10 +217,39 @@ export default function JobPrepPage() {
               }
             </div>
           </div>
+          {isCompleted ? (
+            isSummaryLoading ? (
+              <div>
+                <div className="font-bold mt-12 text-xl">Interview Result</div>
+                <Skeleton height={20} width={500} className="mt-5" />
+                <Skeleton height={20} width={800} />
+                <Skeleton height={20} width={650} />
+              </div>
+            ) : (
+              <div>
+                <div className="font-bold mt-12 text-xl">Interview Result</div>
+                <div className="w-[56rem] mx-auto mt-3 text-md">
+                  {summary}
+                </div>
+                <div className="w-[56rem] mx-auto mt-3 text-md">
+                  <span className="font-semibold">Failed Topics:</span>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {failedTopics && failedTopics.split(",").map((topic, index) => (
+                      <span key={index} className="bg-red-100 text-red-800 px-3 py-1 rounded-md text-sm font-medium">
+                        {topic.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button className="rounded-md bg-dip-purple text-white px-3 py-2 font-bold mt-5">Learn More!</button>
+              </div>
+            )
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
-
-      {isCompleted && <div className="w-[56rem] mx-auto mt-8 text-center text-2xl font-bold"> {summary} </div>}
     </div>
   );
 }   
