@@ -12,7 +12,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 
 export default function JobDetail({ selectedJobId } : { selectedJobId: number | null}) {
-    console.log(selectedJobId)
     const [job, setJob] = useState<JobDetailResponse | null>(null);
     const {companyLogo, jobLink} = useCompanyStore();
     const [showAllDescription, setShowAllDescription] = useState(false);
@@ -41,7 +40,6 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
     }, [selectedJobId])
 
 
-    console.log(description)
     return (
         <div className="w-full min-h-screen">
             <div className='w-[48rem] mx-auto'>

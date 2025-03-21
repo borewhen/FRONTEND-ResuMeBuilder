@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import scraper from '@/lib/app/job/api/scrape';
 import { JobScraperResponse } from "@/lib/app/job/types";
 import clsx from "clsx";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import JobDetail from "./(components)/jobDetail";
 import JobCardLoading from "./(components)/jobCardLoading";
+import 'react-loading-skeleton/dist/skeleton.css'
+import JobDetailLoading from "./(components)/jobDetailLoading";
 
 const JobsPage: React.FC = () => {
     const [jobs, setJobs] = useState<JobScraperResponse>([]);
@@ -27,7 +29,7 @@ const JobsPage: React.FC = () => {
             page: pageNumber
         })
         setJobs(data);
-        setSelectedJobId(data[0].job_id)
+        setSelectedJobId(data[0]?.job_id)
         setLoading(false);
     }
 
@@ -46,11 +48,11 @@ const JobsPage: React.FC = () => {
                         </button>
                     </div>
                     <div className="w-30 flex flex-col gap-5 mt-12">
-                        {jobs.length && !loading? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : loading ? <>
+                        {!loading && jobs.length? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : <>
                             {Array.from({ length: 10 }).map((_, index) => (
                                 <JobCardLoading key={index} />
                             ))}
-                            </>: <div className="text-center">No jobs found</div>
+                            </>
                         }
                         {!loading && jobs.length?<div className="flex w-36 mx-auto justify-between mt-4">
                             {[1,2,3,4,5].map((page, index) => (
@@ -63,7 +65,10 @@ const JobsPage: React.FC = () => {
                 </div>
                 <div className="w-[40rem]">
                     <div className="sticky top-10">
-                        {selectedJobId ? <JobDetail selectedJobId={selectedJobId} /> : <div className="text-gray-500">Select a job to see details</div>}
+                        {selectedJobId ? <JobDetail selectedJobId={selectedJobId} /> : (
+                            <JobDetailLoading/>
+                        )
+                    }
                     </div>
                 </div>
             </div>
