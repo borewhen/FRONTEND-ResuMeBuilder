@@ -25,8 +25,21 @@ class JobDetailsApi {
             return error.response?.data;
         }
     }
-}
 
+    async getDescription(jobId: string): Promise<string> {
+        try{
+            const response = await this.httpClient.get(
+                `${this.serverUrl}/${jobId}/description`,
+            );
+
+            const data: string = await response.data;
+            return data;
+        } 
+        catch(error: any){
+            return error.response?.data;
+        }
+    }
+}
 
 const jobdetail = new JobDetailsApi(FetchClient);
 export default jobdetail;

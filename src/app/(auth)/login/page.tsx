@@ -37,6 +37,7 @@ export default function LoginPage() {
         }
 
         const response = await login.post(userData);
+        console.log(">>>>>> response:" + response)
 
         if ('user' in response){
             setRole("unregistered");

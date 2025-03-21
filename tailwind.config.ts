@@ -22,7 +22,9 @@ export default {
   				'60': '#D1CAB9',
   				'80': '#C0AC8F',
   				'100': '#877459',
-  				blk: '#171717'
+  				blk: '#171717',
+				purple: '#773FF2',
+				grey: '#A8A8A8'
   			},
   			background: 'var(--background)',
   			foreground: 'var(--foreground)'

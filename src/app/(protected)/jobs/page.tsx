@@ -1,16 +1,23 @@
 "use client";
 
 import JobDisplay from "./(components)/jobdisplay";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import scraper from '@/lib/app/job/api/scrape';
 import { JobScraperResponse } from "@/lib/app/job/types";
 import clsx from "clsx";
+import { Search, SlidersHorizontal } from "lucide-react";
+import JobDetail from "./(components)/jobDetail";
 
 const JobsPage: React.FC = () => {
     const [jobs, setJobs] = useState<JobScraperResponse>([]);
-    const [search, setSearch] = useState<string>('');
+    const [search, setSearch] = useState<string>('software engineer');
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
+    const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
+
+    useEffect(() => {
+        handleSubmit()
+    }, [])
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -19,35 +26,41 @@ const JobsPage: React.FC = () => {
             page: pageNumber
         })
         setJobs(data);
+        if (!selectedJobId) {
+            setSelectedJobId(data[0].job_id)
+        }
         setLoading(false);
     }
 
     return (
-        <div className="bg-dip-20 w-full min-h-screen py-8">
-            <div className='w-[56rem] mx-auto flex justify-between'>
-                <div className='w-64'>
-                    <div className='w-full bg-white shadow-xl rounded-lg py-2 px-4'>
-                        <h2 className='text-lg font-bold'>Your Applied Jobs</h2>
-                        <div className='text-gray-600 italic text-sm mt-4'>No jobs applied</div>
-                        <div className='w-full bg-dip-40 rounded-full text-center mt-4 mb-2 text-sm py-1 font-semibold text-dip-blk hover:bg-dip-60'>View All</div>
+        <div className="bg-white w-full min-h-screen py-8">
+            <div className='w-[80rem] mx-auto flex gap-12 mt-[50px]'>
+                <div className="w-[30rem]"> 
+                    <div className='w-70 flex gap-6'>
+                        <input type="text" placeholder="Search for jobs or company" className='w-[22rem] border border-dip-grey rounded-md py-3 px-5 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))} onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                            handleSubmit();
+                            }
+                        }}/>
+                        <button className="border border-dip-grey w-14 flex items-center justify-center">
+                            <SlidersHorizontal className="text-gray-600 w-6 h-6" />
+                        </button>
                     </div>
-                    <div className='w-full bg-white shadow-xl rounded-lg mt-8 py-2 px-4 font-bold text-lg'>
-                        <h2>Preferences</h2>
+                    <div className="w-30 flex flex-col gap-5 mt-12">
+                        {jobs.length && !loading? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : loading? <div className="text-center">Loading...</div> : <div className="text-center">No jobs found</div>}
+                        {jobs.length?<div className="flex w-36 mx-auto justify-between mt-4">
+                            {[1,2,3,4,5].map((page, index) => (
+                                <div key={index} onClick={()=>{if(page!==pageNumber){setPageNumber(page); handleSubmit()}}} className={clsx(page===pageNumber?"bg-slate-200":"", "rounded-full w-8 h-8 flex items-center justify-center hover:cursor-pointer")}>
+                                    {page}
+                                </div>
+                            ))}
+                        </div> : ""}
                     </div>
                 </div>
-                <div className='w-[36rem] bg-white shadow-xl rounded-xl py-4 px-4 min-h-0'>
-                    <form className="flex justify-between" onSubmit={(e) => (e.preventDefault())}>
-                        <input type="text" placeholder="Search for jobs" className='w-4/5 bg-dip-20 rounded-full py-2 px-4 mb-4 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))}/>
-                        <button className=" bg-dip-100 rounded-full py-2 px-6 text-white font-bold h-10" onClick={()=>{setPageNumber(1); handleSubmit()}}>Search</button>
-                    </form>
-                    {jobs.length && !loading? jobs.map((job, index) => (<JobDisplay key={index} job={job} />)) : loading? <div className="text-center">Loading...</div> : <div className="text-center">No jobs found</div>}
-                    {jobs.length?<div className="flex w-36 mx-auto justify-between mt-4">
-                        {[1,2,3,4,5].map((page, index) => (
-                            <div key={index} onClick={()=>{if(page!==pageNumber){setPageNumber(page); handleSubmit()}}} className={clsx(page===pageNumber?"bg-slate-200":"", "rounded-full w-8 h-8 flex items-center justify-center hover:cursor-pointer")}>
-                                {page}
-                            </div>
-                        ))}
-                    </div> : ""}
+                <div className="w-[40rem]">
+                    <div className="sticky top-10">
+                        {selectedJobId ? <JobDetail selectedJobId={selectedJobId} /> : <div className="text-gray-500">Select a job to see details</div>}
+                    </div>
                 </div>
             </div>
         </div>
