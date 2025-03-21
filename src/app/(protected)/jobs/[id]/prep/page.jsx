@@ -9,6 +9,8 @@ import clsx from "clsx";
 import { JobDetailResponse } from "@/lib/app/job/types";
 import jobdetail from "@/lib/app/job/api/detail";
 import { motion } from "framer-motion";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export default function JobPrepPage() {
   const [job, setJob] = useState(null);
@@ -27,6 +29,7 @@ export default function JobPrepPage() {
     "todo": 0,
     "completed": 0
   });
+  const [isLoadingJob, setIsLoadingJob] = useState(true);
 
   const handleClick = (subcategoryId, categoryName, subcategoryName) => {
     setShowPopup(true);
@@ -70,7 +73,9 @@ export default function JobPrepPage() {
     }
 
     const fetchJobDetail = async () => {
+      setIsLoadingJob(true);
       const fetchedJob = await jobdetail.get(id);
+      setIsLoadingJob(false);
       setJob(fetchedJob);
     };
 
@@ -115,8 +120,18 @@ export default function JobPrepPage() {
       <div className="flex flex-col items-center">
         <div className="w-[56rem]">
           <div>
-            <div className="text-2xl font-bold">{job?.job_position}</div>
-            <p className="font-bold text-xl text-dip-purple">{job?.company_name}</p>
+            { isLoadingJob ? (
+              <>
+                <Skeleton width={300} height={20}/>
+                <Skeleton width={150} height={15}/>
+              </>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold">{job?.job_position}</div>
+                  <p className="font-bold text-xl text-dip-purple">{job?.company_name}</p>
+                </>
+              )
+            }
           </div>
           <div className="border w-[60rem] mx-auto rounded-lg py-[50px] mt-8 bg-dip-greyishwhite">
             <div className="text-3xl text-black font-bold text-center">
@@ -138,30 +153,53 @@ export default function JobPrepPage() {
               </div>
             </div>
             <div className="w-[56rem] h-full mx-auto flex flex-wrap gap-8">
-              {!isLoading && interviewList.map((category, index) => {
-                const { category_name, subcategories } = category;
-                const percentage = 100 - (subcategories.reduce((sum, subcategory) => sum + subcategory.status, 0) / subcategories.length) * 100;
-                return (
-                  <div className="w-[27rem] h-72 mt-4 rounded-lg shadow-xl bg-white border border-[#E0E0E0]" key={index}>
-                    <div className="px-4 py-4 flex justify-between items-center">
-                      <div className="font-bold text-xl">{category_name}</div>
-                      <div className="text-sm italic font-bold">{percentage.toFixed(1)}% Completed</div>
+              {
+                isLoading ? (
+                  [...Array(4)].map((_, index) => (
+                    <div
+                      className="w-[27rem] h-72 mt-4 rounded-lg shadow-xl bg-white border border-[#E0E0E0]"
+                      key={index}
+                    >
+                      <div className="px-4 py-4 flex justify-between items-center">
+                        <Skeleton width={120} height={20}/>
+                        <div className="text-sm italic font-bold">% Completed</div>
+                      </div>
+    
+                      {/* Subcategories */}
+                      {[...Array(3)].map((_, subIndex) => (
+                        <div key={subIndex} className="px-4 py-2 border-t border-gray-200">
+                          <Skeleton height={30}/>
+                        </div>
+                      ))}
                     </div>
-                    {
-                      subcategories.map((subcategory, index) => {
-                        const { subcategory_id, subcategory_name, status } = subcategory;
-                        return (
-                          <div className={clsx("mx-4 px-2 py-2 border-gray-200 flex justify-between items-center rounded-lg mb-2 hover:cursor-pointer", status? "bg-red-200 hover:bg-red-400": "bg-green-200 hover:bg-green-400")} key={index} onClick={()=>handleClick(subcategory_id, category_name, subcategory_name)}>
-                            <div className="font-bold text-sm">{subcategory_name}</div>
-                            <div className="text-sm italic">{!status? "Completed": "Not Completed"}</div>
-                          </div>
-                        )
-                      })
-                    }
-                  </div>
+                  ))
+                ) : (
+                  interviewList.map((category, index) => {
+                    const { category_name, subcategories } = category;
+                    const percentage = 100 - (subcategories.reduce((sum, subcategory) => sum + subcategory.status, 0) / subcategories.length) * 100;
+                    return (
+                      <div className="w-[27rem] h-72 mt-4 rounded-lg shadow-xl bg-white border border-[#E0E0E0]" key={index}>
+                        <div className="px-4 py-4 flex justify-between items-center">
+                          <div className="font-bold text-xl">{category_name}</div>
+                          <div className="text-sm italic font-bold">{percentage.toFixed(1)}% Completed</div>
+                        </div>
+                        {
+                          subcategories.map((subcategory, index) => {
+                            const { subcategory_id, subcategory_name, status } = subcategory;
+                            return (
+                              <div className={clsx("mx-4 px-2 py-2 border-gray-200 flex justify-between items-center rounded-lg mb-2 hover:cursor-pointer", status? "bg-red-200 hover:bg-red-400": "bg-green-200 hover:bg-green-400")} key={index} onClick={()=>handleClick(subcategory_id, category_name, subcategory_name)}>
+                                <div className="font-bold text-sm">{subcategory_name}</div>
+                                <div className="text-sm italic">{!status? "Completed": "Not Completed"}</div>
+                              </div>
+                            )
+                          })
+                        }
+                      </div>
+                    )
+                  })
                 )
-              })
               }
+
               {
                 showPopup && (
                   <motion.div
