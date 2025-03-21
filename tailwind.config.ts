@@ -24,7 +24,9 @@ export default {
   				'100': '#877459',
   				blk: '#171717',
 				purple: '#773FF2',
-				grey: '#A8A8A8'
+				grey: '#A8A8A8',
+				lightpurple: '#7B61FF',
+				greyishwhite: '#F8F9FA'
   			},
   			background: 'var(--background)',
   			foreground: 'var(--foreground)'
