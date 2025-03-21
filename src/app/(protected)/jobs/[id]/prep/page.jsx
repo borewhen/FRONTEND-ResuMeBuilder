@@ -60,7 +60,6 @@ export default function JobPrepPage() {
     if(completed){
       setIsCompleted(true);
       getSummary();
-      generateCourse();
     }
   }, [interviewList]);
 
@@ -81,7 +80,7 @@ export default function JobPrepPage() {
 
     getInterviewList();
     fetchJobDetail();
-  }, []);
+  }, [showPopup]);
 
   useEffect(() => {
     if(!startUpdatingCourse || courseId === -1) return;
