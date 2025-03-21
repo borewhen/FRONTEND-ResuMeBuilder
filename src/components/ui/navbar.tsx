@@ -54,31 +54,22 @@ export default function Navbar() {
                     isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
                 )}
             >
-                <div className="pt-16 px-4">
-                    <ul className="space-y-2">
-                        <li>
-                            <Link href="/" className="flex items-center hover:bg-dip-20 p-2 rounded-lg mx-2">
-                                <div className="w-10 h-10 rounded-full overflow-hidden">
-                                    <img 
-                                        src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/Seong_Gi-hun_season_1.png/220px-Seong_Gi-hun_season_1.png" 
-                                        alt="Profile" 
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <span className="ml-3 text-dip-100 font-bold italic">You</span>
-                            </Link>
+                <div className="p-4">
+                    <ul>
+                        <li className="py-2">
+                            <Link href="/user/profile" className="text-dip-100 font-bold hover:underline">Profile</Link>
                         </li>
-                        <li>
-                            <Link href="/interview" className="block px-4 py-2 text-dip-100 font-bold hover:bg-dip-20 rounded-lg mx-2">Interview</Link>
+                        <li className="py-2">
+                            <Link href="/interview" className="text-dip-100 font-bold hover:underline">Interview</Link>
                         </li>
-                        <li>
-                            <Link href="/jobs" className="block px-4 py-2 text-dip-100 font-bold hover:bg-dip-20 rounded-lg mx-2">Jobs</Link>
+                        <li className="py-2">
+                            <Link href="/jobs" className="text-dip-100 font-bold hover:underline">Jobs</Link>
                         </li>
-                        <li>
-                            <Link href="/activity" className="block px-4 py-2 text-dip-100 font-bold hover:bg-dip-20 rounded-lg mx-2">Activity</Link>
+                        <li className="py-2">
+                            <Link href="/activity" className="text-dip-100 font-bold hover:underline">Activity</Link>
                         </li>
-                        <li>
-                            <Link href="/course" className="block px-4 py-2 text-dip-100 font-bold hover:bg-dip-20 rounded-lg mx-2">Course</Link>
+                        <li className="py-2">
+                            <Link href="/course" className="text-dip-100 font-bold hover:underline">Course</Link>
                         </li>
                     </ul>
                 </div>
