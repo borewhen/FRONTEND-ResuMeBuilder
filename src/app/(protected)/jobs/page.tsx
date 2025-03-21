@@ -7,6 +7,7 @@ import { JobScraperResponse } from "@/lib/app/job/types";
 import clsx from "clsx";
 import { Search, SlidersHorizontal } from "lucide-react";
 import JobDetail from "./(components)/jobDetail";
+import JobCardLoading from "./(components)/jobCardLoading";
 
 const JobsPage: React.FC = () => {
     const [jobs, setJobs] = useState<JobScraperResponse>([]);
@@ -26,9 +27,7 @@ const JobsPage: React.FC = () => {
             page: pageNumber
         })
         setJobs(data);
-        if (!selectedJobId) {
-            setSelectedJobId(data[0].job_id)
-        }
+        setSelectedJobId(data[0].job_id)
         setLoading(false);
     }
 
@@ -47,8 +46,13 @@ const JobsPage: React.FC = () => {
                         </button>
                     </div>
                     <div className="w-30 flex flex-col gap-5 mt-12">
-                        {jobs.length && !loading? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : loading? <div className="text-center">Loading...</div> : <div className="text-center">No jobs found</div>}
-                        {jobs.length?<div className="flex w-36 mx-auto justify-between mt-4">
+                        {jobs.length && !loading? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : loading ? <>
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <JobCardLoading key={index} />
+                            ))}
+                            </>: <div className="text-center">No jobs found</div>
+                        }
+                        {!loading && jobs.length?<div className="flex w-36 mx-auto justify-between mt-4">
                             {[1,2,3,4,5].map((page, index) => (
                                 <div key={index} onClick={()=>{if(page!==pageNumber){setPageNumber(page); handleSubmit()}}} className={clsx(page===pageNumber?"bg-slate-200":"", "rounded-full w-8 h-8 flex items-center justify-center hover:cursor-pointer")}>
                                     {page}
