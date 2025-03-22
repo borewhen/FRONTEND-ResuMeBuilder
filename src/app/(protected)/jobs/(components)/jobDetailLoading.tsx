@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 export default function JobDetailLoading() {
     return (
         <div className='w-[48rem] mx-auto'>
-            <div className='w-full shadow-xl bg-white rounded-lg px-4 py-2'>
+            <div className='shadow-xl bg-white rounded-lg px-4 py-2'>
                 <div className="text-gray-500"><>
                     <div className='flex items-center gap-3'>
                         <Skeleton count={1} circle width={30} height={30}/>

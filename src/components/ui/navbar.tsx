@@ -17,7 +17,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center justify-between px-[80px] py-6 bg-white shadow-sm border border-b-[#A8A8A8]">
+    <nav className="flex items-center justify-between px-[80px] py-4 bg-white shadow-sm border border-b-[#A8A8A8]">
       <div className="flex items-center space-x-4">
         <Image
           alt="favicon"
@@ -40,7 +40,7 @@ export default function Navbar() {
           <Link
             key={item.name}
             href={item.href}
-            className={`relative text-gray-600 hover:text-gray-900 text-[18px] ${
+            className={`relative text-gray-600 hover:text-gray-900 text-[16px] ${
               pathname === item.href ? "font-bold text-purple-600" : ""
             }`}
           >

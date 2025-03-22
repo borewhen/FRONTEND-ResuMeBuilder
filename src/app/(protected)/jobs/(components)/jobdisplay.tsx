@@ -11,7 +11,7 @@ export default function JobDisplay({ job, selectedJobId, setSelectedJobId }: { j
     const {setCompanyLogo, setJobLink, setCompanyName, setPositionName} = useCompanyStore();
 
     return (
-        <div className={`flex items-center bg-white border rounded-xl p-4 shadow-md hover:shadow-lg transition cursor-pointer
+        <div className={`flex items-center bg-white border rounded-xl py-3 px-1 shadow-md hover:shadow-lg transition cursor-pointer
         ${selectedJobId == job.job_id ? "border-2 border-purple-400" : "border-gray-200"}`} onClick={() => {
             setSelectedJobId(job.job_id);
             setCompanyLogo(job.company_logo_url);
@@ -22,7 +22,7 @@ export default function JobDisplay({ job, selectedJobId, setSelectedJobId }: { j
             <img src={job.company_logo_url} alt="company logo" className="w-12 h-12 rounded-full" />
             <div className="ml-4">
                 <div className="text-[16px] font-bold text-black p-0">{job.job_position}</div>
-                <div className="text-[16px] text-[#4b5563]">{job.company_name}</div>
+                <div className="text-[12px] text-[#4b5563]">{job.company_name}</div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                     <MapPin className="w-4 h-4 text-gray-400" />
                     <span>{job.job_location}</span>

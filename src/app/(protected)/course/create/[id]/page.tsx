@@ -83,7 +83,7 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
                 </h1>
                 <div className="bg-[#F5F5F4] px-4 py-5 mt-5 flex gap-3 items-center">
                     <AlertCircle className="text-[#5FA5F9]" size={35} />
-                    <p className="text-md max-w-[550px]">
+                    <p className="text-md">
                         We generated chapters for each of your units. Look over
                         them and then click the Button to confirm and continue
                     </p>

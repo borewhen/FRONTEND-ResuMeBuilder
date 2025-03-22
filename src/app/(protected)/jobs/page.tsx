@@ -35,7 +35,7 @@ const JobsPage: React.FC = () => {
 
     return (
         <div className="bg-white w-full min-h-screen py-8">
-            <div className='w-[80rem] mx-auto flex gap-12 mt-[50px]'>
+            <div className='w-[70rem] mx-auto flex gap-8 mt-[50px]'>
                 <div className="w-[30rem]"> 
                     <div className='w-70 flex gap-6'>
                         <input type="text" placeholder="Search for jobs or company" className='w-[22rem] border border-dip-grey rounded-md py-3 px-5 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))} onKeyDown={(e) => {

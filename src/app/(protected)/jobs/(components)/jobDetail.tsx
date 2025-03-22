@@ -41,8 +41,8 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
 
 
     return (
-        <div className="w-full min-h-screen">
-            <div className='w-[48rem] mx-auto'>
+        <div className="min-h-screen">
+            <div className='w-full'>
                 <div className='w-full shadow-xl bg-white rounded-lg px-4 py-2'>
                     {
                         !loading ? (
@@ -51,12 +51,12 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
                                     <img src={companyLogo} className='w-10 h-10 mr-2' alt='Company Logo' />
                                     {job?.company_name}
                                 </div>
-                                <div className='text-2xl font-bold mb-2 mt-2'>{job?.job_position}</div>
+                                <div className='text-xl font-bold mb-2 mt-2'>{job?.job_position}</div>
                                 <div className='text-sm text-gray-500'>
                                     {job?.job_location} • {job?.job_posting_time}
                                 </div>
                                 <div className='flex mt-2 mb-2'>
-                                    <Link href={jobLink} target='_blank' className='w-[105px] border-2 border-dip-grey rounded-full mr-2 px-4 py-2 text-sm hover:border-dip-purple transition-all text-center'>
+                                    <Link href={jobLink} target='_blank' className='w-[110px] border-2 border-dip-grey rounded-full mr-2 px-4 py-2 text-sm hover:border-dip-purple transition-all text-center'>
                                         Apply Here
                                     </Link>
                                     <Link href={`/jobs/${selectedJobId}/prep`} className='w-[105px] border-2 border-dip-grey rounded-full px-4 py-2 text-sm hover:border-dip-purple transition-all text-center'>
@@ -86,8 +86,8 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
                     }
                 </div>
                 <div className={clsx(showAllDescription? '': 'max-h-[480px] overflow-hidden', 'relative w-full shadow-xl bg-white rounded-lg px-8 py-4 mt-8')}>
-                    {!showAllDescription && <div className='absolute bg-white top-[440px] h-8 w-full px-0 left-0 text-center items pt-1 shadow-[0px_0px_10px_10px_#ffffff] hover:cursor-pointer font-bold' onClick={()=>setShowAllDescription(true)}>View More</div>}
-                    <div className='text-2xl font-bold mb-2'>Description</div>
+                    {!showAllDescription && <div className='absolute bg-white top-[450px] h-8 w-full px-0 left-0 text-center items pt-1 shadow-[0px_0px_10px_10px_#ffffff] hover:cursor-pointer font-bold text-sm' onClick={()=>setShowAllDescription(true)}>View More</div>}
+                    <div className='text-xl font-bold mb-2'>Description</div>
                     {
                         !descriptionLoading ? (
                             <div className='text-sm' dangerouslySetInnerHTML={{ __html: description || ''}}></div>
@@ -103,7 +103,7 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
                         )
                     }   
                     <div className='h-4'></div>
-                    {showAllDescription && <div className='absolute bg-[#e5e7eb] rounded-b-lg h-8 w-full px-0 left-0 text-center items pt-1 hover:cursor-pointer font-bold' onClick={()=>setShowAllDescription(false)}>View Less</div>}
+                    {showAllDescription && <div className='absolute bg-[#e5e7eb] rounded-b-lg h-8 w-full px-0 left-0 text-center items pt-1 hover:cursor-pointer font-bold text-sm' onClick={()=>setShowAllDescription(false)}>View Less</div>}
                 </div>
             </div>
         </div>
