@@ -31,7 +31,7 @@ export default function CoursePage() {
                         <div className="bg-white rounded-lg shadow-xl">
                         {
                             courses.map((course) => (
-                                <Link href={`/course/${course.course_id}`} key={course.course_id} className="p-4 border-b">
+                                <Link href={`/course/${course.course_id}/0/0`} key={course.course_id} className="p-4 border-b">
                                     <div className="flex items-center">
                                         <img src={course.image_url} alt="course" className="w-20 h-20 object-cover rounded-lg" />
                                         <div className="ml-4">
