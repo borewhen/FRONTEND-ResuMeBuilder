@@ -10,7 +10,7 @@ import UserAvatar from "./avatar";
 const navItems = [
   { name: "Jobs", href: "/jobs" },
   { name: "Courses", href: "/course" },
-  { name: "Live Video Interview", href: "/interviews" },
+  { name: "Live Video Interview", href: "/interview" },
 ];
 
 export default function Navbar() {
