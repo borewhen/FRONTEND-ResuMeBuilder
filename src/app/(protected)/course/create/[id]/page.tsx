@@ -78,9 +78,12 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     return (
         <div className="py-28 flex justify-center items-center">
             <div>
-                <p className="text-lg">COURSE NAME</p>
+                <p className="text-lg">COURSE</p>
                 <h1 className="font-bold text-black text-4xl">
-                    {course?.courseName}
+                    {course?.company_name}
+                </h1>
+                <h1 className="text-gray-700 text-xl">
+                    {course?.job_position}
                 </h1>
                 <div className="bg-[#F5F5F4] px-4 py-5 mt-5 flex gap-3 items-center">
                     <AlertCircle className="text-[#5FA5F9]" size={35} />
@@ -109,7 +112,7 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
                 </div>
 
 
-                <div className="mt-8 flex items-center gap-5">
+                <div className="mt-12 flex items-center gap-5 justify-center">
                     <div className="flex gap-2">
                         <Button
                             className="font-bold flex gap-1 bg-black text-white"

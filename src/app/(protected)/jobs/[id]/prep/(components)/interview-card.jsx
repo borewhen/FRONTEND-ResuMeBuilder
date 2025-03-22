@@ -117,8 +117,8 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
     return (
         <div className="absolute flex items-center justify-center w-full h-full top-0 left-0">
             <div className="absolute w-full h-full top-0 left-0 bg-[#00000030] z-0" onClick={()=>setShowPopup(false)}></div>
-            <div className="absolute w-4/5 h-4/5 bg-white rounded-lg px-8 py-8 flex flex-col " onClick={()=>{}}>
-                <div className="w-full h-full overflow-y-scroll">
+            <div className="absolute w-4/5 h-4/5 bg-white rounded-lg px-8 py-8 flex flex-col" onClick={()=>{}}>
+                <div className="overflow-y-scroll flex-1">
                     <div className="text-2xl font-bold">{categoryName}: {subcategoryName}</div>
                     { status === "not-attempted" && !isLoading &&
                         <div className="w-full bg-dip-blk text-white text-center rounded-lg py-5 mt-3">
@@ -159,8 +159,9 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                             </div>
                         }
                         </div>
-                    
-                        {   status === "in-progress" &&
+                    </div>
+                </div>
+                {   status === "in-progress" &&
                             <div className="bg-gray-50 rounded-lg p-4 shadow-md border border-dip-grey">
                             {/* Header & Submit Button */}
                             <div className="flex items-center justify-between">
@@ -192,10 +193,7 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                                 </div>
                             </div>
                           </div>
-                    
-                        }
-                    </div>
-                </div>
+                    }
             </div>
         </div>
     )
