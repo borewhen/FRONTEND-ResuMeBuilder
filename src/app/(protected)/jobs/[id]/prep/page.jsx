@@ -165,7 +165,7 @@ export default function JobPrepPage() {
               )
             }
           </div>
-          <div className="border w-[60rem] mx-auto rounded-lg py-[50px] mt-8 bg-dip-greyishwhite">
+          <div className="w-[60rem] mx-auto rounded-lg py-[50px] mt-8 bg-dip-greyishwhite">
             <div className="text-3xl text-black font-bold text-center">
               Interview Preparation
             </div>
@@ -206,7 +206,7 @@ export default function JobPrepPage() {
                     </div>
                   ))
                 ) : (
-                  interviewList.map((category, index) => {
+                  interviewList?.map((category, index) => {
                     const { category_name, subcategories } = category;
                     const percentage = 100 - (subcategories.reduce((sum, subcategory) => sum + subcategory.status, 0) / subcategories.length) * 100;
                     return (
