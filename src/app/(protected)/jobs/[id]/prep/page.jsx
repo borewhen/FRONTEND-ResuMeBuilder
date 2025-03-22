@@ -11,6 +11,8 @@ import jobdetail from "@/lib/app/job/api/detail";
 import { motion } from "framer-motion";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { useRouter } from 'next/navigation';
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function JobPrepPage() {
   const [job, setJob] = useState(null);
@@ -31,6 +33,8 @@ export default function JobPrepPage() {
   });
   const [isLoadingJob, setIsLoadingJob] = useState(true);
   const [isSummaryLoading, setIsSummaryLoading] = useState(true);
+  const [isGenerateCourseLoading, setIsGenerateCourseLoading] = useState(false);
+  const router = useRouter()
 
   const handleClick = (subcategoryId, categoryName, subcategoryName) => {
     setShowPopup(true);
@@ -49,13 +53,6 @@ export default function JobPrepPage() {
       const response = await summaryapi.mockinterviewGet(id);
       setSummary(response.summary);
       setFailed(response.failed_topics);  
-    }
-
-    const generateCourse = async() => {
-      const mockInterviewId = interviewList[0].mock_interview_id;
-      const generatedCourseId = (await coursegeneratorapi.generate(mockInterviewId)).course_id;
-      setStartUpdatingCourse(true);
-      setCourseId(generatedCourseId);
     }
  
     if(completed){
@@ -93,6 +90,39 @@ export default function JobPrepPage() {
     }
     updateCourse();
   }, [courseId, startUpdatingCourse]);
+
+  const generateCourse = async() => {
+    try {
+      const mockInterviewId = interviewList[0]?.mock_interview_id;
+      setIsGenerateCourseLoading(true)
+      const generatedCourseId = (await coursegeneratorapi.generate(mockInterviewId)).course_id;
+      setIsGenerateCourseLoading(false)
+
+      toast.success('Course generated successfully', {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+
+      router.push(`/course/create/${generatedCourseId}`)
+    } catch (error) {
+      toast.error('Error has occured', {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }
 
   useEffect(() => {
     let total = 0;
@@ -242,13 +272,55 @@ export default function JobPrepPage() {
                   </div>
                 </div>
 
-                <button className="rounded-md bg-dip-purple text-white px-3 py-2 font-bold mt-5">Learn More!</button>
+                <button
+                  className={`rounded-md px-3 py-2 font-bold mt-5 transition flex items-center justify-center gap-2
+                    ${isGenerateCourseLoading ? "bg-gray-400 cursor-not-allowed" : "bg-dip-purple text-white hover:bg-purple-700"}
+                  `}
+                  disabled={isGenerateCourseLoading}
+                  onClick={generateCourse}
+                >
+                  {isGenerateCourseLoading && (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                  )}
+                  {isGenerateCourseLoading ? "Loading..." : "Learn More!"}
+                </button>
               </div>
             )
           ) : (
             <div></div>
           )}
         </div>
+        <ToastContainer
+            position="bottom-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+        />
       </div>
     </div>
   );
