@@ -1,9 +1,11 @@
 import type { Config } from "tailwindcss";
+import flowbite from 'flowbite-react/tailwind';
 
 export default {
     darkMode: ["class"],
     content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
+	flowbite.content(),
   ],
   theme: {
   	extend: {
@@ -55,5 +57,5 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), flowbite.plugin()],
 } satisfies Config;
