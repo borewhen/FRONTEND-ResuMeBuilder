@@ -1,53 +1,54 @@
 import axios from 'axios';
+import { AxiosRequestConfig } from "axios";
 
 const FetchClient = {
-    async get(url:string, includeAccessToken:boolean = true, includeCredentials:boolean = true) {
+    async get(url: string, config: AxiosRequestConfig = {}, includeAccessToken: boolean = true, includeCredentials: boolean = true) {
+        const headers: Record<string, string> = {};
         if (includeAccessToken) {
-            return await axios.get(url, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                withCredentials: includeCredentials,
-            });
-        } else {
-            return await axios.get(url, {withCredentials: includeCredentials});
+            headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`;
         }
+
+        return await axios.get(url, {
+            ...config,
+            headers,
+            withCredentials: includeCredentials,
+        });
     },
-    async post(url:string, body: any, includeAccessToken = true, includeCredentials:boolean = true) {
+
+    async post(url: string, body: any, includeAccessToken: boolean = true, includeCredentials: boolean = true) {
+        const headers: Record<string, string> = {};
         if (includeAccessToken) {
-            return await axios.post(url, body, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                withCredentials: includeCredentials,
-            });
-        } else {
-            return await axios.post(url, body, {withCredentials: includeCredentials});
+            headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`;
         }
+
+        return await axios.post(url, body, {
+            headers,
+            withCredentials: includeCredentials,
+        });
     },
-    async put(url:string, includeAccessToken = true, includeCredentials:boolean = true) {
+
+    async put(url: string, body: any, includeAccessToken: boolean = true, includeCredentials: boolean = true) {
+        const headers: Record<string, string> = {};
         if (includeAccessToken) {
-            return await axios.put(url, null, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                withCredentials: includeCredentials,
-            });
-        } else {
-            return await axios.put(url, null, {withCredentials: includeCredentials});
+            headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`;
         }
+
+        return await axios.put(url, body, {
+            headers,
+            withCredentials: includeCredentials,
+        });
     },
-    async delete(url: string, includeAccessToken = true, includeCredentials:boolean = true) {
+
+    async delete(url: string, includeAccessToken: boolean = true, includeCredentials: boolean = true) {
+        const headers: Record<string, string> = {};
         if (includeAccessToken) {
-            return await axios.delete(url, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                withCredentials: includeCredentials,
-            });
-        } else {
-            return await axios.delete(url, {withCredentials: includeCredentials});
+            headers.Authorization = `Bearer ${localStorage.getItem("access_token")}`;
         }
+
+        return await axios.delete(url, {
+            headers,
+            withCredentials: includeCredentials,
+        });
     }
 };
 

@@ -1,96 +1,75 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
-
-const initialSkills = [
-    { id: 1, name: 'JavaScript' },
-    { id: 2, name: 'React' },
-    { id: 3, name: 'Node.js' },
-];
+import JobDisplay from "./(components)/jobdisplay";
+import { useEffect, useState } from "react";
+import scraper from '@/lib/app/job/api/scrape';
+import { JobScraperResponse } from "@/lib/app/job/types";
+import clsx from "clsx";
+import { SlidersHorizontal } from "lucide-react";
+import JobDetail from "./(components)/jobDetail";
+import JobCardLoading from "./(components)/jobCardLoading";
+import 'react-loading-skeleton/dist/skeleton.css'
+import JobDetailLoading from "./(components)/jobDetailLoading";
 
 const JobsPage: React.FC = () => {
-    const [skills, setSkills] = useState(initialSkills);
-    const [newSkill, setNewSkill] = useState('');
+    const [jobs, setJobs] = useState<JobScraperResponse>([]);
+    const [search, setSearch] = useState<string>('software engineer');
+    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
 
-    const handleAddSkill = () => {
-        if (newSkill.trim()) {
-            setSkills([...skills, { id: skills.length + 1, name: newSkill }]);
-            setNewSkill('');
-        }
-    };
+    useEffect(() => {
+        handleSubmit()
+    }, [])
 
-    const handleDeleteSkill = (id: number) => {
-        setSkills(skills.filter(skill => skill.id !== id));
-    };
+    const handleSubmit = async () => {
+        setLoading(true);
+        const data = await scraper.get({
+            field: search,
+            page: pageNumber
+        })
+        setJobs(data);
+        setSelectedJobId(data[0]?.job_id)
+        setLoading(false);
+    }
 
     return (
-        <div className="min-h-screen bg-[#f5f3ef] py-8">
-            <div className="max-w-4xl mx-auto space-y-6">
-                <h1 className="text-2xl font-bold">My Skills</h1>
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                    <h2 className="text-xl font-semibold mb-4">Skills List</h2>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {skills.map(skill => (
-                            <div key={skill.id} className="flex items-center bg-dip-80 text-white rounded-full px-4 py-2">
-                                <span>{skill.name}</span>
-                                <button 
-                                    onClick={() => handleDeleteSkill(skill.id)} 
-                                    className="ml-2 text-white hover:text-red-400"
-                                >
-                                    &times; {/* Close icon */}
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex items-center border-2 border-dip-80 text-dip-100 rounded-full px-4 py-2">
-                        <input 
-                            type="text" 
-                            value={newSkill} 
-                            onChange={(e) => setNewSkill(e.target.value)} 
-                            placeholder="Add a new skill" 
-                            className="bg-transparent border-none outline-none text-dip-100 flex-1"
-                        />
-                        <button 
-                            onClick={handleAddSkill} 
-                            className="ml-2 bg-dip-80 text-white rounded-full px-4 py-1"
-                        >
-                            Add
+        <div className="bg-white w-full min-h-screen py-8">
+            <div className='w-[70rem] mx-auto flex gap-8 mt-[50px]'>
+                <div className="w-[30rem]"> 
+                    <div className='w-70 flex gap-6'>
+                        <input type="text" placeholder="Search for jobs or company" className='w-[22rem] border border-dip-grey rounded-md py-3 px-5 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))} onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                            handleSubmit();
+                            }
+                        }}/>
+                        <button className="border border-dip-grey w-14 flex items-center justify-center">
+                            <SlidersHorizontal className="text-gray-600 w-6 h-6" />
                         </button>
                     </div>
-                </div>
-
-                {/* Job Listings */}
-                <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-6">Job Listings</h2>
-                <div className="space-y-6">
-                    {/* Sample Item 1 */}
-                    <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                        <div className="w-12 h-12 bg-[#e6e0d4] rounded-lg flex items-center justify-center">
-                        <span className="text-[#8b7355] font-semibold">C1</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-semibold text-gray-900">Company 1</h3>
-                        <p className="text-lg text-gray-700">Floor Cleaner</p>
-                        <p className="text-sm text-gray-500 mt-1">Wipe that down</p>
-                    </div>
-                    </div>
-
-                    {/* Sample Item 2 */}
-                    <div className="flex gap-4">
-                    <div className="flex-shrink-0">
-                        <div className="w-12 h-12 bg-[#e6e0d4] rounded-lg flex items-center justify-center">
-                        <span className="text-[#8b7355] font-semibold">C2</span>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="text-xl font-semibold text-gray-900">Company 2</h3>
-                        <p className="text-lg text-gray-700">Chicken Rice Eater</p>
-                        <p className="text-sm text-gray-500 mt-1">Gobble Gobble</p>
-                    </div>
+                    <div className="w-30 flex flex-col gap-5 mt-12">
+                        {!loading && jobs.length? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : <>
+                            {Array.from({ length: 10 }).map((_, index) => (
+                                <JobCardLoading key={index} />
+                            ))}
+                            </>
+                        }
+                        {!loading && jobs.length?<div className="flex w-36 mx-auto justify-between mt-4">
+                            {[1,2,3,4,5].map((page, index) => (
+                                <div key={index} onClick={()=>{if(page!==pageNumber){setPageNumber(page); handleSubmit()}}} className={clsx(page===pageNumber?"bg-slate-200":"", "rounded-full w-8 h-8 flex items-center justify-center hover:cursor-pointer")}>
+                                    {page}
+                                </div>
+                            ))}
+                        </div> : ""}
                     </div>
                 </div>
+                <div className="w-[40rem]">
+                    <div className="sticky top-10">
+                        {selectedJobId ? <JobDetail selectedJobId={selectedJobId} /> : (
+                            <JobDetailLoading/>
+                        )
+                    }
+                    </div>
                 </div>
             </div>
         </div>

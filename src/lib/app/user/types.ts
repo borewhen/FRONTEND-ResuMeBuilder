@@ -15,11 +15,13 @@ interface UserLoginSucess {
         username: string,
         user_id: number,
         role: string,
-    }
+    },
+    access_token: string,
 }
 
 interface UserLoginError {
-    detail: string
+    detail: string,
+    access_token: string | null,
 }
 export type UserLoginResponse = UserLoginSucess | UserLoginError;
 export interface UserRegister {

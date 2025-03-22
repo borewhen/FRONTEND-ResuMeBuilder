@@ -19,8 +19,10 @@ class UserLoginApi {
                 userData,
                 false
             );
-
             const data: UserLoginResponse = await response.data;
+            if (data?.access_token) {
+                localStorage.setItem('access_token', data.access_token);
+            }
             return data;
         } 
         catch(error: any){

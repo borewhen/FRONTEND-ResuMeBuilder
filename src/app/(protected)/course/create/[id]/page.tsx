@@ -1,0 +1,141 @@
+"use client";
+import { FunctionComponent, useEffect, useState } from "react";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { Course } from "@/lib/app/course/types";
+import { ToastContainer, toast } from 'react-toastify';
+import coursegetterapi from "@/lib/app/course/api/get";
+import coursegeneratorapi from "@/lib/app/course/api/generate";
+import MoonLoader from "react-spinners/MoonLoader";
+
+interface Props {}
+
+const CreateSubTopicsPage: FunctionComponent<Props> = () => {
+    const { id: courseId } = useParams();
+    const router = useRouter();
+    const [course, setCourse] = useState<Course | []>([]);
+    const [loading, setLoading] = useState(false);
+    const [isCourseLoading, setCourseLoading] = useState(false);
+
+    useEffect(() => {
+        const getCourseDetail = async () => {
+            setCourseLoading(true)
+            let course_details = await coursegetterapi.getById(courseId);
+            setCourse(course_details)
+            setCourseLoading(false)
+        }
+
+        getCourseDetail();
+    }, [])
+
+    const generateSubTopicContent = async () => {
+        try {
+            setLoading(true);
+            await coursegeneratorapi.update(courseId);
+            router.push(`/course/${courseId}/0/0`);
+            setLoading(false);
+            toast.success('Course generated successfully', {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        } catch (err) {
+            toast.error('Error has occured', {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
+    };
+
+    return (
+        isCourseLoading ? (
+            <div className="w-full h-full flex justify-center items-center">
+                <MoonLoader
+                color="#030510"
+                loading={true}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+                />
+            </div>
+        ) : (
+            <div className="py-28 flex justify-center items-center">
+            <div>
+                <p className="text-lg">COURSE</p>
+                <h1 className="font-bold text-black text-4xl">
+                    {course?.company_name}
+                </h1>
+                <h1 className="text-gray-700 text-xl">
+                    {course?.job_position}
+                </h1>
+                <div className="bg-[#F5F5F4] px-4 py-5 mt-5 flex gap-3 items-center">
+                    <AlertCircle className="text-[#5FA5F9]" size={35} />
+                    <p className="text-md">
+                        We generated chapters for each of your units. Look over
+                        them and then click the Button to confirm and continue
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[2000px]">
+                    {course?.units &&
+                        course?.units.map((unit, index) => (
+                        <div className="mt-8" key={index}>
+                            <p className="text-[#767574] font-semibold">UNIT {index + 1}</p>
+                            <h2 className="text-2xl font-bold">{unit?.unit_name}</h2>
+                            <div className="mt-2 flex flex-col gap-2">
+                            {unit?.chapters &&
+                                unit?.chapters.map((chapter, index) => (
+                                <div className="bg-[#F5F5F4] py-3 px-5" key={index}>
+                                    {chapter?.chapter_name}
+                                </div>
+                                ))}
+                            </div>
+                        </div>
+                        ))}
+                </div>
+
+
+                <div className="mt-12 flex items-center gap-5 justify-center">
+                    <div className="flex gap-2">
+                        <Button
+                            className="font-bold flex gap-1 bg-black text-white"
+                            onClick={generateSubTopicContent}
+                            disabled={loading}
+                        >
+                            {loading ? "Loading..." : "Generate"}
+                            <ChevronRight />
+                        </Button>
+                    </div>
+                </div>
+                <ToastContainer
+                    position="bottom-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                />
+            </div>
+        </div>
+        )   
+    );
+};
+
+export default CreateSubTopicsPage;
