@@ -8,48 +8,34 @@ import { useRouter } from "next/navigation";
 import { Course } from "@/lib/app/course/types";
 import { ToastContainer, toast } from 'react-toastify';
 import coursegetterapi from "@/lib/app/course/api/get";
+import coursegeneratorapi from "@/lib/app/course/api/generate";
+import MoonLoader from "react-spinners/MoonLoader";
 
 interface Props {}
 
 const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     const { id: courseId } = useParams();
-    console.log(courseId)
     const router = useRouter();
     const [course, setCourse] = useState<Course | []>([]);
     const [loading, setLoading] = useState(false);
+    const [isCourseLoading, setCourseLoading] = useState(false);
 
     useEffect(() => {
         const getCourseDetail = async () => {
+            setCourseLoading(true)
             let course_details = await coursegetterapi.getById(courseId);
             setCourse(course_details)
+            setCourseLoading(false)
         }
 
         getCourseDetail();
     }, [])
-    console.log(course);
 
     const generateSubTopicContent = async () => {
         try {
             setLoading(true);
-            const requestBody: any = [];
-            /* course?.units.forEach((unit) => {
-                const unitName = unit.unitName;
-                unit?.chapters.forEach((chapter) => {
-                    const chapterName = chapter.chapterName;
-                    const chapterId = chapter.id;
-                    requestBody.push({ unitName, chapterName, chapterId });
-                });
-            });
-
-            await Promise.all(
-                requestBody.map((chapter: any) => {
-                    return apiClient.put("/course", chapter);
-                })
-            );
-
-            
-            //router.push(`/course/${course?.id}/0/0`);
-            */
+            await coursegeneratorapi.update(courseId);
+            router.push(`/course/${courseId}/0/0`);
             setLoading(false);
             toast.success('Course generated successfully', {
                 position: "bottom-center",
@@ -76,7 +62,17 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     };
 
     return (
-        <div className="py-28 flex justify-center items-center">
+        isCourseLoading ? (
+            <div className="w-full h-full flex justify-center items-center">
+                <MoonLoader
+                color="#030510"
+                loading={true}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+                />
+            </div>
+        ) : (
+            <div className="py-28 flex justify-center items-center">
             <div>
                 <p className="text-lg">COURSE</p>
                 <h1 className="font-bold text-black text-4xl">
@@ -138,6 +134,7 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
                 />
             </div>
         </div>
+        )   
     );
 };
 
