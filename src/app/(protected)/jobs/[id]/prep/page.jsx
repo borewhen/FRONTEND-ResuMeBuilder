@@ -46,6 +46,7 @@ export default function JobPrepPage() {
   }
 
   useEffect(() => {
+    setIsLoading(false);
     if(interviewList.length === 0) return;
     const completed = interviewList.every(category => category.subcategories.every(subcategory => !subcategory.status));
 
@@ -68,7 +69,6 @@ export default function JobPrepPage() {
       setIsLoading(true);
       const response = await topicsapi.post(id)
       setInterviewList(response);
-      setIsLoading(false);
     }
 
     const fetchJobDetail = async () => {

@@ -1,140 +1,76 @@
 "use client";
 
 import React from 'react';
-import { RxUpload } from 'react-icons/rx'; // Import the upload icon
 import { useState, useEffect } from 'react';
-import uploadVideo from '@/lib/app/video/api/upload_video'; // Import the video upload API
 import clsx from 'clsx';
-import LoadingAnimation from '@/app/(protected)/_components/loading';
-import InterviewAnalysis from '@/app/(protected)/_components/interview/interview-analysis';
+import { FaMicrophone } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa";
 
+
+const templateQnA = [
+  {
+    question: "In what way do you think you can contribute to our company?",
+    answer: "I am good!"
+  },
+  {
+    question: "Why do you want to join our company?",
+    answer: "The building looks good from outside. Also I love the cai fan from the coffee shop near your office."
+  },
+  {
+    question: "What did you do as a Middle-End Engineer at your previous company?",
+    answer: "I integrate the API created on the backend side with the ui on the frontend side."
+  },
+  {
+    question: "Have you done any internship previously?",
+    answer: "Yes, I've previously done an internship as a Middle-End Engineer at TikTok as a part of my credit bearing internship"
+  },
+  {
+    question: "Explain briefly about your Resume!",
+    answer: "I am currently a 3rd Year Information Engineering Student from Nanyang Technological Univerisity"
+  },
+]
 const InterviewPage: React.FC = () => {
-  const [videoSrc, setVideoSrc] = useState<string | null>(null);
-  const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
-  const [transcript, setTranscript] = useState<string | null>(null);
-  const [analysis, setAnalysis] = useState<string | null>(null);
-
-  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setVideoSrc(url);
-      setVideoFile(file);
-    }
-  }
-
-  const handleAnalyzeVideo = async () => {
-    if (!videoFile) return;
-    setIsSubmitted(true);
-  }
- 
-  useEffect(() => {
-    if (!videoFile || !isSubmitted) return;
-    const analyzeVideo = async() => {
-      setLoadingResponse(true);
-      const formData = new FormData();
-      formData.append('file', videoFile);
-
-      try{
-        const response = await uploadVideo.post(formData);
-        if(response.success){
-          setTranscript(response.transcript);
-          setAnalysis(response.analysis);
-        }
-        else throw new Error(response.message);
-      } catch (err) {
-        console.log(err)
-        throw new Error(err instanceof Error ? err.message : String(err));
-      } finally {
-        setLoadingResponse(false);
-        setIsSubmitted(false);
-      }
-    }
-
-    analyzeVideo();
-  }, [isSubmitted, videoFile]);
-
+  const [micOn, setMicOn] = useState(true);
+  const [videoOn, setVideoOn] = useState(true)
   return (
-    <div className="w-screen min-h-screen bg-[#f5f3ef] py-8">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <h1 className='text-4xl font-bold text-dip-100 w-80 border-dip-60 border-b-4'>Interview</h1>
-        <div className='italic'>
-          {!videoSrc && "This section is used to analyze your interview video. Please upload your video to get started."}
+    <div className='bg-white w-full min-h-screen py-8'>
+      <div className='w-[80rem] ml-20 flex'>
+        <div className='w-1/2 h-[40rem] border-r'>
+          <div className='w-full h-96 bg-dip-blk items-center justify-center'>
+            <div className='text-white'>Video</div>
+            <div className='flex relative top-72 w-full items-center justify-center'>
+              <FaMicrophone className={clsx('text-white h-12 w-12 rounded-full p-2 mx-2', micOn? "bg-gray-600":"bg-red-600")} onClick={()=>setMicOn(!micOn)}/>
+              <FaVideo className={clsx('text-white h-12 w-12 rounded-full p-2 mx-2', videoOn? "bg-gray-600":"bg-red-600")} onClick={()=>setVideoOn(!videoOn)}/>
+            </div>
+          </div>
+          <div className='mt-2 px-2'>
+            <div className='font-bold'>Transcript</div>
+            <div>omg!</div>
+          </div>
         </div>
-        {
-          videoSrc? (
-            <div className="space-y-6 w-full">
-              <div className='w-full flex justify-center bg-dip-40 rounded-xl'>
-                <video 
-                  src={videoSrc} 
-                  controls 
-                  className="w-2/3 shadow-sm"
-                />
-              </div>
-              {
-                // Loading animation if the response is still loading...
-                loadingResponse && (
-                  <LoadingAnimation />
-                )
-              }
-              {
-                !transcript || !analysis || loadingResponse?
-                (
-                  <div className='flex justify-center'>
-                    <input 
-                      type="file" 
-                      accept="video/*" 
-                      className="hidden" 
-                      id="video-upload"
-                      onChange={handleVideoUpload}
-                      disabled={loadingResponse}
-                    />
-                    <label 
-                      htmlFor="video-upload" 
-                      className={clsx(loadingResponse? "bg-dip-60" : "bg-dip-80 hover:bg-dip-100"
-                        ," inline-block text-white font-bold py-2 px-4 rounded-xl mr-6")}
-                    >
-                      <div className="flex items-center">
-                        <RxUpload className="w-4 h-4 mr-2" />
-                        <span>Reupload Interview</span>
-                      </div>
-                    </label>
-                    <button 
-                      className={clsx(loadingResponse? "bg-dip-60":"bg-dip-80 hover:bg-dip-100", "text-white font-bold py-2 px-4 rounded-xl")}
-                      onClick={() => {handleAnalyzeVideo()}}
-                      disabled={loadingResponse}
-                    >
-                      Analyze Video
-                    </button>
+        <div className='w-1/2 max-h-[40rem] overflow-y-scroll'>
+          <div className='absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md'>
+            <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white'>More Question!</button>
+            <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white'>Finish</button>
+          </div>
+          <div className='mt-8 px-8 py-2 flex flex-col-reverse'>
+            {
+              templateQnA.map((data, index) => {
+                const {question, answer} = data;
+                return (
+                  <div className='mt-4 w-full bg-purple-300 px-4 py-2 rounded-md' key={index}>
+                    <div className=''>Q: {question}</div>
+                    <div className=''>A: {answer}</div>
                   </div>
-                ): <InterviewAnalysis transcript={transcript} analysis={analysis} />
-              }
-            </div>
-          )
-          :(
-            <div className="space-y-6 w-full">
-              <input 
-                type="file" 
-                accept="video/*" 
-                className="hidden" 
-                id="video-upload"
-                onChange={handleVideoUpload}
-              />
-              <label 
-                htmlFor="video-upload" 
-                className="bg-dip-60 flex justify-center items-center cursor-pointer text-dip-100 w-[56rem] h-[18rem] flex-col border-dip-100 border-4 rounded-xl border-dashed"
-              >
-                <RxUpload className="w-20 h-20 mb-2" />
-                <h2 className="font-bold text-xl">Upload Interview</h2>
-              </label>
-            </div>
-          )
-        }
+                )
+              })
+            }
+          </div>
+          
+        </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default InterviewPage;
