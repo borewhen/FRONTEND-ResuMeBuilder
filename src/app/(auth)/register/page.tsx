@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { UserRegister } from '@/lib/app/user/types';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import register from '@/lib/app/user/api/register';
 import Link from 'next/link';
 
@@ -44,7 +45,7 @@ export default function RegisterPage() {
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!userData.email || !userData.password){
-            setError('Please fill in all fields');
+            setError('Please fill in all fields.');
             return;
         }
         if (error){
@@ -60,48 +61,100 @@ export default function RegisterPage() {
         }
         catch(error: unknown){
             console.log(error);
-            setError('Email already exists');
+            setError('Email already exists.');
         }
     }
 
     return (
-        <div className='h-full w-full flex justify-center items-center'>
-            <Card className="w-96 border-transparent shadow-xl">
-                <CardHeader>
-                    <h1 className='text-2xl font-bold'>Register</h1>
-                    <div className='text-sm'>Keep pace with your industry landscape!</div>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit}>
-                        <Input 
-                            className='mb-4 focus-visible:ring-transparent focus-visible:border-black focus-visible:border-2' 
-                            placeholder='Email'
-                            type='email' 
-                            name='email'
-                            onChange={handleChange}/>
-                        <Input 
-                            className='mb-4 focus-visible:ring-transparent focus-visible:border-black focus-visible:border-2'
-                            placeholder='Password' 
-                            type='password' 
-                            name='password'
-                            onChange={handleChange}/>
+        <div className='h-screen w-full flex justify-center items-center'>
 
-                        <Input 
-                            className='focus-visible:ring-transparent focus-visible:border-black focus-visible:border-2'
-                            placeholder='Confirm Password' 
-                            type='password' 
-                            name='cfmPassword'
-                            onChange={(e) => {setCfmPassword(e.target.value)}}/>
-                        
-                        <div className='text-xs text-red-500 mt-1 pl-1 font-bold'>{error}</div>
-                        <Button className='w-full rounded-full mt-4 font-bold' type='submit'>Register</Button>
-                        <span className='text-xs font-semibold pl-1 text-gray-500'> Already registered?</span>
-                        <Link href='/login' className='text-xs font-semibold hover:underline pl-1 text-blue-500'>Login</Link>
-                    </form>
-                    
-                </CardContent>
+          <Card className="w-1/2 flex flex-col border-transparent justify-center px-16">
+            <CardHeader>
+            <div className="mb-6">
+              <Image src="https://cognimate.vercel.app/favicon.svg" alt="Logo" width={50} height={50} />
+            </div>
 
-            </Card>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Register an account</h2>
+            </CardHeader>
+
+            <CardContent>
+            <form onSubmit={handleSubmit} className="w-full">
+
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-medium mb-1">
+                  Email
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your mail address"
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-medium mb-1">
+                  Password
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="Enter password"
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-medium mb-1">
+                  Confirm Password
+                  <span className="text-red-500 ml-1">*</span>
+                </label>
+                <Input
+                  type="password"
+                  name="cfmPassword"
+                  placeholder="Enter password"
+                  onChange={(e) => {setCfmPassword(e.target.value)}}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
+                />
+              </div>
+
+              { error && <div className='block text-red-500 text-sm font-medium mb-1'>{error}</div>
+}
+              <div className="flex justify-between items-center mb-6">
+                <label className="flex items-center text-sm text-gray-600">
+                  <input type="checkbox" className="mr-2 rounded" />
+                  Remember me
+                </label>
+                <Link href="/reset" className="text-sm text-blue-500 hover:underline">
+                  Forgot your password?
+                </Link>
+              </div>
+
+              <Button className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition" type="submit">
+                Register
+              </Button>
+            </form>
+
+            <p className="mt-4 text-sm text-gray-600 text-center">
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-500 hover:underline">
+                Login here
+              </Link>
+            </p>
+            </CardContent>
+          </Card>
+
+          <div className="w-1/2 relative h-screen">
+            <img
+              src='https://i.imgur.com/UPXZRVW.png'
+              alt="Login Image"
+              className="object-cover w-full h-full"
+            />
+          </div>
         </div>
     )
 }
