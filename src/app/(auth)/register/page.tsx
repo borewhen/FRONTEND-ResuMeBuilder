@@ -122,17 +122,11 @@ export default function RegisterPage() {
                 />
               </div>
 
-              { error && <div className='block text-red-500 text-sm font-medium mb-1'>{error}</div>
-}
-              <div className="flex justify-between items-center mb-6">
-                <label className="flex items-center text-sm text-gray-600">
-                  <input type="checkbox" className="mr-2 rounded" />
-                  Remember me
-                </label>
-                <Link href="/reset" className="text-sm text-blue-500 hover:underline">
-                  Forgot your password?
-                </Link>
-              </div>
+                {error && (
+                    <div className="block text-red-500 text-sm font-medium mb-1">
+                        {error}
+                    </div>
+                )}
 
               <Button className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition" type="submit">
                 Register
