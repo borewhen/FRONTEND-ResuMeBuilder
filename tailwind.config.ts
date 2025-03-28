@@ -19,11 +19,19 @@ export default {
   		},
   		colors: {
   			dip: {
+                  /* Original brown color
   				'20': '#F5F3EF',
   				'40': '#E5E0D5',
   				'60': '#D1CAB9',
   				'80': '#C0AC8F',
   				'100': '#877459',
+                  */
+                  '0' : '#000000',
+                '20': '#4a4a48', 
+  				'40': '#7a7a77',
+  				'60': '#a3a29e',
+  				'80': '#d1cfcb', 
+  				'100': '#F5F3EF',
   				blk: '#171717',
 				purple: '#773FF2',
 				grey: '#A8A8A8',
