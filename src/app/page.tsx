@@ -29,7 +29,6 @@ export default function LandingPage() {
     });
 
     // Smoother opacity transitions with more overlap
-    /* Original opacity settings
     const opacity1 = useTransform(smoothProgress, [0, 0.15, 0.25], [1, 1, 0]);
     const opacity2 = useTransform(
         smoothProgress,
@@ -43,29 +42,7 @@ export default function LandingPage() {
     );
     const opacity4 = useTransform(
         smoothProgress,
-        [0.6, 0.75, 0.9, 1],
-        [0, 1, 1, 1]
-    ); */
-
-    const opacity1 = useTransform(
-        smoothProgress, 
-        [0, 0.15, 0.25], 
-        [1, 1, 0]
-    );
-
-    const opacity2 = useTransform(
-        smoothProgress,
-        [0.05, 0.15, 0.3, 0.4],
-        [0, 1, 1, 0]
-    );
-    const opacity3 = useTransform(
-        smoothProgress,
-        [0.25, 0.4, 0.55, 0.65],
-        [0, 1, 1, 0]
-    );
-    const opacity4 = useTransform(
-        smoothProgress,
-        [0.5, 0.65, 0.8, 0.9],
+        [0.65, 0.75, 0.9, 1],
         [0, 1, 1, 1]
     );
 
@@ -118,10 +95,10 @@ export default function LandingPage() {
                             className="mr-2"
                             onError={(e) => {
                                 e.currentTarget.src =
-                                    "https://placehold.co/40x40/dip-100/black?text=UH";
+                                    "https://placehold.co/40x40/dip-100/white?text=UH";
                             }}
                         />
-                        <a href="/" className="text-dip-blk text-xl font-bold">
+                        <a href="/" className="text-white text-xl font-bold">
                             UHired.ai
                         </a>
                     </div>
@@ -133,31 +110,31 @@ export default function LandingPage() {
                             <>
                                 <button
                                     onClick={() => scrollToSection(feature1Ref)}
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     AI Practice
                                 </button>
                                 <button
                                     onClick={() => scrollToSection(feature2Ref)}
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Video Analysis
                                 </button>
                                 <button
                                     onClick={() => scrollToSection(feature3Ref)}
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Job Matching
                                 </button>
                                 <button
                                     onClick={() => router.push("/login")}
-                                    className="w-[100px] text-dip-blk/80 hover:text-dip-blk px-4 py-2 rounded-full border border-dip-0 border-2 font-bold transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
-                                    Login
+                                    Log In
                                 </button>
                                 <button
                                     onClick={() => router.push("/register")}
-                                    className="w-[100px] border border-2 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full font-bold transition-colors"
+                                    className="bg-white text-dip-100 hover:bg-white/90 px-4 py-2 rounded-full transition-colors"
                                 >
                                     Sign Up
                                 </button>
@@ -167,25 +144,25 @@ export default function LandingPage() {
                             <>
                                 <Link
                                     href="/jobs"
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Jobs
                                 </Link>
                                 <Link
                                     href="/course"
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Courses
                                 </Link>
                                 <Link
                                     href="/interview"
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Live Video Interview
                                 </Link>
                                 <Link
                                     href="/dashboard"
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Dashboard
                                 </Link>
@@ -195,7 +172,7 @@ export default function LandingPage() {
 
                     {/* Mobile menu button */}
                     <button
-                        className="md:hidden text-dip-blk"
+                        className="md:hidden text-white"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                         <svg
@@ -225,7 +202,7 @@ export default function LandingPage() {
                                         scrollToSection(feature1Ref);
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     AI Practice
                                 </button>
@@ -234,7 +211,7 @@ export default function LandingPage() {
                                         scrollToSection(feature2Ref);
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Video Analysis
                                 </button>
@@ -243,19 +220,19 @@ export default function LandingPage() {
                                         scrollToSection(feature3Ref);
                                         setMobileMenuOpen(false);
                                     }}
-                                    className="text-dip-blk/80 hover:text-dip-blk transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Job Matching
                                 </button>
                                 <button
                                     onClick={() => router.push("/login")}
-                                    className="text-dip-0/80 hover:text-dip-0 border border-dip-0 border-2 px-4 py-2 rounded-full transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
-                                    Login
+                                    Log In
                                 </button>
                                 <button
                                     onClick={() => router.push("/register")}
-                                    className="border border-2 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full transition-colors w-full"
+                                    className="bg-white text-dip-100 hover:bg-white/90 px-4 py-2 rounded-full transition-colors w-full"
                                 >
                                     Sign Up
                                 </button>
@@ -264,25 +241,25 @@ export default function LandingPage() {
                             <div className="flex flex-col space-y-4">
                                 <Link
                                     href="/jobs"
-                                    className="text-dip-0/80 hover:text-dip-0 transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Jobs
                                 </Link>
                                 <Link
                                     href="/course"
-                                    className="text-dip-0/80 hover:text-dip-0 transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Courses
                                 </Link>
                                 <Link
                                     href="/interview"
-                                    className="text-dip-0/80 hover:text-dip-0 transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Live Video Interview
                                 </Link>
                                 <Link
                                     href="/dashboard"
-                                    className="text-dip-0/80 hover:text-dip-0 transition-colors"
+                                    className="text-white/80 hover:text-white transition-colors"
                                 >
                                     Dashboard
                                 </Link>
@@ -358,14 +335,14 @@ export default function LandingPage() {
                 <div className="max-w-4xl w-full text-center">
                     {/* Logo */}
                     <div className="mb-12">
-                        <h1 className="text-dip-blk text-4xl font-bold">
+                        <h1 className="text-white text-4xl font-bold">
                             UHired.ai
                         </h1>
                     </div>
 
                     {/* Main Slogan */}
                     <motion.h2
-                        className="text-dip-blk text-5xl md:text-7xl font-bold mb-8 max-w-5xl mx-auto"
+                        className="text-white text-5xl md:text-7xl font-bold mb-8 max-w-5xl mx-auto"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
@@ -376,7 +353,7 @@ export default function LandingPage() {
 
                     {/* Subheading */}
                     <motion.p
-                        className="text-dip-blk/80 text-xl md:text-2xl mb-12 max-w-4xl mx-auto"
+                        className="text-white/80 text-xl md:text-2xl mb-12 max-w-4xl mx-auto"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
@@ -408,7 +385,7 @@ export default function LandingPage() {
                                 }}
                             />
                             <Button
-                                className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full transition-all"
+                                className="bg-white text-dip-100 hover:bg-white/90 text-lg font-bold py-6 px-10 rounded-full transition-all"
                                 onMouseEnter={() => setHoverSignup(true)}
                                 onMouseLeave={() => setHoverSignup(false)}
                                 onClick={() => router.push("/register")}
@@ -433,12 +410,12 @@ export default function LandingPage() {
                             />
                             <Button
                                 variant="outline"
-                                className="w-[140px] border border-4 border-dip-0 text-dip-0/80 hover:bg-dip-0/10 px-10 py-6 text-lg font-bold rounded-full transition-all"
+                                className="border-white text-white hover:bg-white/10 px-10 py-6 text-lg font-bold rounded-full transition-all"
                                 onMouseEnter={() => setHoverLogin(true)}
                                 onMouseLeave={() => setHoverLogin(false)}
                                 onClick={() => router.push("/login")}
                             >
-                                Login
+                                Log In
                             </Button>
                         </div>
                     </motion.div>
@@ -447,7 +424,7 @@ export default function LandingPage() {
                 <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-dip-0/50"
+                        className="h-8 w-8 text-white/50"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -478,7 +455,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="bg-dip-0 w-20 h-20 rounded-full flex items-center justify-center mb-8">
+                        <div className="bg-dip-20 w-20 h-20 rounded-full flex items-center justify-center mb-8">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-10 w-10 text-dip-100"
@@ -495,7 +472,7 @@ export default function LandingPage() {
                             </svg>
                         </div>
                         <motion.h2
-                            className="text-dip-blk text-4xl md:text-5xl font-bold mb-6"
+                            className="text-white text-4xl md:text-5xl font-bold mb-6"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{
                                 opacity: feature1InView ? 1 : 0,
@@ -506,7 +483,7 @@ export default function LandingPage() {
                             AI-Powered Practice
                         </motion.h2>
                         <motion.p
-                            className="text-dip-blk/80 text-xl leading-relaxed mb-8"
+                            className="text-white/80 text-xl leading-relaxed mb-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{
                                 opacity: feature1InView ? 1 : 0,
@@ -520,7 +497,7 @@ export default function LandingPage() {
                             prepare you for the real thing.
                         </motion.p>
                         <motion.ul
-                            className="text-dip-blk/80 text-lg space-y-4"
+                            className="text-white/80 text-lg space-y-4"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: feature1InView ? 1 : 0 }}
                             transition={{ duration: 0.5, delay: 0.4 }}
@@ -536,7 +513,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -561,7 +538,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -586,7 +563,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -620,7 +597,7 @@ export default function LandingPage() {
                                 className="rounded-xl w-full"
                                 onError={(e) => {
                                     e.currentTarget.src =
-                                        "https://placehold.co/600x400/dip-80/black?text=AI+Practice+Interface";
+                                        "https://placehold.co/600x400/dip-80/white?text=AI+Practice+Interface";
                                 }}
                             />
                         </div>
@@ -644,7 +621,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="bg-dip-0 w-20 h-20 rounded-full flex items-center justify-center mb-8">
+                        <div className="bg-dip-20 w-20 h-20 rounded-full flex items-center justify-center mb-8">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-10 w-10 text-dip-100"
@@ -661,7 +638,7 @@ export default function LandingPage() {
                             </svg>
                         </div>
                         <motion.h2
-                            className="text-dip-blk text-4xl md:text-5xl font-bold mb-6"
+                            className="text-white text-4xl md:text-5xl font-bold mb-6"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{
                                 opacity: feature2InView ? 1 : 0,
@@ -672,7 +649,7 @@ export default function LandingPage() {
                             Video Analysis
                         </motion.h2>
                         <motion.p
-                            className="text-dip-blk/80 text-xl leading-relaxed mb-8"
+                            className="text-white/80 text-xl leading-relaxed mb-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{
                                 opacity: feature2InView ? 1 : 0,
@@ -686,7 +663,7 @@ export default function LandingPage() {
                             you improve.
                         </motion.p>
                         <motion.ul
-                            className="text-dip-blk/80 text-lg space-y-4"
+                            className="text-white/80 text-lg space-y-4"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: feature2InView ? 1 : 0 }}
                             transition={{ duration: 0.5, delay: 0.4 }}
@@ -702,7 +679,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -729,7 +706,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -756,7 +733,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -790,7 +767,7 @@ export default function LandingPage() {
                                 className="rounded-xl w-full"
                                 onError={(e) => {
                                     e.currentTarget.src =
-                                        "https://placehold.co/600x400/dip-70/black?text=Video+Analysis+Interface";
+                                        "https://placehold.co/600x400/dip-70/white?text=Video+Analysis+Interface";
                                 }}
                             />
                         </div>
@@ -814,7 +791,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="bg-dip-0 w-20 h-20 rounded-full flex items-center justify-center mb-8">
+                        <div className="bg-dip-20 w-20 h-20 rounded-full flex items-center justify-center mb-8">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-10 w-10 text-dip-100"
@@ -831,7 +808,7 @@ export default function LandingPage() {
                             </svg>
                         </div>
                         <motion.h2
-                            className="text-dip-blk text-4xl md:text-5xl font-bold mb-6"
+                            className="text-white text-4xl md:text-5xl font-bold mb-6"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{
                                 opacity: feature3InView ? 1 : 0,
@@ -842,7 +819,7 @@ export default function LandingPage() {
                             Job Matching
                         </motion.h2>
                         <motion.p
-                            className="text-dip-blk/80 text-xl leading-relaxed mb-8"
+                            className="text-white/80 text-xl leading-relaxed mb-8"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{
                                 opacity: feature3InView ? 1 : 0,
@@ -856,7 +833,7 @@ export default function LandingPage() {
                             to succeed.
                         </motion.p>
                         <motion.ul
-                            className="text-dip-blk/80 text-lg space-y-4"
+                            className="text-white/80 text-lg space-y-4"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: feature3InView ? 1 : 0 }}
                             transition={{ duration: 0.5, delay: 0.4 }}
@@ -872,7 +849,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -897,7 +874,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -922,7 +899,7 @@ export default function LandingPage() {
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
+                                    className="h-6 w-6 text-dip-20 mr-2 flex-shrink-0 mt-1"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -954,7 +931,7 @@ export default function LandingPage() {
                                 className="rounded-xl w-full"
                                 onError={(e) => {
                                     e.currentTarget.src =
-                                        "https://placehold.co/600x400/dip-60/black?text=Job+Matching+Interface";
+                                        "https://placehold.co/600x400/dip-60/white?text=Job+Matching+Interface";
                                 }}
                             />
                         </div>
@@ -977,7 +954,7 @@ export default function LandingPage() {
 
                 <div className="max-w-4xl w-full text-center relative z-10">
                     <motion.h2
-                        className="text-dip-blk text-4xl md:text-6xl font-bold mb-8"
+                        className="text-white text-4xl md:text-6xl font-bold mb-8"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{
                             opacity: ctaInView ? 1 : 0,
@@ -988,7 +965,7 @@ export default function LandingPage() {
                         Ready to transform your career?
                     </motion.h2>
                     <motion.p
-                        className="text-dip-blk/80 text-xl md:text-2xl mb-12 max-w-3xl mx-auto"
+                        className="text-white/80 text-xl md:text-2xl mb-12 max-w-3xl mx-auto"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{
                             opacity: ctaInView ? 1 : 0,
@@ -1000,7 +977,7 @@ export default function LandingPage() {
                     </motion.p>
 
                     <motion.div
-                        className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+                        className="flex flex-col sm:flex-row gap-6 justify-center"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{
                             opacity: ctaInView ? 1 : 0,
@@ -1009,17 +986,17 @@ export default function LandingPage() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <Button
-                            className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full"
+                            className="bg-white text-dip-100 hover:bg-white/90 text-lg font-bold py-6 px-10 rounded-full"
                             onClick={() => router.push("/register")}
                         >
                             Sign Up
                         </Button>
 
                         <Button
-                            className="w-[140px] bg-transparent border-4 border-dip-0 text-dip-0/80 hover:bg-dip-0/10 text-lg font-bold py-6 px-10 rounded-full"
+                            className="bg-transparent border-2 border-white text-white hover:bg-white/10 text-lg font-bold py-6 px-10 rounded-full"
                             onClick={() => router.push("/login")}
                         >
-                            Login
+                            Log In
                         </Button>
                     </motion.div>
 
@@ -1046,18 +1023,18 @@ export default function LandingPage() {
                                 transition: { duration: 0.2 },
                             }}
                         >
-                            <p className="text-dip-blk/90 text-lg italic mb-6">
+                            <p className="text-white/90 text-lg italic mb-6">
                                 "UHired.ai transformed my interview preparation.
                                 The AI feedback helped me identify weaknesses I
                                 didn't know I had."
                             </p>
                             <div className="flex items-center">
-                                <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
+                                <div className="w-12 h-12 rounded-full bg-dip-20 mr-4"></div>
                                 <div>
-                                    <p className="text-dip-blk font-bold">
+                                    <p className="text-white font-bold">
                                         Sarah
                                     </p>
-                                    <p className="text-dip-blk/70 text-sm">
+                                    <p className="text-white/70 text-sm">
                                         Software Engineer
                                     </p>
                                 </div>
@@ -1077,18 +1054,18 @@ export default function LandingPage() {
                                 transition: { duration: 0.2 },
                             }}
                         >
-                            <p className="text-dip-blk/90 text-lg italic mb-6">
+                            <p className="text-white/90 text-lg italic mb-6">
                                 "The job matching feature connected me with
                                 opportunities I wouldn't have found otherwise.
                                 Landed my dream job in weeks!"
                             </p>
                             <div className="flex items-center">
-                                <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
+                                <div className="w-12 h-12 rounded-full bg-dip-20 mr-4"></div>
                                 <div>
-                                    <p className="text-dip-blk font-bold">
+                                    <p className="text-white font-bold">
                                         Michael
                                     </p>
-                                    <p className="text-dip-blk/70 text-sm">
+                                    <p className="text-white/70 text-sm">
                                         Product Manager
                                     </p>
                                 </div>
@@ -1099,11 +1076,11 @@ export default function LandingPage() {
             </motion.section>
 
             {/* Footer */}
-            <footer className="bg-dip-100 text-dip-blk/50 py-12 px-4">
+            <footer className="bg-dip-100 text-white/50 py-12 px-4">
                 <div className="max-w-6xl mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
                         <div className="mb-8 md:mb-0">
-                            <h3 className="text-dip-blk text-2xl font-bold mb-4">
+                            <h3 className="text-white text-2xl font-bold mb-4">
                                 UHired.ai
                             </h3>
                             <p className="max-w-xs">
@@ -1114,14 +1091,14 @@ export default function LandingPage() {
 
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
                             <div>
-                                <h4 className="text-dip-blk font-bold mb-4">
+                                <h4 className="text-white font-bold mb-4">
                                     Company
                                 </h4>
                                 <ul className="space-y-2">
                                     <li>
                                         <a
                                             href="#"
-                                            className="hover:text-dip-blk"
+                                            className="hover:text-white"
                                         >
                                             About
                                         </a>
@@ -1129,7 +1106,7 @@ export default function LandingPage() {
                                     <li>
                                         <a
                                             href="#"
-                                            className="hover:text-dip-blk"
+                                            className="hover:text-white"
                                         >
                                             Contact
                                         </a>
@@ -1139,10 +1116,10 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    <div className="border-t border-dip-0/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                    <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
                         <p>© 2025 UHired.ai. All rights reserved.</p>
                         <div className="flex space-x-4 mt-4 md:mt-0">
-                            <a href="#" className="hover:text-dip-0">
+                            <a href="#" className="hover:text-white">
                                 <svg
                                     className="h-6 w-6"
                                     fill="currentColor"
@@ -1151,7 +1128,7 @@ export default function LandingPage() {
                                     <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
                                 </svg>
                             </a>
-                            <a href="#" className="hover:text-dip-0">
+                            <a href="#" className="hover:text-white">
                                 <svg
                                     className="h-6 w-6"
                                     fill="currentColor"
@@ -1160,7 +1137,7 @@ export default function LandingPage() {
                                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
                                 </svg>
                             </a>
-                            <a href="#" className="hover:text-dip-0">
+                            <a href="#" className="hover:text-white">
                                 <svg
                                     className="h-6 w-6"
                                     fill="currentColor"
