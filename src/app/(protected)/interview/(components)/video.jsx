@@ -25,12 +25,14 @@ const VideoPage = ({setStartInterview}) => {
   const wsRef = useRef(null);
   const [eyeContact, setEyeContact] = useState(true);
 
+  // Summary
+  const [summaryClicked, setSummaryClicked] = useState(false);
+  const [summary, setSummary] = useState("");
+
   const startWebcam = async () => {
     try{
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
       setVideoOn(true);
     } catch (err) {
       console.error(err);
@@ -38,13 +40,10 @@ const VideoPage = ({setStartInterview}) => {
   }
 
   const stopWebcam = () => {
-    console.log(videoRef);
     if (videoRef.current) {
       const stream = videoRef.current.srcObject;
       const tracks = stream.getTracks();
       tracks.forEach(track => track.stop());
-      videoRef.current = null;
-      console.log("Webcam stopped");
     }
     setVideoOn(false);
   }
@@ -121,11 +120,16 @@ const VideoPage = ({setStartInterview}) => {
     };
 
     getQuestion();
-
+    setVideoOn(true);
     return () => {
         if (wsRef.current) wsRef.current.close();
         stopWebcam();
         stopMic();
+        if (videoRef.current) {
+            const stream = videoRef.current.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
     };
   }, []);
 
@@ -147,14 +151,6 @@ const VideoPage = ({setStartInterview}) => {
       }, "image/jpeg", 0.5);
   };
 
-  const sendMessage = (message) => {
-    if (socket.current.readyState === WebSocket.OPEN) {
-      socket.current.send(JSON.stringify(message));
-    } else {
-      console.error('WebSocket is not open. Message not sent:', message);
-    }
-  };
-
   useEffect(() => {
     const interval = setInterval(sendFrameToBackend, 100);
     return () => clearInterval(interval);
@@ -169,6 +165,15 @@ const VideoPage = ({setStartInterview}) => {
     });
     setTranscript("");
     await getQuestion();
+  }
+
+  const handleClickLeft = () => {
+    setSummaryClicked(true);
+    setSummary("Please Make Eye Contact with the Camera");
+  }
+  const handleClickRight = () => {
+    setSummaryClicked(true);
+    setSummary("Eye Contact is maintained with the Camera");
   }
 
   return (
@@ -203,20 +208,24 @@ const VideoPage = ({setStartInterview}) => {
         </div>
         <div className='w-1/2 max-h-[40rem] overflow-y-scroll'>
             <div className='absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md'>
-            <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white'>More Question!</button>
-            <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white' onClick={finishInterview}>Finish</button>
+            <button className='bg-dip-purple hover:bg-dip-lightpurple rounded-lg mx-2 text-white flex w-32'>
+              <div className='w-1/2 text-dip-purple px-[0.8rem] py-1' onClick={handleClickLeft}>.</div>
+              <div className='pr-16 pt-1' onClick={handleClickRight}>Summary</div>
+            </button>
+            <button className={clsx('bg-dip-purple px-6 py-1 rounded-lg mx-2 text-white disabled:bg-opacity-30', !summaryClicked? "bg-opacity-30":"hover:bg-dip-lightpurple")} disabled={!summaryClicked} onClick={finishInterview}>Finish</button>
             </div>
             <div className='mt-8 px-8 py-2 flex flex-col'>
-            {
-                questions.map((question, index) => {
-                  return (
-                      <div className='mt-4 w-full bg-purple-300 px-4 py-2 rounded-md' key={index}>
-                      <div className=''>Q: {question}</div>
-                      <div className=''>A: {index < answers.length? answers[index]: ""}</div>
-                      </div>
-                  )
-                })
-            }
+              {summary && <div className="mt-4">Summary: {summary}</div>}
+              {
+                  questions.map((question, index) => {
+                    return (
+                        <div className='mt-4 w-full bg-purple-300 px-4 py-2 rounded-md' key={index}>
+                        <div className=''>Q: {question}</div>
+                        <div className=''>A: {index < answers.length? answers[index]: ""}</div>
+                        </div>
+                    )
+                  })
+              }
             </div>
         </div>
     </div>
