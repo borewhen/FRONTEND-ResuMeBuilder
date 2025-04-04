@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const VideoPage = ({setStartInterview}) => {
   // Video
-  const [videoOn, setVideoOn] = useState(false);
+  const [videoOn, setVideoOn] = useState(true);
   const videoRef = useRef(null);
 
   // Mic

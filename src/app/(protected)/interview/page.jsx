@@ -55,6 +55,12 @@ const UploadResumePage = () => {
             setIsLoading(false);
         }
         getQuestion();
+        return () => {
+            setFile(null);
+            setFileUrl(null);
+            setFileName(null);
+            setShowFile(false);
+        }
     }, []);
     
     const handleFileChange = (event) => {
