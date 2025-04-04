@@ -1,35 +1,14 @@
 "use client";
 
-import React from 'react';
+import React, { use } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { BsFillMicFill, BsFillMicMuteFill, BsCameraVideoFill, BsCameraVideoOffFill } from "react-icons/bs";
+import axios from 'axios';
 
-const templateQnA = [
-  {
-    question: "In what way do you think you can contribute to our company?",
-    answer: "I am good!"
-  },
-  {
-    question: "Why do you want to join our company?",
-    answer: "The building looks good from outside. Also I love the cai fan from the coffee shop near your office."
-  },
-  {
-    question: "What did you do as a Middle-End Engineer at your previous company?",
-    answer: "I integrate the API created on the backend side with the ui on the frontend side."
-  },
-  {
-    question: "Have you done any internship previously?",
-    answer: "Yes, I've previously done an internship as a Middle-End Engineer at TikTok as a part of my credit bearing internship"
-  },
-  {
-    question: "Explain briefly about your Resume!",
-    answer: "I am currently a 3rd Year Information Engineering Student from Nanyang Technological Univerisity"
-  },
-]
-const VideoPage = () => {
+const VideoPage = ({setStartInterview}) => {
   // Video
-  const [videoOn, setVideoOn] = useState(true);
+  const [videoOn, setVideoOn] = useState(false);
   const videoRef = useRef(null);
 
   // Mic
@@ -38,7 +17,8 @@ const VideoPage = () => {
   const micRef = useRef(null);
 
   // QnA
-  const [qna, setqna] = useState(templateQnA);
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
 
   // Eye Tracking
   const canvasRef = useRef(null);
@@ -104,6 +84,23 @@ const VideoPage = () => {
     setMicOn(false);
   }
 
+  const getQuestion = async() => {
+    const userid = window.localStorage.getItem('user_id');
+    const response = await axios.post("http://localhost:8000/generate_interview/get-question", {
+      user_id: Number(userid)
+    });
+    const data = await response.data;
+    setQuestions(data.questions);
+    setAnswers(data.answers);
+  }
+
+  const finishInterview = async() => {
+    const userid = window.localStorage.getItem('user_id');
+    await axios.post('  http://localhost:8000/generate_interview/finish-interview', {
+      user_id: Number(userid)
+    })
+    setStartInterview(false);
+  }
 
   useEffect(() => {
     initMic();
@@ -122,6 +119,8 @@ const VideoPage = () => {
         const data = JSON.parse(event.data);
         setEyeContact(data.eye_contact);
     };
+
+    getQuestion();
 
     return () => {
         if (wsRef.current) wsRef.current.close();
@@ -161,6 +160,17 @@ const VideoPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const submitResponse = async() => {
+    setAnswers([...answers, transcript]);
+    const userid = window.localStorage.getItem('user_id');
+    const response = await axios.post("http://localhost:8000/generate_interview/submit-answer", {
+      user_id: Number(userid),
+      answer: transcript
+    });
+    setTranscript("");
+    await getQuestion();
+  }
+
   return (
     <div className='w-full flex'>
         <div className='w-1/2 h-[42.5rem] border-r'>
@@ -187,25 +197,24 @@ const VideoPage = () => {
             <div className='w-full h-44 overflow-scroll'>{transcript}</div>
             <div className='w-full flex justify-end mt-2'>
                 <button className={clsx('bg-dip-purple  px-6 py-1 rounded-lg mx-2 text-white', micOn? "bg-opacity-30": "hover:bg-dip-lightpurple")} onClick={()=>setTranscript("")} disabled={micOn}>Restart</button>
-                <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white'>Submit</button>
+                <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white' onClick={submitResponse}>Submit</button>
             </div>
             </div>
         </div>
         <div className='w-1/2 max-h-[40rem] overflow-y-scroll'>
             <div className='absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md'>
             <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white'>More Question!</button>
-            <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white'>Finish</button>
+            <button className='bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white' onClick={finishInterview}>Finish</button>
             </div>
-            <div className='mt-8 px-8 py-2 flex flex-col-reverse'>
+            <div className='mt-8 px-8 py-2 flex flex-col'>
             {
-                templateQnA.map((data, index) => {
-                const {question, answer} = data;
-                return (
-                    <div className='mt-4 w-full bg-purple-300 px-4 py-2 rounded-md' key={index}>
-                    <div className=''>Q: {question}</div>
-                    <div className=''>A: {answer}</div>
-                    </div>
-                )
+                questions.map((question, index) => {
+                  return (
+                      <div className='mt-4 w-full bg-purple-300 px-4 py-2 rounded-md' key={index}>
+                      <div className=''>Q: {question}</div>
+                      <div className=''>A: {index < answers.length? answers[index]: ""}</div>
+                      </div>
+                  )
                 })
             }
             </div>
