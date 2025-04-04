@@ -47,11 +47,7 @@ export default function LandingPage() {
         [0, 1, 1, 1]
     ); */
 
-    const opacity1 = useTransform(
-        smoothProgress, 
-        [0, 0.15, 0.25], 
-        [1, 1, 0]
-    );
+    const opacity1 = useTransform(smoothProgress, [0, 0.15, 0.25], [1, 1, 0]);
 
     const opacity2 = useTransform(
         smoothProgress,
@@ -157,7 +153,7 @@ export default function LandingPage() {
                                 </button>
                                 <button
                                     onClick={() => router.push("/register")}
-                                    className="w-[100px] border border-2 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full font-bold transition-colors"
+                                    className="w-[100px] border-dip-0 bg-dip-purple text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full font-bold transition-colors"
                                 >
                                     Sign Up
                                 </button>
@@ -255,7 +251,7 @@ export default function LandingPage() {
                                 </button>
                                 <button
                                     onClick={() => router.push("/register")}
-                                    className="border border-2 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full transition-colors w-full"
+                                    className="border bg-dip-purple text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full transition-colors w-full"
                                 >
                                     Sign Up
                                 </button>
@@ -408,7 +404,7 @@ export default function LandingPage() {
                                 }}
                             />
                             <Button
-                                className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full transition-all"
+                                className="w-[140px] bg-dip-purple text-dip-100 hover:bg-dip-purple/90 text-lg font-bold py-7 px-10 rounded-full transition-all"
                                 onMouseEnter={() => setHoverSignup(true)}
                                 onMouseLeave={() => setHoverSignup(false)}
                                 onClick={() => router.push("/register")}
@@ -998,30 +994,6 @@ export default function LandingPage() {
                     >
                         All you need in one place, right here.
                     </motion.p>
-
-                    <motion.div
-                        className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{
-                            opacity: ctaInView ? 1 : 0,
-                            y: ctaInView ? 0 : 30,
-                        }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                    >
-                        <Button
-                            className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full"
-                            onClick={() => router.push("/register")}
-                        >
-                            Sign Up
-                        </Button>
-
-                        <Button
-                            className="w-[140px] bg-transparent border-4 border-dip-0 text-dip-0/80 hover:bg-dip-0/10 text-lg font-bold py-6 px-10 rounded-full"
-                            onClick={() => router.push("/login")}
-                        >
-                            Login
-                        </Button>
-                    </motion.div>
 
                     {/* Testimonials */}
                     <motion.div
