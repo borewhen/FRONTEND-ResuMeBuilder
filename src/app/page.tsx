@@ -47,11 +47,7 @@ export default function LandingPage() {
         [0, 1, 1, 1]
     ); */
 
-    const opacity1 = useTransform(
-        smoothProgress, 
-        [0, 0.15, 0.25], 
-        [1, 1, 0]
-    );
+    const opacity1 = useTransform(smoothProgress, [0, 0.15, 0.25], [1, 1, 0]);
 
     const opacity2 = useTransform(
         smoothProgress,
@@ -141,13 +137,13 @@ export default function LandingPage() {
                                     onClick={() => scrollToSection(feature2Ref)}
                                     className="text-dip-blk/80 hover:text-dip-blk transition-colors"
                                 >
-                                    Video Analysis
+                                    Video Interview
                                 </button>
                                 <button
                                     onClick={() => scrollToSection(feature3Ref)}
                                     className="text-dip-blk/80 hover:text-dip-blk transition-colors"
                                 >
-                                    Job Matching
+                                    Course Generator
                                 </button>
                                 <button
                                     onClick={() => router.push("/login")}
@@ -245,7 +241,7 @@ export default function LandingPage() {
                                     }}
                                     className="text-dip-blk/80 hover:text-dip-blk transition-colors"
                                 >
-                                    Job Matching
+                                    Course Generator
                                 </button>
                                 <button
                                     onClick={() => router.push("/login")}
@@ -503,7 +499,7 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            AI-Powered Practice
+                            Job Specific AI Interview
                         </motion.h2>
                         <motion.p
                             className="text-dip-blk/80 text-xl leading-relaxed mb-8"
@@ -514,10 +510,9 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            Our AI generates customized interview questions
-                            based on your target role, industry, and experience
-                            level. Practice with realistic scenarios that
-                            prepare you for the real thing.
+                            Our AI analyzes your job description and generates
+                            customized interview questions based on the required
+                            skills, role, and industry.
                         </motion.p>
                         <motion.ul
                             className="text-dip-blk/80 text-lg space-y-4"
@@ -573,33 +568,9 @@ export default function LandingPage() {
                                         d="M5 13l4 4L19 7"
                                     />
                                 </svg>
-                                <span>Behavioral interview preparation</span>
-                            </motion.li>
-                            <motion.li
-                                className="flex items-start"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{
-                                    opacity: feature1InView ? 1 : 0,
-                                    x: feature1InView ? 0 : -20,
-                                }}
-                                transition={{ duration: 0.3, delay: 0.7 }}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
                                 <span>
-                                    Adaptive question sets based on skill sets
+                                    Tailored questions aligned with the job
+                                    posting
                                 </span>
                             </motion.li>
                         </motion.ul>
@@ -613,9 +584,9 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <div className="bg-dip-90/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                        <div className="bg-dip-90/30 backdrop-blur-sm rounded-2xl shadow-xl">
                             <img
-                                src="/images/ai-practice-mockup.png"
+                                src="/mock_interview.png"
                                 alt="AI Practice Interface"
                                 className="rounded-xl w-full"
                                 onError={(e) => {
@@ -669,7 +640,7 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            Video Analysis
+                            Live Video Interview
                         </motion.h2>
                         <motion.p
                             className="text-dip-blk/80 text-xl leading-relaxed mb-8"
@@ -682,8 +653,8 @@ export default function LandingPage() {
                         >
                             Record your practice interviews and receive detailed
                             feedback on your performance. Our AI analyzes your
-                            body language, speech patterns, and content to help
-                            you improve.
+                            resume and ask you behavioural & technical questions
+                            regarding your past experiences.
                         </motion.p>
                         <motion.ul
                             className="text-dip-blk/80 text-lg space-y-4"
@@ -715,7 +686,7 @@ export default function LandingPage() {
                                     />
                                 </svg>
                                 <span>
-                                    Body language and facial expression analysis
+                                    Personalized questions based on your resume
                                 </span>
                             </motion.li>
                             <motion.li
@@ -741,9 +712,7 @@ export default function LandingPage() {
                                         d="M5 13l4 4L19 7"
                                     />
                                 </svg>
-                                <span>
-                                    Speech clarity and confidence assessment
-                                </span>
+                                <span>Eye contact detection</span>
                             </motion.li>
                             <motion.li
                                 className="flex items-start"
@@ -769,7 +738,7 @@ export default function LandingPage() {
                                     />
                                 </svg>
                                 <span>
-                                    Personalized improvement recommendations
+                                    Receive actionable feedback to improve on
                                 </span>
                             </motion.li>
                         </motion.ul>
@@ -783,9 +752,9 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <div className="bg-dip-80/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                        <div className="bg-dip-80/30 backdrop-blur-sm rounded-2xl shadow-xl">
                             <img
-                                src="/images/video-analysis-mockup.png"
+                                src="/video.png"
                                 alt="Video Analysis Interface"
                                 className="rounded-xl w-full"
                                 onError={(e) => {
@@ -839,7 +808,7 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            Job Matching
+                            Course Generator
                         </motion.h2>
                         <motion.p
                             className="text-dip-blk/80 text-xl leading-relaxed mb-8"
@@ -850,10 +819,10 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            Discover opportunities that match your skills and
-                            experience. Our intelligent job matching system
-                            connects you with positions where you're most likely
-                            to succeed.
+                            Our AI analyzes your responses from past mock
+                            interviews to detect skill gaps and automatically
+                            generates targeted practice questions and learning
+                            modules to help you improve.
                         </motion.p>
                         <motion.ul
                             className="text-dip-blk/80 text-lg space-y-4"
@@ -884,7 +853,7 @@ export default function LandingPage() {
                                         d="M5 13l4 4L19 7"
                                     />
                                 </svg>
-                                <span>AI-powered skill matching</span>
+                                <span>AI-powered skill gap detection</span>
                             </motion.li>
                             <motion.li
                                 className="flex items-start"
@@ -909,32 +878,7 @@ export default function LandingPage() {
                                         d="M5 13l4 4L19 7"
                                     />
                                 </svg>
-                                <span>Personalized job recommendations</span>
-                            </motion.li>
-                            <motion.li
-                                className="flex items-start"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{
-                                    opacity: feature3InView ? 1 : 0,
-                                    x: feature3InView ? 0 : -20,
-                                }}
-                                transition={{ duration: 0.3, delay: 0.7 }}
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-dip-0 mr-2 flex-shrink-0 mt-1"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                                <span>Application tracking and insights</span>
+                                <span>Personalized course generation</span>
                             </motion.li>
                         </motion.ul>
                     </motion.div>
@@ -947,11 +891,11 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8, delay: 0.5 }}
                     >
-                        <div className="bg-dip-70/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
+                        <div className="bg-dip-70/30 backdrop-blur-sm rounded-2xl shadow-xl">
                             <img
-                                src="/images/job-matching-mockup.png"
+                                src="/course.png"
                                 alt="Job Matching Interface"
-                                className="rounded-xl w-full"
+                                className="rounded-xl w-full object-contain"
                                 onError={(e) => {
                                     e.currentTarget.src =
                                         "https://placehold.co/600x400/dip-60/black?text=Job+Matching+Interface";
