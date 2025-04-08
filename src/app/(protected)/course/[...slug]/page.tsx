@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { FunctionComponent, useEffect, useState } from "react";
-import CourseSidebar from "@/components/ui/CourseSidebar";
+import CourseSidebar from "@/components/ui/coursesidebar";
 import MainVideoSummary from "@/components/ui/mainvideosummary";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
