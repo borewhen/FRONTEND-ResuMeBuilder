@@ -13,7 +13,7 @@ interface UserLoginSucess {
     user: {
         email: string,
         username: string,
-        user_id: number,
+        id: number,
         role: string,
     },
     access_token: string,
@@ -22,6 +22,12 @@ interface UserLoginSucess {
 interface UserLoginError {
     detail: string,
     access_token: string | null,
+    user: {
+        email: string,
+        username: string,
+        id: number,
+        role: string,
+    }
 }
 export type UserLoginResponse = UserLoginSucess | UserLoginError;
 export interface UserRegister {
