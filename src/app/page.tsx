@@ -117,9 +117,9 @@ export default function LandingPage() {
                                     "https://placehold.co/40x40/dip-100/black?text=UH";
                             }}
                         />
-                        <a href="/" className="text-dip-blk text-xl font-bold">
+                        <Link href="/" className="text-dip-blk text-xl font-bold">
                             UHired.ai
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Desktop Navigation */}
@@ -991,9 +991,9 @@ export default function LandingPage() {
                             }}
                         >
                             <p className="text-dip-blk/90 text-lg italic mb-6">
-                                "UHired.ai transformed my interview preparation.
+                                &quot;UHired.ai transformed my interview preparation.
                                 The AI feedback helped me identify weaknesses I
-                                didn't know I had."
+                                didn&apos;t know I had.&quot;
                             </p>
                             <div className="flex items-center">
                                 <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
@@ -1022,9 +1022,9 @@ export default function LandingPage() {
                             }}
                         >
                             <p className="text-dip-blk/90 text-lg italic mb-6">
-                                "The job matching feature connected me with
-                                opportunities I wouldn't have found otherwise.
-                                Landed my dream job in weeks!"
+                                &quot;The job matching feature connected me with
+                                opportunities I wouldn&apos;t have found otherwise.
+                                Landed my dream job in weeks!&quot;
                             </p>
                             <div className="flex items-center">
                                 <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
