@@ -1,11 +1,11 @@
 import React from "react";
+import { Chapter, Unit } from "@/lib/app/course/types";
 
-const MainVideoSummary = ({ unitIndex, chapter, chapterIndex }) => {
-    console.log(chapter)
+const MainVideoSummary = ({ unit, unitIndex, chapter, chapterIndex }: { unit: Unit, unitIndex: number, chapter: Chapter, chapterIndex: number }) => {
     return (
         <div className="py-12 flex-[2] px-12">
             <h4 className="text-md uppercase text-secondary-foreground/60">
-                Unit {unitIndex + 1} &bull; Chapter {chapterIndex + 1}
+                Unit {unitIndex + 1}: {unit.unit_name} &bull; Chapter {chapterIndex + 1}
             </h4>
             <h1 className="text-2xl font-bold">{chapter?.chapter_name}</h1>
             <iframe

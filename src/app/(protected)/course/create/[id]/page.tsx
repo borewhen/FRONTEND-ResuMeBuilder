@@ -11,19 +11,23 @@ import coursegetterapi from "@/lib/app/course/api/get";
 import coursegeneratorapi from "@/lib/app/course/api/generate";
 import MoonLoader from "react-spinners/MoonLoader";
 
-interface Props {}
+interface Props {
+    params: {
+        id: string;
+    };
+}
 
 const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     const { id: courseId } = useParams();
     const router = useRouter();
-    const [course, setCourse] = useState<Course | []>([]);
+    const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(false);
     const [isCourseLoading, setCourseLoading] = useState(false);
 
     useEffect(() => {
         const getCourseDetail = async () => {
             setCourseLoading(true)
-            const course_details = await coursegetterapi.getById(courseId);
+            const course_details = await coursegetterapi.getById(Number(courseId));
             setCourse(course_details)
             setCourseLoading(false)
         }
@@ -34,7 +38,7 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     const generateSubTopicContent = async () => {
         try {
             setLoading(true);
-            await coursegeneratorapi.update(courseId);
+            await coursegeneratorapi.update(Number(courseId));
             router.push(`/course/${courseId}/0/0`);
             setLoading(false);
             toast.success('Course generated successfully', {
@@ -48,6 +52,7 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
                 theme: "colored",
             });
         } catch (err) {
+            console.log(err);
             toast.error('Error has occured', {
                 position: "bottom-center",
                 autoClose: 5000,

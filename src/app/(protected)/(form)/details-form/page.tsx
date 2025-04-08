@@ -8,15 +8,17 @@ import JobSeekerForm from "@/app/(protected)/_components/details-form/job-seeker
 import clsx from "clsx";
 
 export default function DetailsFormPage() {  
-    const { setRole } = useUserStore();
+    // const { setRole } = useUserStore();
     const [chosenRole, setChosenRole] = useState<"jobseeker" | "recruiter">("jobseeker");
-    const router = useRouter();
+    // const router = useRouter();
 
     // Temporarily disabled
     // const handleClick = () => {
     //     setRole(chosenRole);
     //     router.push('/');
     // }
+
+    // *** THIS FILE CONTAINS DECLARED & UNUSED VALUES, PLS OVERWRITE ONCE DONE
 
     return (
         <div className="w-full h-full flex items-center justify-center">

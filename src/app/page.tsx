@@ -72,10 +72,10 @@ export default function LandingPage() {
     const y4 = useTransform(smoothProgress, [0.65, 1], [-50, 0]);
 
     // Refs for section elements
-    const feature1Ref = useRef(null);
-    const feature2Ref = useRef(null);
-    const feature3Ref = useRef(null);
-    const ctaRef = useRef(null);
+    const feature1Ref = useRef<HTMLElement>(null);
+    const feature2Ref = useRef<HTMLElement>(null);
+    const feature3Ref = useRef<HTMLElement>(null);
+    const ctaRef = useRef<HTMLElement>(null);
 
     // Check if sections are in view
     const feature1InView = useInView(feature1Ref, { once: false, amount: 0.3 });
@@ -96,8 +96,10 @@ export default function LandingPage() {
     }, []);
 
     // Scroll to section function
-    const scrollToSection = (ref) => {
-        ref.current.scrollIntoView({ behavior: "smooth" });
+    const scrollToSection = (ref: React.RefObject<HTMLElement | null>) => {
+        if (ref.current) {
+            ref.current.scrollIntoView({ behavior: "smooth" });
+        }
     };
 
     return (
