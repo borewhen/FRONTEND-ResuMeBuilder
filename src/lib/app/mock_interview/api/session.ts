@@ -3,7 +3,9 @@ import { InterviewSessionRequest, InterviewSessionGetResponse } from "@/lib/app/
 import { MOCK_INTERVIEW_API_URL } from "@/lib/app/mock_interview/constants";
 type FetchClientType = typeof FetchClient;
 
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+// not currently used, uncomment to implement
+// const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 
 class InterviewSessionApi {
     httpClient: FetchClientType;

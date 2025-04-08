@@ -1,6 +1,7 @@
 "use client";
-import { MapPin, Calendar } from "lucide-react";
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+// import { MapPin, Calendar } from "lucide-react"; //these are unused...
+// import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
 
 export default function JobCardLoading() {

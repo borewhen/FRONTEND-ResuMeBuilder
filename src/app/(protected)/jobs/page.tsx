@@ -29,7 +29,7 @@ const JobsPage: React.FC = () => {
             page: pageNumber
         })
         setJobs(data);
-        setSelectedJobId(data[0]?.job_id)
+        setSelectedJobId(Number(data[0]?.job_id))
         setLoading(false);
     }
 

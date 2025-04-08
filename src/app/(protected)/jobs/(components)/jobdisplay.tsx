@@ -1,9 +1,10 @@
 "use client";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useCompanyStore } from "@/store/useCompanyStore";
 import { Job } from "@/lib/app/job/types";
-import { Briefcase, MapPin, Calendar } from "lucide-react";
-import { useState } from "react";
+// import { Briefcase, MapPin, Calendar } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
+// import { useState } from "react";
 
 export default function JobDisplay({
     job,
@@ -14,7 +15,7 @@ export default function JobDisplay({
     selectedJobId: number | null;
     setSelectedJobId: (id: number | null) => void;
 }) {
-    const route = useRouter();
+    // const route = useRouter();
     const { setCompanyLogo, setJobLink, setCompanyName, setPositionName } =
         useCompanyStore();
 
@@ -22,12 +23,12 @@ export default function JobDisplay({
         <div
             className={`flex items-center bg-white border rounded-xl py-3 px-3 shadow-md hover:shadow-lg transition cursor-pointer
         ${
-            selectedJobId == job.job_id
+            String(selectedJobId) == job.job_id
                 ? "border-2 border-purple-400"
                 : "border-gray-200"
         }`}
             onClick={() => {
-                setSelectedJobId(job.job_id);
+                setSelectedJobId(Number(job.job_id));
                 setCompanyLogo(job.company_logo_url);
                 setJobLink(job.job_link);
                 setCompanyName(job.company_name);
