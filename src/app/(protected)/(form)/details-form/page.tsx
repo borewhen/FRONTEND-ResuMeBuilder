@@ -3,7 +3,7 @@
 import { useUserStore } from "@/store/useUserStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input"; // unused import
 import JobSeekerForm from "@/app/(protected)/_components/details-form/job-seeker-form";
 import clsx from "clsx";
 
@@ -12,10 +12,11 @@ export default function DetailsFormPage() {
     const [chosenRole, setChosenRole] = useState<"jobseeker" | "recruiter">("jobseeker");
     const router = useRouter();
 
-    const handleClick = () => {
-        setRole(chosenRole);
-        router.push('/');
-    }
+    // Temporarily disabled
+    // const handleClick = () => {
+    //     setRole(chosenRole);
+    //     router.push('/');
+    // }
 
     return (
         <div className="w-full h-full flex items-center justify-center">
