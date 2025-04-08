@@ -11,11 +11,7 @@ import coursegetterapi from "@/lib/app/course/api/get";
 import coursegeneratorapi from "@/lib/app/course/api/generate";
 import MoonLoader from "react-spinners/MoonLoader";
 
-interface Props {
-    params: {
-        id: string;
-    };
-}
+interface Props {}
 
 const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     const { id: courseId } = useParams();
@@ -52,7 +48,6 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
                 theme: "colored",
             });
         } catch (err) {
-            console.log(err);
             toast.error('Error has occured', {
                 position: "bottom-center",
                 autoClose: 5000,
