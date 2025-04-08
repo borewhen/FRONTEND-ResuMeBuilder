@@ -23,7 +23,7 @@ const CreateSubTopicsPage: FunctionComponent<Props> = () => {
     useEffect(() => {
         const getCourseDetail = async () => {
             setCourseLoading(true)
-            let course_details = await coursegetterapi.getById(courseId);
+            const course_details = await coursegetterapi.getById(courseId);
             setCourse(course_details)
             setCourseLoading(false)
         }

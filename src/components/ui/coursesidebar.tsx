@@ -11,7 +11,7 @@ const CourseSidebar: FunctionComponent<any> = ({
         <Sidebar className="sticky top-0 w-[350px] h-screen">
             <Sidebar.Items>
                 <Sidebar.ItemGroup>
-                    {course?.units.map((unit, unitIndex) => {
+                    {course?.units.map((unit: any, unitIndex: any) => {
                         return (
                             <div key={unit.unit_id}>
                                 <Sidebar.Collapse
@@ -21,10 +21,11 @@ const CourseSidebar: FunctionComponent<any> = ({
                                     className="font-bold text-md border-b-2 py-3 rounded-none"
                                 >
                                     {unit?.chapters.map(
-                                        (chapter, chapterIndex) => {
+                                        (chapter: any, chapterIndex: any) => {
                                             return (
                                                 <Link
                                                     href={`/course/${course?.course_id}/${unitIndex}/${chapterIndex}`}
+                                                    key={chapter.chapter_id}
                                                 >
                                                     <div
                                                         key={chapter.chapter_id}
