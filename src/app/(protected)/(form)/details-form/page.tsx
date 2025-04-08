@@ -1,7 +1,7 @@
 "use client";
 
-import { useUserStore } from "@/store/useUserStore";
-import { useRouter } from "next/navigation";
+// import { useUserStore } from "@/store/useUserStore";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
 // import { Input } from "@/components/ui/input"; // unused import
 import JobSeekerForm from "@/app/(protected)/_components/details-form/job-seeker-form";

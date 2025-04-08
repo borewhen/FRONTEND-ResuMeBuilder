@@ -3,7 +3,12 @@ import Link from "next/link";
 import { FunctionComponent } from "react";
 import { Sidebar } from "flowbite-react";
 
-const CourseSidebar: FunctionComponent<any> = ({
+interface CourseSidebarProps {
+    course: any;
+    currentChapterId: string | null;
+}
+
+const CourseSidebar: FunctionComponent<CourseSidebarProps> = ({
     course,
     currentChapterId,
 }) => {
@@ -22,6 +27,7 @@ const CourseSidebar: FunctionComponent<any> = ({
                                 >
                                     {unit?.chapters.map(
                                         (chapter: any, chapterIndex: any) => {
+                                            const isActive = currentChapterId === String(chapter.chapter_id);
                                             return (
                                                 <Link
                                                     href={`/course/${course?.course_id}/${unitIndex}/${chapterIndex}`}
@@ -29,7 +35,9 @@ const CourseSidebar: FunctionComponent<any> = ({
                                                 >
                                                     <div
                                                         key={chapter.chapter_id}
-                                                        className="text-sm py-2 pl-5 hover:bg-[#F3F4F6] cursor-pointer"
+                                                        className={`text-sm py-2 pl-5 hover:bg-[#F3F4F6] cursor-pointer ${
+                                                            isActive ? "bg-[#E5E7EB] font-medium" : ""
+                                                        }`}
                                                     >
                                                         {chapterIndex + 1}.{" "}
                                                         {chapter.chapter_name}
