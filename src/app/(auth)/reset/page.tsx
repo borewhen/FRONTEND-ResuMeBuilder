@@ -25,7 +25,7 @@ export default function ResetPage() {
     return (
         <div className='h-screen w-full flex justify-center items-center'>
 
-          <Card className="w-1/2 flex flex-col border-transparent justify-center px-16">
+          <Card className="w-full md:w-1/2 flex flex-col border-transparent justify-center px-16">
             <CardHeader>
             <div className="mb-6">
               <Image src="https://cognimate.vercel.app/favicon.svg" alt="Logo" width={50} height={50} />
@@ -65,7 +65,7 @@ export default function ResetPage() {
             </CardContent>
           </Card>
 
-          <div className="w-1/2 relative h-screen">
+          <div className="hidden md:block w-1/2 relative h-screen">
             <img
               src='https://i.imgur.com/UPXZRVW.png'
               alt="Login Image"
