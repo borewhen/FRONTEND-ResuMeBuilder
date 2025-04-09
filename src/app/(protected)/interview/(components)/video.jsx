@@ -190,7 +190,7 @@ const VideoPage = ({ setStartInterview }) => {
 
     const handleClickLeft = async () => {
         const userid = window.localStorage.getItem("user_id");
-        await axios.post(
+        const res = await axios.post(
             "  http://localhost:8000/generate_interview/finish-interview",
             {
                 user_id: Number(userid),
@@ -202,12 +202,12 @@ const VideoPage = ({ setStartInterview }) => {
                     "user eye contact is lacking, user need to look at the camera more",
             }
         );
-        setStartInterview(false);
+        setSummary(res.data.technical_feedback + res.data.eye_contact_feedback);
     };
 
     const handleClickRight = async () => {
         const userid = window.localStorage.getItem("user_id");
-        await axios.post(
+        const res = await axios.post(
             "  http://localhost:8000/generate_interview/finish-interview",
             {
                 user_id: Number(userid),
@@ -219,8 +219,12 @@ const VideoPage = ({ setStartInterview }) => {
                     "user eye contact is relatively good, look at the camera most of the times",
             }
         );
-        setStartInterview(false);
+        setSummary(res.data.technical_feedback + res.data.eye_contact_feedback);
     };
+
+    const handleNewInterview = () => {
+        setStartInterview(false);
+    }
 
     return (
         <div className="w-full flex">
@@ -276,16 +280,6 @@ const VideoPage = ({ setStartInterview }) => {
                     </div>
                 </div>
                 <div className="mt-2 px-2 w-full">
-                    <div className="font-bold">Feedback</div>
-                    {eyeContact ? (
-                        <div className="text-green-500">
-                            You are making eye contact!
-                        </div>
-                    ) : (
-                        <div className="text-red-500">
-                            You are not making eye contact!
-                        </div>
-                    )}
                     <div className="font-bold">Response</div>
                     <div className="w-full h-44 overflow-scroll">
                         {transcript}
@@ -304,8 +298,9 @@ const VideoPage = ({ setStartInterview }) => {
                             Restart
                         </button>
                         <button
-                            className="bg-dip-purple hover:bg-dip-lightpurple px-6 py-1 rounded-lg mx-2 text-white"
+                            className={clsx("bg-dip-purple px-6 py-1 rounded-lg mx-2 text-white", transcript == "" || summary !== "" ? "bg-opacity-30" : "hover:bg-dip-lightpurple")}
                             onClick={submitResponse}
+                            disabled={transcript === "" || summary !== ""} 
                         >
                             Submit
                         </button>
@@ -314,7 +309,7 @@ const VideoPage = ({ setStartInterview }) => {
             </div>
             <div className="w-1/2 max-h-[40rem] overflow-y-scroll">
                 <div className="absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md">
-                    <button className="bg-dip-purple hover:bg-dip-lightpurple rounded-lg mx-2 text-white flex w-32">
+                    <button className={clsx("bg-dip-purple rounded-lg mx-2 text-white flex w-32", summary? "bg-opacity-30": "hover:bg-dip-lightpurple")}>
                         <div
                             className="w-1/2 text-dip-purple px-[0.8rem] py-1"
                             onClick={handleClickLeft}
@@ -325,8 +320,14 @@ const VideoPage = ({ setStartInterview }) => {
                             Summary
                         </div>
                     </button>
+                    {
+                        summary && <button className={clsx("bg-dip-purple rounded-lg mx-2 px-4 py-1 text-center text-white flex hover:bg-dip-lightpurple")} onClick={handleNewInterview}>New Interview</button>
+                    }
                 </div>
                 <div className="mt-8 px-8 py-2 flex flex-col">
+                    {
+                        summary && <div className="mt-4"><b>Summary:</b><br></br>{summary}</div>
+                    }
                     {questions.map((question, index) => {
                         return (
                             <div
