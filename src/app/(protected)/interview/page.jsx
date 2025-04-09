@@ -87,7 +87,10 @@ const UploadResumePage = () => {
             .catch((error) => {
                 console.log(error);
             });
-
+            setFile(null);
+            setFileUrl(null);
+            setFileName(null);
+            setShowFile(false);
         }
         catch (error) {
             console.log(error);

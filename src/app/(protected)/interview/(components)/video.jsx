@@ -31,8 +31,9 @@ const VideoPage = ({ setStartInterview }) => {
     const [eyeContact, setEyeContact] = useState(true);
 
     // Summary
-    const [summaryClicked, setSummaryClicked] = useState(false);
-    const [summary, setSummary] = useState("");
+    const [showSummary, setShowSummary] = useState(false);
+    const [technicalSummary, setTechnicalSummary] = useState("");
+    const [eyeContactSummary, setEyeContactSummary] = useState("");
 
     const startWebcam = async () => {
         try {
@@ -189,37 +190,45 @@ const VideoPage = ({ setStartInterview }) => {
     };
 
     const handleClickLeft = async () => {
-        const userid = window.localStorage.getItem("user_id");
-        const res = await axios.post(
-            "  http://localhost:8000/generate_interview/finish-interview",
-            {
-                user_id: Number(userid),
-                interview: {
-                    answers,
-                    questions,
-                },
-                summary:
-                    "user eye contact is lacking, user need to look at the camera more",
-            }
-        );
-        setSummary(res.data.technical_feedback + res.data.eye_contact_feedback);
+        if(technicalSummary === "") {
+            const userid = window.localStorage.getItem("user_id");
+            const res = await axios.post(
+                "  http://localhost:8000/generate_interview/finish-interview",
+                {
+                    user_id: Number(userid),
+                    interview: {
+                        answers,
+                        questions,
+                    },
+                    summary:
+                        "user eye contact is lacking, user need to look at the camera more",
+                }
+            );
+            setTechnicalSummary(res.data.technical_feedback);
+            setEyeContactSummary(res.data.eye_contact_feedback);
+        }
+        setShowSummary(true);
     };
 
     const handleClickRight = async () => {
-        const userid = window.localStorage.getItem("user_id");
-        const res = await axios.post(
-            "  http://localhost:8000/generate_interview/finish-interview",
-            {
-                user_id: Number(userid),
-                interview: {
-                    answers,
-                    questions,
-                },
-                summary:
-                    "user eye contact is relatively good, look at the camera most of the times",
-            }
-        );
-        setSummary(res.data.technical_feedback + res.data.eye_contact_feedback);
+        if(technicalSummary === "") {
+            const userid = window.localStorage.getItem("user_id");
+            const res = await axios.post(
+                "  http://localhost:8000/generate_interview/finish-interview",
+                {
+                    user_id: Number(userid),
+                    interview: {
+                        answers,
+                        questions,
+                    },
+                    summary:
+                        "user eye contact is relatively good, look at the camera most of the times",
+                }
+            );
+            setTechnicalSummary(res.data.technical_feedback);
+            setEyeContactSummary(res.data.eye_contact_feedback);
+        }
+        setShowSummary(true);
     };
 
     const handleNewInterview = () => {
@@ -298,9 +307,9 @@ const VideoPage = ({ setStartInterview }) => {
                             Restart
                         </button>
                         <button
-                            className={clsx("bg-dip-purple px-6 py-1 rounded-lg mx-2 text-white", transcript == "" || summary !== "" ? "bg-opacity-30" : "hover:bg-dip-lightpurple")}
+                            className={clsx("bg-dip-purple px-6 py-1 rounded-lg mx-2 text-white", transcript == "" || technicalSummary !== "" ? "bg-opacity-30" : "hover:bg-dip-lightpurple")}
                             onClick={submitResponse}
-                            disabled={transcript === "" || summary !== ""} 
+                            disabled={transcript === "" || technicalSummary !== ""} 
                         >
                             Submit
                         </button>
@@ -309,7 +318,7 @@ const VideoPage = ({ setStartInterview }) => {
             </div>
             <div className="w-1/2 max-h-[40rem] overflow-y-scroll">
                 <div className="absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md">
-                    <button className={clsx("bg-dip-purple rounded-lg mx-2 text-white flex w-32", summary? "bg-opacity-30": "hover:bg-dip-lightpurple")}>
+                    <button className={clsx("bg-dip-purple rounded-lg mx-2 text-white flex w-32 hover:bg-dip-lightpurple")}>
                         <div
                             className="w-1/2 text-dip-purple px-[0.8rem] py-1"
                             onClick={handleClickLeft}
@@ -320,13 +329,27 @@ const VideoPage = ({ setStartInterview }) => {
                             Summary
                         </div>
                     </button>
-                    {
-                        summary && <button className={clsx("bg-dip-purple rounded-lg mx-2 px-4 py-1 text-center text-white flex hover:bg-dip-lightpurple")} onClick={handleNewInterview}>New Interview</button>
-                    }
                 </div>
                 <div className="mt-8 px-8 py-2 flex flex-col">
                     {
-                        summary && <div className="mt-4"><b>Summary:</b><br></br>{summary}</div>
+                        technicalSummary && showSummary && 
+                        (
+                            <div className="absolute w-[100vw] h-[calc(100vh+8rem)] top-0 left-0 bg-opacity-30 z-10 bg-black overflow" onClick={()=>setShowSummary(false)}>
+                                <div className="absolute bg-white w-1/2 h-1/2 top-1/4 left-1/4 rounded-lg shadow-lg px-8 py-8 z-20">
+                                    <div className="w-full text-center text-2xl font-bold mb-4">Interview Completed</div>
+                                    <div className="w-full text-sm">
+                                        <b>Technical Feedback</b><br></br>
+                                        <div className="mb-8 text-justify">{technicalSummary}</div>
+                                        <b>Behavioral Feedback</b><br></br>
+                                        <div className="mb-8 text-justify">{eyeContactSummary}</div>
+                                    </div>
+                                    <div className="absolute bottom-8 w-full flex">
+                                        <button className="bg-dip-purple rounded-lg px-4 py-1 text-white hover:bg-dip-lightpurple mr-4" onClick={()=>setShowSummary(false)}>Back</button>
+                                        <button className="bg-dip-purple rounded-lg px-4 py-1 text-white hover:bg-dip-lightpurple" onClick={handleNewInterview}>New Interview</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
                     }
                     {questions.map((question, index) => {
                         return (
