@@ -1,13 +1,14 @@
 "use client";
 import Link from 'next/link';
-import { useParams } from 'next/navigation'
+// import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import jobdetail from '@/lib/app/job/api/detail';
 import { JobDetailResponse } from '@/lib/app/job/types';
 import { useCompanyStore } from '@/store/useCompanyStore';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+// import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
 
 
@@ -22,7 +23,7 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
     useEffect(() => {
         const fetchJobDetail = async () => {
             setLoading(true);
-            const fetchedJob = await jobdetail.get(selectedJobId);
+            const fetchedJob = await jobdetail.get(String(selectedJobId));
             setJob(fetchedJob);
             
             setLoading(false);
@@ -30,7 +31,7 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
 
         const fetchDescription = async () => {
             setDescriptionLoading(true);
-            const description = await jobdetail.getDescription(selectedJobId);
+            const description = await jobdetail.getDescription(String(selectedJobId));
             setDescription(description)
             setDescriptionLoading(false);
         }
