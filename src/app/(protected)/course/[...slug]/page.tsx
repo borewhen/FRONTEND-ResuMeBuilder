@@ -15,7 +15,7 @@ const CourseDetail: FunctionComponent<Props> = () => {
     // Always call useParams unconditionally
     const params = useParams();
 
-    // If params.slug is not defined, use an empty array.
+    // If params.slug is defined, cast it as a string array; otherwise use an empty array.
     const slug: string[] = Array.isArray(params?.slug)
         ? params.slug
         : params?.slug
@@ -25,27 +25,29 @@ const CourseDetail: FunctionComponent<Props> = () => {
     // Check if we have at least three values.
     const hasValidSlug = slug.length >= 3;
 
-    // Destructure the values, using empty strings if not valid.
+    // Destructure the values (default to empty strings if invalid)
     const [courseId, unitIndexParam, chapterIndexParam] = hasValidSlug
         ? slug
         : ["", "", ""];
 
-    // Always call your hooks.
+    // Always call hooks
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(false);
     
     useEffect(() => {
         if (courseId) {
             const fetchCourseDetail = async () => {
+                setLoading(true);
                 const courseDetail = await coursegetterapi.getById(parseInt(courseId));
                 setCourse(courseDetail);
+                setLoading(false);
             };
 
             fetchCourseDetail();
         }
     }, [courseId]);
 
-    // If we don't have valid slug values, render an error message.
+    // Return an error if we don't have valid slug values.
     if (!hasValidSlug) {
         return <>Something went wrong</>;
     }
