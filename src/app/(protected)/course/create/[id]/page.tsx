@@ -3,39 +3,48 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { Course } from "@/lib/app/course/types";
+import { useParams, useRouter } from "next/navigation";
 import { ToastContainer, toast } from 'react-toastify';
 import coursegetterapi from "@/lib/app/course/api/get";
 import coursegeneratorapi from "@/lib/app/course/api/generate";
 import MoonLoader from "react-spinners/MoonLoader";
+import { Course } from "@/lib/app/course/types";
 
 interface Props {}
 
 const CreateSubTopicsPage: FunctionComponent<Props> = () => {
-    const { id: courseId } = useParams();
+    const params = useParams();
     const router = useRouter();
+
+    const id = typeof params?.id === "string" ? params.id : undefined;
+
     const [course, setCourse] = useState<Course | null>(null);
     const [loading, setLoading] = useState(false);
     const [isCourseLoading, setCourseLoading] = useState(false);
 
     useEffect(() => {
-        const getCourseDetail = async () => {
-            setCourseLoading(true)
-            const course_details = await coursegetterapi.getById(Number(courseId));
-            setCourse(course_details)
-            setCourseLoading(false)
-        }
+        if (id) {
+            console.log("Course create page, id =", id);
+            const getCourseDetail = async () => {
+                setCourseLoading(true)
+                const course_details = await coursegetterapi.getById(Number(id));
+                setCourse(course_details)
+                setCourseLoading(false)
+            }
 
-        getCourseDetail();
-    }, [])
+            getCourseDetail();
+        }
+    }, [id])
+
+    if (!id) {
+        return <div>Something went wrong — missing course id.</div>;
+    }
 
     const generateSubTopicContent = async () => {
         try {
             setLoading(true);
-            await coursegeneratorapi.update(Number(courseId));
-            router.push(`/course/${courseId}/0/0`);
+            await coursegeneratorapi.update(Number(id));
+            router.push(`/course/${id}/0/0`);
             setLoading(false);
             toast.success('Course generated successfully', {
                 position: "bottom-center",
