@@ -28,11 +28,11 @@ export default function Navbar() {
                     data-nimg="1"
                     className="dark:invert"
                     style={{ color: "transparent" }}
-                    src="/logo.svg"
+                    src="/logo-purple-box.svg"
                 />
-                <div className="text-[22px] font-semibold text-gray-900">
-                    <span className="text-gray-900">UHired.ai</span>
-                </div>
+                {/* <div className="text-[22px] font-semibold text-gray-900">
+                    <span className="text-gray-900">uHired.ai</span>
+                </div> */}
             </div>
 
             <div className="flex space-x-10">
@@ -53,14 +53,24 @@ export default function Navbar() {
                     </Link>
                 ))}
             </div>
-
-            <div className="flex items-center space-x-7">
+            
+            <div className="text-sm text-gray-500">
+                Logged in as: <b>{window.localStorage.getItem("user_email")}</b>. <button className="text-gray-500 hover:text-gray-700" onClick={() => {
+                    window.localStorage.removeItem("user_email");
+                    window.localStorage.removeItem("user_id");
+                    window.localStorage.removeItem("access_token");
+                    window.location.href = "/";
+                }}>
+                    <i><u>Logout?</u></i>
+                </button>
+            </div>
+            {/* <div className="flex items-center space-x-7">
                 <div className="relative">
                     <Bell className="w-6 h-6 text-gray-500 cursor-pointer" />
                     <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                 </div>
                 <UserAvatar />
-            </div>
+            </div> */}
         </nav>
     );
 }

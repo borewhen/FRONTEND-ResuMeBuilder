@@ -37,15 +37,12 @@ const JobsPage: React.FC = () => {
         <div className="bg-white w-full min-h-screen py-8">
             <div className='w-[70rem] mx-auto flex gap-8 mt-[50px]'>
                 <div className="w-[30rem]"> 
-                    <div className='w-70 flex gap-6'>
-                        <input type="text" placeholder="Search for jobs or company" className='w-[22rem] border border-dip-grey rounded-md py-3 px-5 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))} onKeyDown={(e) => {
+                    <div className='flex gap-6'>
+                        <input type="text" placeholder="Search for jobs or company" className='w-[30rem] border border-dip-grey rounded-md py-3 px-5 focus:outline-none' onChange={(e)=>(setSearch(e.target.value))} onKeyDown={(e) => {
                             if (e.key === "Enter") {
                             handleSubmit();
                             }
                         }}/>
-                        <button className="border border-dip-grey w-14 flex items-center justify-center">
-                            <SlidersHorizontal className="text-gray-600 w-6 h-6" />
-                        </button>
                     </div>
                     <div className="w-30 flex flex-col gap-5 mt-12">
                         {!loading && jobs.length? jobs.map((job, index) => (<JobDisplay key={index} job={job} selectedJobId={selectedJobId} setSelectedJobId={setSelectedJobId}/>)) : <>
@@ -64,6 +61,7 @@ const JobsPage: React.FC = () => {
                     </div>
                 </div>
                 <div className="w-[40rem]">
+                    <div className="h-[96px]"></div>
                     <div className="sticky top-10">
                         {selectedJobId ? <JobDetail selectedJobId={selectedJobId} /> : (
                             <JobDetailLoading/>

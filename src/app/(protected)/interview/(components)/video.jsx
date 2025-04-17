@@ -10,6 +10,8 @@ import {
     BsCameraVideoOffFill,
 } from "react-icons/bs";
 import axios from "axios";
+import { useRouter, usePathname } from 'next/navigation';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const VideoPage = ({ setStartInterview }) => {
     // Video
@@ -35,6 +37,19 @@ const VideoPage = ({ setStartInterview }) => {
     const [technicalSummary, setTechnicalSummary] = useState("");
     const [eyeContactSummary, setEyeContactSummary] = useState("");
 
+
+    const fullTranscriptRef = useRef("");
+    const baselineOffsetRef = useRef(0);
+
+    // state for storing previous answers
+    const [storedAnswers, setStoredAnswers] = useState("");
+
+    // Add this state at the top of your component
+    const [isReviewing, setIsReviewing] = useState(false);
+
+    const router = useRouter();
+    const pathname = usePathname();
+
     const startWebcam = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -48,12 +63,22 @@ const VideoPage = ({ setStartInterview }) => {
     };
 
     const stopWebcam = () => {
-        if (videoRef.current) {
+        if (videoRef.current && videoRef.current.srcObject) {
             const stream = videoRef.current.srcObject;
+            
+            // Stop all tracks (both video and audio)
             const tracks = stream.getTracks();
-            tracks.forEach((track) => track.stop());
+            tracks.forEach((track) => {
+                console.log(`Stopping track: ${track.kind}`);
+                track.stop();
+            });
+            
+            // Clear the srcObject
+            videoRef.current.srcObject = null;
         }
+        
         setVideoOn(false);
+        console.log("Webcam cleanup completed");
     };
 
     const initMic = async () => {
@@ -67,11 +92,15 @@ const VideoPage = ({ setStartInterview }) => {
             recognition.lang = "en-US";
 
             recognition.onresult = (event) => {
-                let text = "";
+                let fullText = "";
                 for (let i = 0; i < event.results.length; i++) {
-                    text += event.results[i][0].transcript + " ";
+                    fullText += event.results[i][0].transcript + " ";
                 }
-                setTranscript(text);
+                
+                fullTranscriptRef.current = fullText;
+                
+                const newText = fullText.substring(baselineOffsetRef.current);
+                setTranscript(newText);
             };
 
             recognition.onerror = (event) => {
@@ -212,6 +241,14 @@ const VideoPage = ({ setStartInterview }) => {
         );
         setTranscript("");
         await getQuestion();
+
+        // Store the current transcript in storedAnswers
+        setStoredAnswers((prev) => prev + transcript);
+        
+        // Update the baseline offset to the current full transcript length
+        if (fullTranscriptRef && fullTranscriptRef.current) {
+            baselineOffsetRef.current = fullTranscriptRef.current.length;
+        }
     };
 
     const handleClickLeft = async () => {
@@ -261,78 +298,94 @@ const VideoPage = ({ setStartInterview }) => {
     }
 
     return (
-        <div className="w-full flex">
-            <div className="w-1/2 h-[42.5rem] border-r">
-                <div className="w-full h-96 bg-dip-blk items-center justify-center">
-                    <video
-                        ref={videoRef}
-                        className="w-full h-full transform scale-x-[-1]"
-                        autoPlay
-                        playsInline
-                    ></video>
+        <div className="w-full flex p-6 gap-6">
+            <div className="w-1/2 h-[42.5rem] border-r pr-6">
+                <div className="w-full h-96 bg-dip-blk rounded-lg overflow-hidden flex items-center justify-center mb-6">
+                    <div className="relative w-full h-full">
+                        <video
+                            ref={videoRef}
+                            className="w-full h-full object-cover transform scale-x-[-1] rounded-lg shadow-md"
+                            autoPlay
+                            playsInline
+                        ></video>
+                        <div className="absolute top-4 right-4 bg-black bg-opacity-60 backdrop-blur-sm rounded-full px-3 py-1.5 text-white shadow-lg transition-opacity duration-300">
+                            {eyeContact ? (
+                                <div className="flex items-center">
+                                    <FaEye className="text-green-400 mr-2" />
+                                    <span className="text-xs font-medium">Good eye contact</span>
+                                </div>
+                            ) : (
+                                <div className="flex items-center">
+                                    <FaEyeSlash className="text-red-400 mr-2" />
+                                    <span className="text-xs font-medium">Poor eye contact</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     <canvas
                         ref={canvasRef}
                         width="224"
                         height="224"
                         style={{ display: "none" }}
                     />
-                    <div className="flex relative top-[-4rem] w-full items-center justify-center">
+                </div>
+                <div className="flex justify-center -mt-20 mb-8 relative z-10">
+                    <div className="bg-black bg-opacity-60 backdrop-blur-sm rounded-full px-5 py-3 flex items-center shadow-lg">
                         {micOn ? (
                             <BsFillMicFill
-                                className={clsx(
-                                    "text-white h-12 w-12 rounded-full p-3 mx-2",
-                                    micOn ? "bg-gray-600" : "bg-red-600"
-                                )}
+                                className={`text-white h-10 w-10 rounded-full p-2.5 mx-3 cursor-pointer transition-colors duration-200 ${
+                                    micOn ? "bg-gray-700 hover:bg-gray-600" : "bg-red-600 hover:bg-red-500"
+                                }`}
                                 onClick={micOn ? stopMic : startMic}
                             />
                         ) : (
                             <BsFillMicMuteFill
-                                className={clsx(
-                                    "text-white h-12 w-12 rounded-full p-3 mx-2",
-                                    micOn ? "bg-gray-600" : "bg-red-600"
-                                )}
+                                className={`text-white h-10 w-10 rounded-full p-2.5 mx-3 cursor-pointer transition-colors duration-200 ${
+                                    micOn ? "bg-gray-700 hover:bg-gray-600" : "bg-red-600 hover:bg-red-500"
+                                }`}
                                 onClick={micOn ? stopMic : startMic}
                             />
                         )}
                         {videoOn ? (
                             <BsCameraVideoFill
-                                className={clsx(
-                                    "text-white h-12 w-12 rounded-full p-3 mx-2",
-                                    videoOn ? "bg-gray-600" : "bg-red-600"
-                                )}
+                                className={`text-white h-10 w-10 rounded-full p-2.5 mx-3 cursor-pointer transition-colors duration-200 ${
+                                    videoOn ? "bg-gray-700 hover:bg-gray-600" : "bg-red-600 hover:bg-red-500"
+                                }`}
                                 onClick={videoOn ? stopWebcam : startWebcam}
                             />
                         ) : (
                             <BsCameraVideoOffFill
-                                className={clsx(
-                                    "text-white h-12 w-12 rounded-full p-3 mx-2",
-                                    videoOn ? "bg-gray-600" : "bg-red-600"
-                                )}
+                                className={`text-white h-10 w-10 rounded-full p-2.5 mx-3 cursor-pointer transition-colors duration-200 ${
+                                    videoOn ? "bg-gray-700 hover:bg-gray-600" : "bg-red-600 hover:bg-red-500"
+                                }`}
                                 onClick={videoOn ? stopWebcam : startWebcam}
                             />
                         )}
                     </div>
                 </div>
-                <div className="mt-2 px-2 w-full">
-                    <div className="font-bold">Response</div>
-                    <div className="w-full h-44 overflow-scroll">
+                <div className="mt-8 px-4 w-full">
+                    <div className="font-bold text-lg mb-3">Your Response</div>
+                    <div className="w-full h-44 overflow-auto rounded-lg border border-gray-200 p-4 bg-white shadow-inner scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
                         {transcript}
                     </div>
-                    <div className="w-full flex justify-end mt-2">
+                    <div className="w-full flex justify-end mt-5">
                         <button
-                            className={clsx(
-                                "bg-dip-purple  px-6 py-1 rounded-lg mx-2 text-white",
+                            className={`px-6 py-2 rounded-full mr-3 text-white transition-all duration-200 ${
                                 micOn
-                                    ? "bg-opacity-30"
-                                    : "hover:bg-dip-lightpurple"
-                            )}
+                                    ? "bg-dip-purple bg-opacity-30 cursor-not-allowed"
+                                    : "bg-gray-500/80 hover:bg-gray-600/80"
+                            }`}
                             onClick={() => setTranscript("")}
                             disabled={micOn}
                         >
-                            Restart
+                            Clear This Response
                         </button>
                         <button
-                            className={clsx("bg-dip-purple px-6 py-1 rounded-lg mx-2 text-white", transcript == "" || technicalSummary !== "" ? "bg-opacity-30" : "hover:bg-dip-lightpurple")}
+                            className={`px-6 py-2 rounded-full text-white transition-all duration-200 ${
+                                transcript === "" || technicalSummary !== "" 
+                                    ? "bg-dip-purple bg-opacity-30 cursor-not-allowed" 
+                                    : "bg-dip-purple hover:bg-dip-lightpurple"
+                            }`}
                             onClick={submitResponse}
                             disabled={transcript === "" || technicalSummary !== ""} 
                         >
@@ -341,36 +394,51 @@ const VideoPage = ({ setStartInterview }) => {
                     </div>
                 </div>
             </div>
-            <div className="w-1/2 max-h-[40rem] overflow-y-scroll">
-                <div className="absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md">
-                    <button className={clsx("bg-dip-purple rounded-lg mx-2 text-white flex w-32 hover:bg-dip-lightpurple")}>
-                        <div
-                            className="w-1/2 text-dip-purple px-[0.8rem] py-1"
-                            onClick={handleClickLeft}
+            <div className="w-1/2 relative pl-2">
+                <div className="sticky top-0 w-full h-14 flex items-center justify-end bg-white shadow-sm z-10 px-6 mb-4">
+                    <div className="flex items-center">
+                        <span className="text-gray-600 mr-3 font-medium">Done practicing?</span>
+                        <button 
+                            className="bg-dip-purple rounded-full text-white px-4 py-2.5 font-medium transition-colors duration-200 hover:bg-dip-lightpurple relative"
+                            onClick={() => {
+                                setIsReviewing(true);
+                                handleClickRight();
+                                setTimeout(() => setIsReviewing(false), 3000);
+                            }}
                         >
-                            .
-                        </div>
-                        <div className="pr-16 pt-1" onClick={handleClickRight}>
-                            Summary
-                        </div>
-                    </button>
+                            {isReviewing ? (
+                                <>
+                                    <span className="opacity-0">Review</span>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                                    </div>
+                                </>
+                            ) : (
+                                "Review"
+                            )}
+                        </button>
+                    </div>
                 </div>
-                <div className="mt-8 px-8 py-2 flex flex-col">
+                <div className="px-6 py-2 flex flex-col max-h-[calc(42.5rem-4rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-4">
                     {
                         technicalSummary && showSummary && 
                         (
-                            <div className="absolute w-[100vw] h-[calc(100vh+8rem)] top-0 left-0 bg-opacity-30 z-10 bg-black overflow" onClick={()=>setShowSummary(false)}>
-                                <div className="absolute bg-white w-1/2 h-1/2 top-1/4 left-1/4 rounded-lg shadow-lg px-8 py-8 z-20">
-                                    <div className="w-full text-center text-2xl font-bold mb-4">Interview Completed</div>
-                                    <div className="w-full text-sm">
-                                        <b>Technical Feedback</b><br></br>
-                                        <div className="mb-8 text-justify">{technicalSummary}</div>
-                                        <b>Behavioral Feedback</b><br></br>
-                                        <div className="mb-8 text-justify">{eyeContactSummary}</div>
+                            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center backdrop-blur-sm p-8" onClick={()=>setShowSummary(false)}>
+                                <div className="bg-white w-1/2 max-h-3/4 rounded-lg shadow-xl p-10 overflow-auto scrollbar-thin scrollbar-thumb-gray-300" onClick={(e) => e.stopPropagation()}>
+                                    <div className="w-full text-center text-2xl font-bold mb-8">Interview Completed</div>
+                                    <div className="w-full text-sm space-y-8">
+                                        <div>
+                                            <h3 className="font-bold text-lg mb-3">Technical Feedback</h3>
+                                            <div className="mb-6 text-justify leading-relaxed">{technicalSummary}</div>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-lg mb-3">Behavioral Feedback</h3>
+                                            <div className="mb-6 text-justify leading-relaxed">{eyeContactSummary}</div>
+                                        </div>
                                     </div>
-                                    <div className="absolute bottom-8 w-full flex">
-                                        <button className="bg-dip-purple rounded-lg px-4 py-1 text-white hover:bg-dip-lightpurple mr-4" onClick={()=>setShowSummary(false)}>Back</button>
-                                        <button className="bg-dip-purple rounded-lg px-4 py-1 text-white hover:bg-dip-lightpurple" onClick={handleNewInterview}>New Interview</button>
+                                    <div className="flex justify-end mt-10 space-x-5">
+                                        <button className="bg-gray-500/80 rounded-full px-7 py-2.5 text-white font-bold hover:bg-gray-600/80 transition-colors duration-200" onClick={()=>setShowSummary(false)}>Back</button>
+                                        <button className="bg-dip-purple rounded-full px-7 py-2.5 text-white font-bold hover:bg-dip-lightpurple transition-colors duration-200" onClick={handleNewInterview}>New Interview</button>
                                     </div>
                                 </div>
                             </div>
@@ -379,19 +447,17 @@ const VideoPage = ({ setStartInterview }) => {
                     {questions.map((question, index) => {
                         return (
                             <div
-                                className="mt-4 w-full bg-purple-300 px-4 py-2 rounded-md"
+                                className="mb-6 w-full bg-purple-100 px-7 py-5 rounded-lg shadow-sm border border-purple-200"
                                 key={index}
                             >
-                                <div className="">Q: {question}</div>
-                                <div className="">
-                                    A:{" "}
-                                    {index < answers.length
-                                        ? answers[index]
-                                        : ""}
+                                <div className="font-medium mb-3">Q: {question}</div>
+                                <div className="pl-5 border-l-2 border-purple-300 text-gray-700 mt-2">
+                                    A: {index < answers.length ? answers[index] : ""}
                                 </div>
                             </div>
                         );
                     })}
+                    <div className="h-6"></div>
                 </div>
             </div>
         </div>
@@ -399,3 +465,4 @@ const VideoPage = ({ setStartInterview }) => {
 };
 
 export default VideoPage;
+

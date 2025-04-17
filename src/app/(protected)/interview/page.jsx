@@ -16,7 +16,9 @@ const UploadResumePage = () => {
     const [showFile, setShowFile] = useState(false);
     const [userid, setUserid] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const canvasRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         setUserid(window.localStorage.getItem('user_id'));
@@ -59,6 +61,7 @@ const UploadResumePage = () => {
     };
 
     const submitResume = async() => {
+        setIsSubmitting(true);
         if (!file || !userid) return;
 
         const formData = new FormData();
@@ -76,26 +79,43 @@ const UploadResumePage = () => {
             const questions = questionResponse.data.questions;
             setStartInterview(questions.length > 0);
         } catch (error) {
-            console.log(error);
+            console.error("Error submitting resume:", error);
+        } finally {
+            setIsSubmitting(false);
         }
         
         setFile(null);
         setFileUrl(null);
         setFileName(null);
         setShowFile(false);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
     }
 
     return (
-        isLoading? <></> : <div className='w-full flex min-h-screen'>
-            <div className='w-[80rem] ml-20 flex items-center justify-center flex-col'>
-              { startInterview? <VideoPage setStartInterview={setStartInterview}/>: 
-                <div>
-                  <div className='hover:bg-dip-greyishwhite'>
-                      <label className='font-bold border px-20 py-16 rounded-md border-dashed border-dip-blk text-sm flex flex-col items-center' htmlFor='resume'>
-                          <FaCloudUploadAlt className='w-12 h-12'/>
-                          Drag & drop a file here, or click to select one
+        isLoading ? 
+            <div className="w-full h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-dip-purple"></div>
+            </div>
+         : 
+            <div className='w-full flex min-h-screen'>
+            <div className='w-full flex items-center justify-center flex-col'>
+              { startInterview ? <VideoPage setStartInterview={setStartInterview}/>: 
+                <div className="flex flex-col items-center justify-center w-full">
+                  <div className='hover:scale-103 transition-all duration-300 items-center w-full flex justify-center'>
+                      <label className='font-bold border px-20 py-16 rounded-lg border-dashed border-dip-blk text-sm hover:cursor-pointer flex flex-col items-center justify-center' htmlFor='resume'>
+                          <FaCloudUploadAlt className='w-12 h-12 mb-2'/>
+                          Drag & drop your resume here, or click to browse your files.
                       </label>
-                      <input type='file' accept="application/pdf" id='resume' hidden onChange={handleFileChange}/>
+                      <input 
+                        type='file' 
+                        accept="application/pdf" 
+                        id='resume' 
+                        hidden 
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                      />
                       {
                           showFile &&
                           <div className='fixed w-screen h-screen bg-black bg-opacity-30 top-0 left-0 mx-auto flex justify-center items-center' onClick={()=>setShowFile(false)}>
@@ -106,18 +126,43 @@ const UploadResumePage = () => {
                   </div>
                   {
                       file?
-                      <div className='w-[29rem] mt-2 px-4 py-4 rounded-md  bg-dip-purple flex items-center justify-between hover:bg-dip-lightpurple'>
-                          <button className=' text-white text-left hover:underline'  onClick={()=>setShowFile(true)}>
+                      <div className='w-[29rem] mt-8 px-4 py-4 rounded-full border-2 border-dip-purple flex items-center justify-between'>
+                          <button className='ml-4 text-dip-purple font-bold text-left hover:underline' onClick={()=>setShowFile(true)}>
                               {fileName}
                           </button>
-                          <FaRegTrashAlt className='w-8 h-8 p-2 rounded-full text-white hover:cursor-pointer hover:bg-black' onClick={()=>setFileUrl(null)}/>
-                      </div>:
-                      <div>
-                          Please upload your resume to start the interview.
+                          <FaRegTrashAlt 
+                            className='w-8 h-8 p-2 rounded-full text-dip-purple hover:cursor-pointer hover:bg-black' 
+                            onClick={() => {
+                              setFileUrl(null);
+                              setFile(null);
+                              setFileName('');
+                              if (fileInputRef.current) {
+                                fileInputRef.current.value = '';
+                              }
+                            }}
+                          />
+                      </div>
+                      :
+                      <div className='text-dip-purple/80 text-sm text-center mt-4 w-full'>
+                          <i>No file uploaded.</i>
                       </div>
                   }
-                  <div>
-                      <button className='bg-dip-purple text-white px-8 py-4 mt-2 rounded-md w-full disabled:bg-opacity-50 hover:bg-dip-lightpurple' disabled={file===null} onClick={submitResume}>Start Interview</button>
+                  <div className='mt-8 w-[29rem] flex justify-center'>
+                    <button 
+                      className='bg-dip-purple text-white font-bold px-8 py-4 rounded-full w-full disabled:bg-opacity-50 hover:bg-dip-lightpurple relative'
+                      disabled={file===null || isSubmitting}
+                      onClick={submitResume}>
+                        {isSubmitting ? (
+                          <>
+                            <span className="opacity-0">Start Interview</span>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
+                            </div>
+                          </>
+                        ) : (
+                          "Start Interview"
+                        )}
+                    </button>
                   </div>
                 </div>
             }
