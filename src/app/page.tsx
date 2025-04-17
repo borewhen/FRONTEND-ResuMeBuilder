@@ -72,10 +72,10 @@ export default function LandingPage() {
     const y4 = useTransform(smoothProgress, [0.65, 1], [-50, 0]);
 
     // Refs for section elements
-    const feature1Ref = useRef(null);
-    const feature2Ref = useRef(null);
-    const feature3Ref = useRef(null);
-    const ctaRef = useRef(null);
+    const feature1Ref = useRef<HTMLElement>(null);
+    const feature2Ref = useRef<HTMLElement>(null);
+    const feature3Ref = useRef<HTMLElement>(null);
+    const ctaRef = useRef<HTMLElement>(null);
 
     // Check if sections are in view
     const feature1InView = useInView(feature1Ref, { once: false, amount: 0.3 });
@@ -96,8 +96,10 @@ export default function LandingPage() {
     }, []);
 
     // Scroll to section function
-    const scrollToSection = (ref) => {
-        ref.current.scrollIntoView({ behavior: "smooth" });
+    const scrollToSection = (ref: React.RefObject<HTMLElement | null>) => {
+        if (ref.current) {
+            ref.current.scrollIntoView({ behavior: "smooth" });
+        }
     };
 
     return (
@@ -117,9 +119,9 @@ export default function LandingPage() {
                                     "https://placehold.co/40x40/dip-100/black?text=UH";
                             }}
                         />
-                        <a href="/" className="text-dip-blk text-xl font-bold">
+                        <Link href="/" className="text-dip-blk text-xl font-bold">
                             UHired.ai
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Desktop Navigation */}
@@ -991,9 +993,9 @@ export default function LandingPage() {
                             }}
                         >
                             <p className="text-dip-blk/90 text-lg italic mb-6">
-                                "UHired.ai transformed my interview preparation.
+                                &quot;UHired.ai transformed my interview preparation.
                                 The AI feedback helped me identify weaknesses I
-                                didn't know I had."
+                                didn&apos;t know I had.&quot;
                             </p>
                             <div className="flex items-center">
                                 <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
@@ -1022,9 +1024,9 @@ export default function LandingPage() {
                             }}
                         >
                             <p className="text-dip-blk/90 text-lg italic mb-6">
-                                "The job matching feature connected me with
-                                opportunities I wouldn't have found otherwise.
-                                Landed my dream job in weeks!"
+                                &quot;The job matching feature connected me with
+                                opportunities I wouldn&apos;t have found otherwise.
+                                Landed my dream job in weeks!&quot;
                             </p>
                             <div className="flex items-center">
                                 <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>

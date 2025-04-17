@@ -15,7 +15,8 @@ class UserLoginApi {
     async post(userData: UserLogin): Promise<UserLoginResponse> {
         try{
             const response = await this.httpClient.post(
-                `${this.serverUrl}/login`,
+                // `${this.serverUrl}/login`,
+                `/api/login`,
                 userData,
                 false
             );

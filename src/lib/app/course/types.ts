@@ -5,6 +5,7 @@ export interface Chapter {
     video_thumbnail: string;
     video_title: string;
     video_transcript: string;
+    video_id: string;
 }
 
 export interface Unit {
@@ -20,6 +21,8 @@ export interface Course {
     mock_interview_id: number;
     user_id: number;
     units: Unit[];
+    company_name: string;
+    job_position: string;
 }
 
 // generate
