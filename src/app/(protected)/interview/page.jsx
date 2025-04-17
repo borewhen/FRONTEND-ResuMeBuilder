@@ -15,8 +15,12 @@ const UploadResumePage = () => {
     const [fileName, setFileName] = useState(null);
     const [showFile, setShowFile] = useState(false);
     const [userid, setUserid] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const canvasRef = useRef(null);
+
+    useEffect(() => {
+        setUserid(window.localStorage.getItem('user_id'));
+    }, []);
 
     useEffect(() => {
         if (fileUrl && showFile) {
@@ -43,26 +47,6 @@ const UploadResumePage = () => {
         }
       }, [fileUrl, showFile]);
 
-    useEffect(() => {
-        setUserid(window.localStorage.getItem('user_id'));
-        const getQuestion = async() => {
-            const userid = window.localStorage.getItem('user_id');
-            const response = await axios.post("http://localhost:8000/generate_interview/get-question", {
-            user_id: Number(userid)
-            });
-            const data = await response.data.questions;
-            setStartInterview(data.length > 0);
-            setIsLoading(false);
-        }
-        getQuestion();
-        return () => {
-            setFile(null);
-            setFileUrl(null);
-            setFileName(null);
-            setShowFile(false);
-        }
-    }, []);
-    
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile && selectedFile.type === "application/pdf") {
@@ -75,26 +59,30 @@ const UploadResumePage = () => {
     };
 
     const submitResume = async() => {
+        if (!file || !userid) return;
+
         const formData = new FormData();
         formData.append('user_id', Number(userid));
         formData.append('resume', file);
+
         try {
-            await axios.post('http://localhost:8000/generate_interview/start-interview', formData)
-            .then((response) => {
-                console.log(response);
-                setStartInterview(true);
-            })
-            .catch((error) => {
-                console.log(error);
+            const startResponse = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/start-interview`, formData);
+            console.log("Start interview response:", startResponse);
+
+            const questionResponse = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/get-question`, {
+                user_id: Number(userid)
             });
-            setFile(null);
-            setFileUrl(null);
-            setFileName(null);
-            setShowFile(false);
-        }
-        catch (error) {
+            
+            const questions = questionResponse.data.questions;
+            setStartInterview(questions.length > 0);
+        } catch (error) {
             console.log(error);
         }
+        
+        setFile(null);
+        setFileUrl(null);
+        setFileName(null);
+        setShowFile(false);
     }
 
     return (

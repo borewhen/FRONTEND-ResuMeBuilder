@@ -74,8 +74,15 @@ const VideoPage = ({ setStartInterview }) => {
                 setTranscript(text);
             };
 
-            recognition.onerror = (event) =>
-                console.error("Speech recognition error:", event);
+            recognition.onerror = (event) => {
+                if (event.error === "no-speech") {
+                    console.warn("No speech detected, restarting recognition.");
+                    recognition.stop();
+                    recognition.start();
+                } else {
+                    console.error("Speech recognition error:", event);
+                }
+            };
             micRef.current = recognition;
         }
     };
@@ -105,7 +112,7 @@ const VideoPage = ({ setStartInterview }) => {
     const getQuestion = async () => {
         const userid = window.localStorage.getItem("user_id");
         const response = await axios.post(
-            "http://localhost:8000/generate_interview/get-question",
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/get-question`,
             {
                 user_id: Number(userid),
             }
@@ -127,17 +134,35 @@ const VideoPage = ({ setStartInterview }) => {
             })
             .catch(console.error);
 
-        wsRef.current = new WebSocket("ws://localhost:8000/interview/ws");
+        // If the environment variable is not set, fallback to localhost for development.
+        const wsUrl =
+            process.env.NEXT_PUBLIC_WEBSOCKET_URL ||
+            "ws://localhost:8000/interview/ws";
+        
+        wsRef.current = new WebSocket(wsUrl);
+
+        wsRef.current.onopen = () => {
+            console.log("WebSocket connection opened:", wsUrl);
+        };
 
         wsRef.current.onmessage = (event) => {
+            console.log("Received WebSocket message:", event.data);
             const data = JSON.parse(event.data);
             setEyeContact(data.eye_contact);
+        };
+
+        wsRef.current.onerror = (error) => {
+            console.error("WebSocket error observed:", error);
+        };
+
+        wsRef.current.onclose = () => {
+            console.log("WebSocket connection closed");
         };
 
         getQuestion();
         setVideoOn(true);
         return () => {
-            if (wsRef.current) wsRef.current.close();
+            wsRef.current && wsRef.current.close();
             stopWebcam();
             stopMic();
             if (videoRef.current) {
@@ -179,7 +204,7 @@ const VideoPage = ({ setStartInterview }) => {
         setAnswers([...answers, transcript]);
         const userid = window.localStorage.getItem("user_id");
         const response = await axios.post(
-            "http://localhost:8000/generate_interview/submit-answer",
+            `${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/submit-answer`,
             {
                 user_id: Number(userid),
                 answer: transcript,
@@ -193,7 +218,7 @@ const VideoPage = ({ setStartInterview }) => {
         if(technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
-                "  http://localhost:8000/generate_interview/finish-interview",
+                `  ${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/finish-interview`,
                 {
                     user_id: Number(userid),
                     interview: {
@@ -214,7 +239,7 @@ const VideoPage = ({ setStartInterview }) => {
         if(technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
-                "  http://localhost:8000/generate_interview/finish-interview",
+                `  ${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/finish-interview`,
                 {
                     user_id: Number(userid),
                     interview: {
