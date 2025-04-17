@@ -115,16 +115,16 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
 
 
     return (
-        <div className="absolute flex items-center justify-center w-full h-full top-0 left-0">
+        <div className="absolute flex items-center justify-center w-full h-full top-0 left-0 scrollbar-hide">
             <div className="absolute w-full h-full top-0 left-0 bg-[#00000030] z-0" onClick={()=>setShowPopup(false)}></div>
             <div className="absolute w-4/5 h-4/5 bg-white rounded-lg px-8 py-8 flex flex-col" onClick={()=>{}}>
                 <div className="overflow-y-scroll flex-1">
-                    <div className="text-2xl font-bold">{categoryName}: {subcategoryName}</div>
+                    <div className="text-2xl font-bold text-center">{categoryName}: {subcategoryName}</div>
                     { status === "not-attempted" && !isLoading &&
-                        <div className="w-full bg-dip-blk text-white text-center rounded-lg py-5 mt-3">
+                        <div className="w-full h-full text-dip-blk/80 text-center rounded-lg py-5 mt-3">
                             <div className="text-xl font-bold mb-2">Not Attempted Yet</div>
-                            <div className="mb-2 text-sm w-1/2 mx-auto italic">you will be given interview questions related to this topic. answer accordingly and we will give you feedbacks on how you answer our question</div>
-                            <button className="rounded-full border-white border-[1px] px-4 py-1" onClick={() => {handleStartInterview()}}>Start Now!</button>
+                            <div className="mb-2 text-sm w-1/2 mx-auto italic">Speak to answer the questions given to you on this topic.</div>
+                            <button className="rounded-full border-dip-blk/80 border-[2px] px-4 py-1" onClick={() => {handleStartInterview()}}>Begin</button>
                         </div>
                     }
                     { isLoading && status === "not-attempted" && (
@@ -144,8 +144,8 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                         {  status !== "not-attempted" &&
                             questions.map((bubble, index) => {
                                 return (
-                                    <div className="w-full border-black border-2 rounded-lg px-4 py-2 mt-2 text-sm" key={index}>
-                                        <div><div className="font-bold">Question: </div>{bubble}</div>
+                                    <div className="w-full rounded-lg px-4 py-2 mt-2 text-md text-center" key={index}>
+                                        <div><div className="font-bold italic">Question: </div><i>{bubble}</i></div>
                                         {answers[index]? <div className="mt-8"><div className="font-bold">Your Response: </div>{answers[index]}</div> : isLoading &&  <div className="mt-8">Assessing your response...</div>}
                                         {feedbacks[index] && <div className="mt-8"><div className="font-bold">Feedback: </div>{feedbacks[index]}</div>}
                                     </div>
@@ -153,8 +153,8 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                             })
                         }
                         {   status === "completed" &&
-                            <div className="w-full rounded-lg mt-12">
-                                <div className="text-xl font-bold mb-2">Interview Completed</div>
+                            <div className="w-full rounded-lg mt-12 text-center">
+                                <div className="text-xl font-bold italic mb-2">Overall Review</div>
                                 <div>{isLoading? "Generating Summary..." : interviewSummary}</div>
                             </div>
                         }
@@ -162,19 +162,7 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                     </div>
                 </div>
                 {   status === "in-progress" &&
-                            <div className="bg-gray-50 rounded-lg p-4 shadow-md border border-dip-grey">
-                            {/* Header & Submit Button */}
-                            <div className="flex items-center justify-between">
-                              <div className="font-semibold text-gray-800 text-lg">Answer</div>
-                              <button
-                                className="px-4 py-2 rounded-full text-white bg-gradient-to-r from-[#8D72E1] to-[#D66DDF] disabled:opacity-50 hover:opacity-90 transition font-bold"
-                                onClick={handleSubmit}
-                                disabled={transcript === "" || isListening}
-                              >
-                                Submit Answer
-                              </button>
-                            </div>
-                    
+                            <div className="bg-gray-50 rounded-lg p-4 shadow-md">
                             <div className="flex items-center mt-4">
                               <div className="mr-4">
                                 <TiMicrophoneOutline
@@ -188,10 +176,21 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                                 />
                               </div>
                     
-                                <div className="border border-gray-300 flex-1 h-11 rounded-md bg-[#E9E3FF] text-gray-700 flex items-center px-3">
-                                    {transcript ? transcript : "Press and Speak to Answer"}
+                                <div className="border border-gray-300 italic flex-1 min-h-[2.75rem] rounded-md bg-[#E9E3FF] text-gray-700 flex items-center px-3 py-2">
+                                    {transcript ? transcript : "Press and speak to answer..."}
                                 </div>
                             </div>
+                            {/* Header & Submit Button */}
+                            <div className="flex items-end justify-end">
+                              <button
+                                className="px-4 py-2 mt-4 rounded-full text-white bg-dip-purple disabled:opacity-50 hover:opacity-90 transition font-bold"
+                                onClick={handleSubmit}
+                                disabled={transcript === "" || isListening}
+                              >
+                                Submit Answer
+                              </button>
+                            </div>
+                    
                           </div>
                     }
             </div>

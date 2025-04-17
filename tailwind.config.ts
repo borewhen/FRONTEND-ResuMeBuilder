@@ -33,9 +33,9 @@ export default {
   				'80': '#d1cfcb', 
   				'100': '#F5F3EF',
   				blk: '#171717',
-				purple: '#773FF2',
+				purple: '#693895',
 				grey: '#A8A8A8',
-				lightpurple: '#7B61FF',
+				lightpurple: '#773FF2',
 				greyishwhite: '#F8F9FA'
   			},
   			background: 'var(--background)',

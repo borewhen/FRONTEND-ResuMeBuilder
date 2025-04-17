@@ -48,7 +48,9 @@ export default function JobPrepPage() {
   useEffect(() => {
     setIsLoading(false);
     if(interviewList.length === 0) return;
-    const completed = interviewList.every(category => category.subcategories.every(subcategory => !subcategory.status));
+    const completed = interviewList.every(category => 
+      (Array.isArray(category.subcategories) ? category.subcategories : []).every(subcategory => !subcategory.status)
+    );
 
     const getSummary = async () => {
       const response = await summaryapi.mockinterviewGet(id);
@@ -167,7 +169,7 @@ export default function JobPrepPage() {
           </div>
           <div className="w-[60rem] mx-auto rounded-lg py-[50px] mt-8 bg-dip-greyishwhite">
             <div className="text-3xl text-black font-bold text-center">
-              Interview Preparation
+              Technical Review
             </div>
 
             <div className="flex mx-[40px] my-5">
@@ -219,9 +221,9 @@ export default function JobPrepPage() {
                           subcategories.map((subcategory, index) => {
                             const { subcategory_id, subcategory_name, status } = subcategory;
                             return (
-                              <div className={clsx("mx-4 px-2 py-2 border-gray-200 flex justify-between items-center rounded-lg mb-2 hover:cursor-pointer", status? "bg-red-200 hover:bg-red-400": "bg-green-200 hover:bg-green-400")} key={index} onClick={()=>handleClick(subcategory_id, category_name, subcategory_name)}>
-                                <div className="font-bold text-sm">{subcategory_name}</div>
-                                <div className="text-sm italic">{!status? "Completed": "Not Completed"}</div>
+                              <div className={clsx("mx-4 px-2 py-2 border-gray-200 flex justify-between items-center rounded-full mb-2 hover:cursor-pointer", status? "bg-red-200 hover:bg-red-400": "bg-green-200 hover:bg-green-400")} key={index} onClick={()=>handleClick(subcategory_id, category_name, subcategory_name)}>
+                                <div className="ml-4 font-bold text-sm">{subcategory_name}</div>
+                                {/* <div className="text-sm italic">{!status? "Completed": "Not Completed"}</div> */}
                               </div>
                             )
                           })
@@ -257,13 +259,13 @@ export default function JobPrepPage() {
               </div>
             ) : (
               <div>
-                <div className="font-bold mt-12 text-xl">Interview Result</div>
+                <div className="font-bold mt-12 text-xl text-center">Interview Result</div>
                 <div className="w-[56rem] mx-auto mt-3 text-md">
                   {summary}
                 </div>
-                <div className="w-[56rem] mx-auto mt-3 text-md">
-                  <span className="font-semibold">Failed Topics:</span>
-                  <div className="flex flex-wrap gap-2 mt-2">
+                <div className="w-[56rem] mx-auto mt-3 text-md text-center">
+                  <span className="font-bold text-dip-purple">Skill Gaps:</span>
+                  <div className="flex flex-wrap gap-2 mt-2 justify-center">
                     {failedTopics && failedTopics.split(",").map((topic, index) => (
                       <span key={index} className="bg-red-100 text-red-800 px-3 py-1 rounded-md text-sm font-medium">
                         {topic.trim()}
@@ -272,37 +274,59 @@ export default function JobPrepPage() {
                   </div>
                 </div>
 
-                <button
-                  className={`rounded-md px-3 py-2 font-bold mt-5 transition flex items-center justify-center gap-2
-                    ${isGenerateCourseLoading ? "bg-gray-400 cursor-not-allowed" : "bg-dip-purple text-white hover:bg-purple-700"}
-                  `}
-                  disabled={isGenerateCourseLoading}
-                  onClick={generateCourse}
-                >
-                  {isGenerateCourseLoading && (
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                      ></path>
-                    </svg>
-                  )}
-                  {isGenerateCourseLoading ? "Loading..." : "Learn More!"}
-                </button>
+                <div className="w-full flex justify-center mt-5">
+                  <button
+                    className={`rounded-full px-6 py-2.5 font-bold transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg
+                      ${isGenerateCourseLoading 
+                        ? "bg-gray-400 cursor-not-allowed" 
+                        : "bg-dip-purple text-white hover:translate-y-[-2px]"}
+                    `}
+                    disabled={isGenerateCourseLoading}
+                    onClick={generateCourse}
+                  >
+                    {isGenerateCourseLoading ? (
+                      <>
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                          ></path>
+                        </svg>
+                        <span>Loading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Learn More!</span>
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className="h-5 w-5" 
+                          viewBox="0 0 20 20" 
+                          fill="currentColor"
+                        >
+                          <path 
+                            fillRule="evenodd" 
+                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" 
+                            clipRule="evenodd" 
+                          />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             )
           ) : (

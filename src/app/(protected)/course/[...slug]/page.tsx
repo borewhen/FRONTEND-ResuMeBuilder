@@ -90,12 +90,6 @@ const CourseDetail: FunctionComponent<Props> = () => {
                     />
                 </div>
             </div>
-            
-            {currentChapterId && (
-                <div className="text-center mt-4 text-gray-500">
-                    Current Chapter ID: {currentChapterId}
-                </div>
-            )}
         </>
     );
 };

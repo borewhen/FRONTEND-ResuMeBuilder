@@ -12,7 +12,7 @@ const withAuth = (WrappedComponent: any) => {
 
     useEffect(() => {
       if (role === "unregistered") {
-        router.replace("/details-form");
+        router.replace("/");
       }
     }, [role, router]);
 

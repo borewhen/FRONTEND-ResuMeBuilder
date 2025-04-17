@@ -108,19 +108,18 @@ export default function LandingPage() {
             <nav className="fixed top-0 left-0 right-0 bg-dip-100/90 backdrop-blur-sm z-50 py-4 px-6">
                 <div className="max-w-6xl mx-auto flex justify-between items-center">
                     <div className="flex items-center">
-                        <Image
-                            alt="UHired.ai Logo"
-                            width={40}
-                            height={40}
-                            src="/logo.svg"
-                            className="mr-2"
-                            onError={(e) => {
-                                e.currentTarget.src =
-                                    "https://placehold.co/40x40/dip-100/black?text=UH";
-                            }}
-                        />
-                        <Link href="/" className="text-dip-blk text-xl font-bold">
-                            UHired.ai
+                        <Link href="/">
+                            <Image
+                                alt="uHired.ai Logo"
+                                width={40}
+                                height={40}
+                                src="/logo-purple-box.svg"
+                                className="mr-2"
+                                onError={(e) => {
+                                    e.currentTarget.src =
+                                        "https://placehold.co/40x40/dip-100/black?text=UH";
+                                }}
+                            />
                         </Link>
                     </div>
 
@@ -148,16 +147,16 @@ export default function LandingPage() {
                                     Course Generator
                                 </button>
                                 <button
-                                    onClick={() => router.push("/login")}
-                                    className="w-[100px] text-dip-blk/80 hover:text-dip-blk px-4 py-2 rounded-full border border-dip-0 border-2 font-bold transition-colors"
-                                >
-                                    Login
-                                </button>
-                                <button
                                     onClick={() => router.push("/register")}
-                                    className="w-[100px] border border-2 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full font-bold transition-colors"
+                                    className="w-[100px] border border-2 border-dip-purple bg-dip-purple text-dip-100 hover:bg-dip-lightpurple hover:border-dip-lightpurple px-4 py-2 rounded-full font-bold transition-colors"
                                 >
                                     Sign Up
+                                </button>
+                                <button
+                                    onClick={() => router.push("/login")}
+                                    className="w-[100px] text-dip-purple hover:text-dip-lightpurple hover:border-dip-lightpurple px-4 py-2 rounded-full border border-dip-purple border-2 font-bold transition-colors"
+                                >
+                                    Login
                                 </button>
                             </>
                         ) : (
@@ -246,16 +245,16 @@ export default function LandingPage() {
                                     Course Generator
                                 </button>
                                 <button
-                                    onClick={() => router.push("/login")}
-                                    className="text-dip-0/80 hover:text-dip-0 border border-dip-0 border-2 px-4 py-2 rounded-full transition-colors"
-                                >
-                                    Login
-                                </button>
-                                <button
                                     onClick={() => router.push("/register")}
-                                    className="border border-2 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 px-4 py-2 rounded-full transition-colors w-full"
+                                    className="border border-2 border-dip-purple bg-dip-purple text-dip-100 hover:bg-dip-lightpurple hover:border-dip-lightpurple px-4 py-2 rounded-full transition-colors w-full"
                                 >
                                     Sign Up
+                                </button>
+                                <button
+                                    onClick={() => router.push("/login")}
+                                    className="text-dip-purple hover:text-dip-lightpurple hover:border-dip-lightpurple px-4 py-2 rounded-full border border-dip-purple border-2 font-bold transition-colors"
+                                >
+                                    Login
                                 </button>
                             </div>
                         ) : (
@@ -355,14 +354,27 @@ export default function LandingPage() {
             >
                 <div className="max-w-4xl w-full text-center">
                     {/* Logo */}
-                    <div className="mb-12">
-                        <h1 className="text-dip-blk text-4xl font-bold">
-                            UHired.ai
-                        </h1>
-                    </div>
+                    {/* <div className="mb-12 flex justify-center">
+                        <img
+                            src="/logo-purple-text.svg"
+                            alt="uHired.ai Logo"
+                            className="w-60 h-30"
+                        />
+                    </div> */}
 
                     {/* Main Slogan */}
                     <motion.h2
+                        className="mb-12 flex justify-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <img
+                            src="/logo-purple-text.svg"
+                            alt="uHired.ai Logo"
+                        />
+                    </motion.h2>
+                    {/* <motion.h2
                         className="text-dip-blk text-5xl md:text-7xl font-bold mb-8 max-w-5xl mx-auto"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -370,18 +382,18 @@ export default function LandingPage() {
                     >
                         Practice. Review. <br className="hidden sm:block" />
                         Interview. Succeed.
-                    </motion.h2>
+                    </motion.h2> */}
 
                     {/* Subheading */}
                     <motion.p
-                        className="text-dip-blk/80 text-xl md:text-2xl mb-12 max-w-4xl mx-auto"
+                        className="text-dip-blk/90 text-xl md:text-2xl mb-12 max-w-4xl mx-auto"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                        Opportunities are for those who prepare for them.{" "}
+                        <i>Practice. Review. Interview. Succeed.</i>{" "}
                         <br className="hidden sm:block" />
-                        Prepare for your opportunities here, all in one place.
+                        Meet our AI-powered, all-in-one interview preparation platform.
                     </motion.p>
 
                     {/* Buttons */}
@@ -406,7 +418,7 @@ export default function LandingPage() {
                                 }}
                             />
                             <Button
-                                className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full transition-all"
+                                className="w-[140px] border border-4 border-dip-purple bg-dip-purple text-dip-100 hover:bg-dip-lightpurple hover:border-dip-lightpurple text-lg font-bold py-6 px-10 rounded-full transition-all"
                                 onMouseEnter={() => setHoverSignup(true)}
                                 onMouseLeave={() => setHoverSignup(false)}
                                 onClick={() => router.push("/register")}
@@ -431,7 +443,7 @@ export default function LandingPage() {
                             />
                             <Button
                                 variant="outline"
-                                className="w-[140px] border border-4 border-dip-0 text-dip-0/80 hover:bg-dip-0/10 px-10 py-6 text-lg font-bold rounded-full transition-all"
+                                className="w-[140px] border border-4 border-dip-purple text-dip-purple hover:border-dip-lightpurple hover:text-dip-lightpurple px-10 py-6 text-lg font-bold rounded-full transition-all"
                                 onMouseEnter={() => setHoverLogin(true)}
                                 onMouseLeave={() => setHoverLogin(false)}
                                 onClick={() => router.push("/login")}
@@ -442,10 +454,10 @@ export default function LandingPage() {
                     </motion.div>
                 </div>
 
-                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2 animate-bounce">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-dip-0/50"
+                        className="h-8 w-8 text-dip-purple/80"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -476,7 +488,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="bg-dip-0 w-20 h-20 rounded-full flex items-center justify-center mb-8">
+                        <div className="bg-dip-blk/90 w-20 h-20 rounded-full flex items-center justify-center mb-8">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-10 w-10 text-dip-100"
@@ -501,7 +513,7 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            Job Specific AI Interview
+                            Technical Preparation
                         </motion.h2>
                         <motion.p
                             className="text-dip-blk/80 text-xl leading-relaxed mb-8"
@@ -512,9 +524,8 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            Our AI analyzes your job description and generates
-                            customized interview questions based on the required
-                            skills, role, and industry.
+                            Customised interview questions based on the required
+                            skills, role, and industry for a job of your choice.
                         </motion.p>
                         <motion.ul
                             className="text-dip-blk/80 text-lg space-y-4"
@@ -617,7 +628,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="bg-dip-0 w-20 h-20 rounded-full flex items-center justify-center mb-8">
+                        <div className="bg-dip-blk/90 w-20 h-20 rounded-full flex items-center justify-center mb-8">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-10 w-10 text-dip-100"
@@ -642,7 +653,7 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            Live Video Interview
+                            Live Practice Sessions
                         </motion.h2>
                         <motion.p
                             className="text-dip-blk/80 text-xl leading-relaxed mb-8"
@@ -653,10 +664,9 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            Record your practice interviews and receive detailed
-                            feedback on your performance. Our AI analyzes your
-                            resume and ask you behavioural & technical questions
-                            regarding your past experiences.
+                            Practice to get more confident! Upload your resume
+                            and we&apos;ll give you sample questions based on
+                            your past experiences to help you speak <i>(and look)</i> better.
                         </motion.p>
                         <motion.ul
                             className="text-dip-blk/80 text-lg space-y-4"
@@ -740,7 +750,7 @@ export default function LandingPage() {
                                     />
                                 </svg>
                                 <span>
-                                    Receive actionable feedback to improve on
+                                    Actionable feedback
                                 </span>
                             </motion.li>
                         </motion.ul>
@@ -785,7 +795,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.8 }}
                     >
-                        <div className="bg-dip-0 w-20 h-20 rounded-full flex items-center justify-center mb-8">
+                        <div className="bg-dip-blk/90 w-20 h-20 rounded-full flex items-center justify-center mb-8">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 className="h-10 w-10 text-dip-100"
@@ -821,10 +831,9 @@ export default function LandingPage() {
                             }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            Our AI analyzes your responses from past mock
-                            interviews to detect skill gaps and automatically
-                            generates targeted practice questions and learning
-                            modules to help you improve.
+                            Don&apos;t worry if you didn&apos;t get all the questions right;
+                            our course generator knows just what to do to
+                            prepare you for the position you want.
                         </motion.p>
                         <motion.ul
                             className="text-dip-blk/80 text-lg space-y-4"
@@ -921,7 +930,7 @@ export default function LandingPage() {
                     transition={{ duration: 1 }}
                 />
 
-                <div className="max-w-4xl w-full text-center relative z-10">
+                <div className="max-w-6xl w-full text-center relative z-10">
                     <motion.h2
                         className="text-dip-blk text-4xl md:text-6xl font-bold mb-8"
                         initial={{ opacity: 0, y: 30 }}
@@ -931,7 +940,7 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.6 }}
                     >
-                        Ready to transform your career?
+                        Ready to kickstart your career?
                     </motion.h2>
                     <motion.p
                         className="text-dip-blk/80 text-xl md:text-2xl mb-12 max-w-3xl mx-auto"
@@ -942,7 +951,18 @@ export default function LandingPage() {
                         }}
                         transition={{ duration: 0.6, delay: 0.1 }}
                     >
-                        All you need in one place, right here.
+                        Let us help you check all the boxes on your interviewer&apos;s list:
+                    </motion.p>
+                    <motion.p
+                        className="text-dip-blk/80 text-xl md:text-2xl mb-12 max-w-3xl mx-auto"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{
+                            opacity: ctaInView ? 1 : 0,
+                            y: ctaInView ? 0 : 30,
+                        }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                    >
+                        All in one place, right here.
                     </motion.p>
 
                     <motion.div
@@ -955,14 +975,14 @@ export default function LandingPage() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <Button
-                            className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full"
+                            className="w-[140px] border border-4 border-dip-purple bg-dip-purple text-dip-100 hover:bg-dip-lightpurple hover:border-dip-lightpurple text-lg font-bold py-6 px-10 rounded-full"
                             onClick={() => router.push("/register")}
                         >
                             Sign Up
                         </Button>
 
                         <Button
-                            className="w-[140px] bg-transparent border-4 border-dip-0 text-dip-0/80 hover:bg-dip-0/10 text-lg font-bold py-6 px-10 rounded-full"
+                            className="w-[140px] bg-transparent border-4 border-dip-purple text-dip-purple hover:border-dip-lightpurple hover:text-dip-lightpurple text-lg font-bold py-6 px-10 rounded-full"
                             onClick={() => router.push("/login")}
                         >
                             Login
@@ -993,12 +1013,11 @@ export default function LandingPage() {
                             }}
                         >
                             <p className="text-dip-blk/90 text-lg italic mb-6">
-                                &quot;UHired.ai transformed my interview preparation.
+                                &quot;uHired transformed my interview preparation.
                                 The AI feedback helped me identify weaknesses I
                                 didn&apos;t know I had.&quot;
                             </p>
                             <div className="flex items-center">
-                                <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
                                 <div>
                                     <p className="text-dip-blk font-bold">
                                         Sarah
@@ -1029,7 +1048,6 @@ export default function LandingPage() {
                                 Landed my dream job in weeks!&quot;
                             </p>
                             <div className="flex items-center">
-                                <div className="w-12 h-12 rounded-full bg-dip-0 mr-4"></div>
                                 <div>
                                     <p className="text-dip-blk font-bold">
                                         Michael
@@ -1050,7 +1068,7 @@ export default function LandingPage() {
                     <div className="flex flex-col md:flex-row justify-between items-center md:items-start">
                         <div className="mb-8 md:mb-0">
                             <h3 className="text-dip-blk text-2xl font-bold mb-4">
-                                UHired.ai
+                                uHired.ai
                             </h3>
                             <p className="max-w-xs">
                                 Your path to career success starts with the
@@ -1086,7 +1104,7 @@ export default function LandingPage() {
                     </div>
 
                     <div className="border-t border-dip-0/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-                        <p>© 2025 UHired.ai. All rights reserved.</p>
+                        <p>© 2025 uHired.ai. All rights reserved.</p>
                         <div className="flex space-x-4 mt-4 md:mt-0">
                             <a href="#" className="hover:text-dip-0">
                                 <svg

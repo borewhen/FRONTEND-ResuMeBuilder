@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:8000/:path*' // Assuming FastAPI runs on port 8000
+        destination: `${process.env.NEXT_PUBLIC_SERVER_URL}/:path*`
       }
     ];
   },

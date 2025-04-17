@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface Prep {
@@ -11,6 +11,7 @@ interface Prep {
     skills: string[];
 }
 
+// Move the data outside the component to avoid re-creating it on each render
 const prepData: Prep[] = [
     {
         job_id: "1",
@@ -84,10 +85,38 @@ const prepData: Prep[] = [
     }
 ];
 
-
 export default function ActivityPage(){
     const [statusFilter, setStatusFilter] = useState("all");
     const [searchFilter, setSearchFilter] = useState("");
+    const [mounted, setMounted] = useState(false);
+    
+    // Add this useEffect to handle any potential browser-only code
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Only render the full content after component has mounted on the client
+    if (!mounted) {
+        return (
+            <div className="py-8 w-full min-h-screen bg-dip-20">
+                <div className="w-[56rem] mx-auto text-2xl font-bold mb-2">YOUR INTERVIEW PREPS</div>
+                <div className="w-[56rem] mx-auto bg-white rounded-xl shadow-lg">
+                    <div className="px-4 py-4 w-full flex justify-between items-center">
+                        {/* Loading state */}
+                        <div className="animate-pulse bg-gray-200 h-8 w-96 rounded-md"></div>
+                        <div className="animate-pulse bg-gray-200 h-8 w-56 rounded-md"></div>
+                    </div>
+                    {/* Loading state for items */}
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="mx-4 py-4 rounded-lg flex flex-col">
+                            <div className="animate-pulse bg-gray-200 h-6 w-full rounded-md mb-2"></div>
+                            <div className="animate-pulse bg-gray-200 h-4 w-1/2 rounded-md"></div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="py-8 w-full min-h-screen bg-dip-20">
