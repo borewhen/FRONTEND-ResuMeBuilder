@@ -26,6 +26,11 @@ export default function JobSeekerForm() {
     const [image, setImage] = useState<string | null>(null);
     const {setUserData} = useUserStore();
     const router = useRouter();
+    const [isBrowser, setIsBrowser] = useState(false);
+
+    useEffect(() => {
+        setIsBrowser(true);
+    }, []);
 
     useEffect(() => {
         setFormData({
@@ -36,14 +41,16 @@ export default function JobSeekerForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'profile_picture_url') {
-            const file = e.target.files?.[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64 = reader.result as string;
-                    setImage(base64);
+            if (isBrowser) {
+                const file = e.target.files?.[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64 = reader.result as string;
+                        setImage(base64);
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
             }
             return;
         }
