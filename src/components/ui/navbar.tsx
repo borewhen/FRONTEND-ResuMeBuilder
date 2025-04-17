@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -13,6 +13,20 @@ const navItems = [
 
 export default function Navbar() {
     const pathname = usePathname();
+    const [userEmail, setUserEmail] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        setUserEmail(localStorage.getItem("user_email"));
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user_email");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("access_token");
+        window.location.href = "/";
+    };
 
     return (
         <nav className="flex items-center justify-between px-[80px] py-4 bg-white shadow-sm border border-b-[#A8A8A8]">
@@ -53,14 +67,19 @@ export default function Navbar() {
             </div>
             
             <div className="text-sm text-gray-500">
-                Logged in as: <b>{window.localStorage.getItem("user_email")}</b>. <button className="text-gray-500 hover:text-gray-700" onClick={() => {
-                    window.localStorage.removeItem("user_email");
-                    window.localStorage.removeItem("user_id");
-                    window.localStorage.removeItem("access_token");
-                    window.location.href = "/";
-                }}>
-                    <i><u>Logout?</u></i>
-                </button>
+                {mounted && userEmail ? (
+                    <>
+                        Logged in as: <b>{userEmail}</b>.{" "}
+                        <button 
+                            className="text-gray-500 hover:text-gray-700" 
+                            onClick={handleLogout}
+                        >
+                            <i><u>Logout?</u></i>
+                        </button>
+                    </>
+                ) : (
+                    <span>Loading user info...</span>
+                )}
             </div>
             {/* <div className="flex items-center space-x-7">
                 <div className="relative">
