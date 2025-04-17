@@ -3,9 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell } from "lucide-react"; // Icons from Lucide
 import Image from "next/image";
-import UserAvatar from "./avatar";
 
 const navItems = [
     { name: "Jobs", href: "/jobs" },

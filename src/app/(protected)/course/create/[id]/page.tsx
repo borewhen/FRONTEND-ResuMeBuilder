@@ -2,7 +2,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { ToastContainer, toast } from 'react-toastify';
 import coursegetterapi from "@/lib/app/course/api/get";
