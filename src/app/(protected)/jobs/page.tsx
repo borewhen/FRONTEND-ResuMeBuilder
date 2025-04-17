@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import scraper from '@/lib/app/job/api/scrape';
 import { JobScraperResponse } from "@/lib/app/job/types";
 import clsx from "clsx";
-import { SlidersHorizontal } from "lucide-react";
 import JobDetail from "./(components)/jobDetail";
 import JobCardLoading from "./(components)/jobCardLoading";
 import 'react-loading-skeleton/dist/skeleton.css'
