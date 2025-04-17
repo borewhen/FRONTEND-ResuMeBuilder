@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "UHired.ai",
+    title: "uHired.ai",
     description: "GenAI powered application for interview prep",
     icons: {
-        icon: "https://cognimate.vercel.app/favicon.svg",
+        icon: "/logo-purple-border-bottom.svg"
     },
 };
 

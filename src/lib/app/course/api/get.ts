@@ -34,6 +34,7 @@ class CourseGetter {
                 `${this.serverUrl}/${courseId}`,
                 {},
             );
+            console.log(response);
             const data: Course = await response.data;
             return data;
         } 

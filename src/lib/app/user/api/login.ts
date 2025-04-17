@@ -24,6 +24,7 @@ class UserLoginApi {
             if (data?.access_token) {
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('user_id', data.user.id.toString());
+                localStorage.setItem('user_email', data.user.email);
             }
             return data;
         } 

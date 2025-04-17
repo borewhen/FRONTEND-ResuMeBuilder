@@ -15,7 +15,7 @@ export default async function handler(
   try {
     // Forward the login request to your backend login endpoint
     const apiRes = await fetch(
-      "https://backend-resumebuilder-production.up.railway.app/user/login",
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/user/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

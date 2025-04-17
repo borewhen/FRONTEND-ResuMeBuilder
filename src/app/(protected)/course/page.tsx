@@ -17,6 +17,7 @@ type Courses = Course[];
 export default function CoursePage() {
     const [courses, setCourses] = useState<Courses>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,11 +68,17 @@ export default function CoursePage() {
                                 href={`/course/${course.course_id}/0/0`}
                                 key={course.course_id}
                             >
-                                <Card className="w-[250px] h-[280px] flex flex-col items-center justify-between text-center shadow-sm hover:shadow-xl hover:scale-[1.03] transition duration-300 rounded-xl bg-dip-greyishwhite hover:cursor-pointer">
+                                <Card 
+                                    className="w-[250px] h-[280px] flex flex-col items-center justify-between text-center shadow-sm hover:shadow-xl hover:scale-[1.03] transition duration-300 rounded-xl bg-dip-greyishwhite hover:cursor-pointer"
+                                    onMouseEnter={() => setHoveredCardId(course.course_id)}
+                                    onMouseLeave={() => setHoveredCardId(null)}
+                                >
                                     <CardHeader className="flex items-center justify-center pt-6 h-25 bg-white w-full rounded-t-xl">
-                                        <div className="absolute top-2 right-2 bg-dip-purple text-white text-xs px-2 py-1 rounded-full">
-                                            #{courseIndex + 1}
-                                        </div>
+                                        {hoveredCardId === course.course_id && (
+                                            <div className="absolute top-2 right-2 bg-dip-purple text-white text-xs px-2 py-1 rounded-full">
+                                                #{courseIndex + 1}
+                                            </div>
+                                        )}
                                         <img
                                             src={course.image_url}
                                             alt={`${course.company_name} Logo`}
