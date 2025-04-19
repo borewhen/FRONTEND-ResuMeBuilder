@@ -53,7 +53,7 @@ export default function LoginPage() {
                 <CardHeader>
                     <div className="mb-6">
                         <Image
-                            src="https://cognimate.vercel.app/favicon.svg"
+                            src="/logo.png"
                             alt="Logo"
                             width={50}
                             height={50}
