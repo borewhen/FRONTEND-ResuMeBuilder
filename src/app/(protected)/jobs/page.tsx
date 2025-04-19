@@ -6,7 +6,7 @@ import scraper from '@/lib/app/job/api/scrape';
 import { JobScraperResponse } from "@/lib/app/job/types";
 import clsx from "clsx";
 import { SlidersHorizontal } from "lucide-react";
-import { ourJobList } from "./(components)/masterpiece";
+import { ourJobList, ourJobList2 } from "./(components)/masterpiece";
 import JobDetail from "./(components)/jobDetail";
 import JobCardLoading from "./(components)/jobCardLoading";
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -30,6 +30,7 @@ const JobsPage: React.FC = () => {
             page: pageNumber
         })
         data[4] = ourJobList;
+        data[8] = ourJobList2;
         setJobs(data);
         setSelectedJobId(Number(data[0]?.job_id))
         setLoading(false);

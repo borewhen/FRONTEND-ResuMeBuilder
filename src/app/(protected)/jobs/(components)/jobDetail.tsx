@@ -8,6 +8,7 @@ import { useCompanyStore } from '@/store/useCompanyStore';
 // import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { ourJobDetails, ourJobDescription, myJobId } from './masterpiece';
+import { ourJobDetails2, ourJobDescription2, myJobId2 } from './masterpiece';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -30,6 +31,10 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 fetchedJob = ourJobDetails;
             }
+            else if (selectedJobId == myJobId2) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                fetchedJob = ourJobDetails2;
+            }
             else fetchedJob = await jobdetail.get(String(selectedJobId));
             setJob(fetchedJob);
             setLoading(false);
@@ -41,6 +46,10 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
             if (selectedJobId == myJobId) {
                 await new Promise(resolve => setTimeout(resolve, 4512));
                 description = ourJobDescription;
+            }
+            else if (selectedJobId == myJobId2) {
+                await new Promise(resolve => setTimeout(resolve, 4512));
+                description = ourJobDescription2;
             }
             else description = await jobdetail.getDescription(String(selectedJobId));
             setDescription(description)

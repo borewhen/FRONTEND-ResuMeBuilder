@@ -15,15 +15,15 @@ const CourseSidebar: FunctionComponent<CourseSidebarProps> = ({
     return (
         <Sidebar className="sticky top-0 w-[350px] h-screen">
             <Sidebar.Items>
-                <Sidebar.ItemGroup>
+                <Sidebar.ItemGroup className=" list-none p-0">
                     {course?.units.map((unit: any, unitIndex: any) => {
                         return (
                             <div key={unit.unit_id}>
                                 <Sidebar.Collapse
                                     label={`Section ${unitIndex + 1}: ${
-                                        unit.unit_name
+                                        unit.unit_name.length > 20? unit.unit_name.slice(0, 20) + "..." : unit.unit_name
                                     }`}
-                                    className="font-bold text-md border-b-2 py-3 rounded-none"
+                                    className="font-bold text-md border-b-2 py-3 rounded-none w-max-[350px] overflow-x-hidden"
                                 >
                                     {unit?.chapters.map(
                                         (chapter: any, chapterIndex: any) => {
