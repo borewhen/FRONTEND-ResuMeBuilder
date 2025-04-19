@@ -7,10 +7,12 @@ import { JobDetailResponse } from '@/lib/app/job/types';
 import { useCompanyStore } from '@/store/useCompanyStore';
 // import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
+import { ourJobDetails, ourJobDescription, myJobId } from './masterpiece';
 // import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
 
+ // Example job ID for testing
 
 export default function JobDetail({ selectedJobId } : { selectedJobId: number | null}) {
     const [job, setJob] = useState<JobDetailResponse | null>(null);
@@ -23,17 +25,27 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
     useEffect(() => {
         const fetchJobDetail = async () => {
             setLoading(true);
-            const fetchedJob = await jobdetail.get(String(selectedJobId));
+            let fetchedJob: JobDetailResponse | null = null;
+            if (selectedJobId == myJobId) {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                fetchedJob = ourJobDetails;
+            }
+            else fetchedJob = await jobdetail.get(String(selectedJobId));
             setJob(fetchedJob);
-            
             setLoading(false);
         };
 
         const fetchDescription = async () => {
             setDescriptionLoading(true);
-            const description = await jobdetail.getDescription(String(selectedJobId));
+            let description: string | null = null;
+            if (selectedJobId == myJobId) {
+                await new Promise(resolve => setTimeout(resolve, 4512));
+                description = ourJobDescription;
+            }
+            else description = await jobdetail.getDescription(String(selectedJobId));
             setDescription(description)
             setDescriptionLoading(false);
+            console.log(description);
         }
 
         fetchJobDetail();
