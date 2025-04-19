@@ -1,32 +1,33 @@
-import { JobDetailResponse } from '@/lib/app/job/types';
+import { JobDetailResponse } from "@/lib/app/job/types";
 export const ourJobList = {
-    "company_logo_url": "https://media.licdn.com/dms/image/v2/D560BAQHn4CmVqM4SyA/company-logo_200_200/company-logo_200_200/0/1712652396164/novoai_logo?e=1750291200&v=beta&t=fikhIzHChooHBUnwyrKT3HhvacufD430iBr_sO6qSyc",
-    "company_name": "Novo AI",
-    "company_profile": "https://www.linkedin.com/company/novoai",
-    "job_id": "42012811001",
-    "job_link": "https://www.linkedin.com/jobs/view/4211512611/?alternateChannel=search&refId=NejjiF41nkJdhvM50%2BnA0Q%3D%3D&trackingId=6qAmGRyEJ1P%2BE4eICYgDfw%3D%3D",
-    "job_location": "Singapore",
-    "job_position": "Full-Stack Developer",
-    "job_posting_date": "2025-04-19"
-}
-  
+    company_logo_url:
+        "https://media.licdn.com/dms/image/v2/D560BAQHn4CmVqM4SyA/company-logo_200_200/company-logo_200_200/0/1712652396164/novoai_logo?e=1750291200&v=beta&t=fikhIzHChooHBUnwyrKT3HhvacufD430iBr_sO6qSyc",
+    company_name: "Novo AI",
+    company_profile: "https://www.linkedin.com/company/novoai",
+    job_id: "42012811001",
+    job_link:
+        "https://www.linkedin.com/jobs/view/4211512611/?alternateChannel=search&refId=NejjiF41nkJdhvM50%2BnA0Q%3D%3D&trackingId=6qAmGRyEJ1P%2BE4eICYgDfw%3D%3D",
+    job_location: "Singapore",
+    job_position: "Full-Stack Developer",
+    job_posting_date: "2025-04-19",
+};
 
-export const ourJobDetails:JobDetailResponse = {
-    "company_name": "Novo AI",
-    "job_location": "Singapore",
-    "job_position": "Full-Stack Developer",
-    "job_posting_time": "1 week ago",
-    "jobs_status": "",
-    "company_linkedin_id": "https://www.linkedin.com/company/novoai",
-    "base_pay": "",
-    "job_description": "",
-    "seniority_level": "Entry level",
-    "employment_type": "Full-time",
-    "Job_function": "string",
-    "Industries": "",
-    "recruiter_details": "",
-    "similar_jobs": []
-}
+export const ourJobDetails: JobDetailResponse = {
+    company_name: "Novo AI",
+    job_location: "Singapore",
+    job_position: "Full-Stack Developer",
+    job_posting_time: "1 week ago",
+    jobs_status: "",
+    company_linkedin_id: "https://www.linkedin.com/company/novoai",
+    base_pay: "",
+    job_description: "",
+    seniority_level: "Entry level",
+    employment_type: "Full-time",
+    Job_function: "string",
+    Industries: "",
+    recruiter_details: "",
+    similar_jobs: [],
+};
 
 export const ourJobDescription = `
 <div style="font-family: Arial, sans-serif; max-width: 800px;">
@@ -58,6 +59,7 @@ export const ourJobDescription = `
     <li>Experience with AI/LLM implementations preferred</li>
     <li>Excellent problem-solving and system design skills</li>
     <li>Strong communication abilities and experience working in remote teams</li>
+    <li>Good RESTful API design fundamentals and knowledge of building serverless applications</li>
   </ul>
 
   <p style="font-size: 14px; font-weight: bold;">Nice to have</p>
@@ -80,38 +82,40 @@ export const ourJobDescription = `
     We're particularly interested in hearing about your production engineering experience, any AI/ML projects you've worked on, and your approach to technical problem-solving.
   </p>
 </div>
-`
+`;
 
 export const myJobId = 42012811001;
 
 export const ourJobList2 = {
-    "company_logo_url": "https://media.licdn.com/dms/image/v2/C4E0BAQG0dfCs_tMDUQ/company-logo_100_100/company-logo_100_100/0/1631307630627?e=1750291200&v=beta&t=VitC1mTf_E3FUkyEEpc30pnSkMHEDfaoAeyX_j_nTP4",
-    "company_name": "Infineon Technologies",
-    "company_profile": "https://www.linkedin.com/company/infineon-technologies",
-    "job_id": "42012811002",
-    "job_link": "https://www.linkedin.com/jobs/view/4187276227/?alternateChannel=search&refId=kRjxO3UcJo3spTAyuppuRg%3D%3D&trackingId=J%2Fe5x3oK5R2iaE%2B0AN%2FAXw%3D%3D",
-    "job_location": "Singapore",
-    "job_position": "Data Science Intern",
-    "job_posting_date": "2025-04-12"
-}
-  
+    company_logo_url:
+        "https://media.licdn.com/dms/image/v2/C4E0BAQG0dfCs_tMDUQ/company-logo_100_100/company-logo_100_100/0/1631307630627?e=1750291200&v=beta&t=VitC1mTf_E3FUkyEEpc30pnSkMHEDfaoAeyX_j_nTP4",
+    company_name: "Infineon Technologies",
+    company_profile: "https://www.linkedin.com/company/infineon-technologies",
+    job_id: "42012811002",
+    job_link:
+        "https://www.linkedin.com/jobs/view/4187276227/?alternateChannel=search&refId=kRjxO3UcJo3spTAyuppuRg%3D%3D&trackingId=J%2Fe5x3oK5R2iaE%2B0AN%2FAXw%3D%3D",
+    job_location: "Singapore",
+    job_position: "Data Science Intern",
+    job_posting_date: "2025-04-12",
+};
 
-export const ourJobDetails2:JobDetailResponse = {
-    "company_name": "Infineon Technologies",
-    "job_location": "Singapore",
-    "job_position": "Data Science Intern",
-    "job_posting_time": "5 days ago",
-    "jobs_status": "",
-    "company_linkedin_id": "https://www.linkedin.com/company/infineon-technologies",
-    "base_pay": "",
-    "job_description": "",
-    "seniority_level": "Internship",
-    "employment_type": "Internship",
-    "Job_function": "string",
-    "Industries": "",
-    "recruiter_details": "",
-    "similar_jobs": []
-}
+export const ourJobDetails2: JobDetailResponse = {
+    company_name: "Infineon Technologies",
+    job_location: "Singapore",
+    job_position: "Data Science Intern",
+    job_posting_time: "5 days ago",
+    jobs_status: "",
+    company_linkedin_id:
+        "https://www.linkedin.com/company/infineon-technologies",
+    base_pay: "",
+    job_description: "",
+    seniority_level: "Internship",
+    employment_type: "Internship",
+    Job_function: "string",
+    Industries: "",
+    recruiter_details: "",
+    similar_jobs: [],
+};
 
 export const ourJobDescription2 = `
 <div style="font-family: Arial, sans-serif; max-width: 900px">
@@ -159,6 +163,6 @@ export const ourJobDescription2 = `
     We are on a journey to create the best Infineon for everyone. This means we embrace diversity and inclusion and welcome everyone for who they are. At Infineon, we offer a working environment characterized by trust, openness, respect and tolerance and are committed to giving all applicants and employees equal opportunities. We base our recruiting decisions on the applicant´s experience and skills.
   </p>
 </div>
-`
+`;
 
 export const myJobId2 = 42012811002;
