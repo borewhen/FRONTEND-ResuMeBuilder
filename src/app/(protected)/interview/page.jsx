@@ -22,7 +22,27 @@ const UploadResumePage = () => {
 
     useEffect(() => {
         setUserid(window.localStorage.getItem('user_id'));
+        const getQuestion = async () => {
+            const userid = window.localStorage.getItem("user_id");
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/get-question`,
+                {
+                    user_id: Number(userid),
+                }
+            );
+            const data = await response.data.questions;
+            setStartInterview(data.length > 0);
+            setIsLoading(false);
+        };
+        getQuestion();
+        return () => {
+            setFile(null);
+            setFileUrl(null);
+            setFileName(null);
+            setShowFile(false);
+        };
     }, []);
+
 
     useEffect(() => {
         if (fileUrl && showFile) {
@@ -118,8 +138,8 @@ const UploadResumePage = () => {
                       />
                       {
                           showFile &&
-                          <div className='fixed w-screen h-screen bg-black bg-opacity-30 top-0 left-0 mx-auto flex justify-center items-center' onClick={()=>setShowFile(false)}>
-                              <canvas ref={canvasRef} className="border rounded-lg shadow-md mx-auto overflow-scroll" />
+                          <div className='fixed w-screen h-screen bg-black bg-opacity-30 top-0 left-0 mx-auto flex justify-center items-center z-10' onClick={()=>setShowFile(false)}>
+                              <canvas ref={canvasRef} className="border rounded-lg shadow-md mx-auto overflow-scroll z-20" />
                           </div>
                           
                       }
