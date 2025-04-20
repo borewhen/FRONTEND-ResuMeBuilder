@@ -15,7 +15,8 @@ class UserLoginApi {
     async post(userData: UserLogin): Promise<UserLoginResponse> {
         try{
             const response = await this.httpClient.post(
-                `${this.serverUrl}/login`,
+                // `${this.serverUrl}/login`,
+                `/api/login`,
                 userData,
                 false
             );
@@ -23,6 +24,7 @@ class UserLoginApi {
             if (data?.access_token) {
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('user_id', data.user.id.toString());
+                localStorage.setItem('user_email', data.user.email);
             }
             return data;
         } 

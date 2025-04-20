@@ -65,7 +65,7 @@ export default function JobDetail({ selectedJobId } : { selectedJobId: number | 
     return (
         <div className="min-h-screen">
             <div className='w-full'>
-                <div className='w-full shadow-xl bg-white rounded-lg px-4 py-2'>
+                <div className='w-full shadow-xl border border-dip-greybg-white rounded-lg px-4 py-2'>
                     {
                         !loading ? (
                             <>

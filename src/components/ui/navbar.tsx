@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 const navItems = [
     { name: "Jobs", href: "/jobs" },
@@ -14,11 +13,19 @@ const navItems = [
 
 export default function Navbar() {
     const pathname = usePathname();
-    const router = useRouter();
+    const [userEmail, setUserEmail] = useState<string | null>(null);
+    const [mounted, setMounted] = useState(false);
 
-    const logout = () => {
+    useEffect(() => {
+        setMounted(true);
+        setUserEmail(localStorage.getItem("user_email"));
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user_email");
+        localStorage.removeItem("user_id");
         localStorage.removeItem("access_token");
-        router.push("/");
+        window.location.href = "/";
     };
 
     return (
@@ -33,7 +40,7 @@ export default function Navbar() {
                     data-nimg="1"
                     className="dark:invert"
                     style={{ color: "transparent" }}
-                    src="/logo.png"
+                    src="/logo-purple-box.svg"
                 />
             </div>
 
@@ -55,17 +62,20 @@ export default function Navbar() {
                     </Link>
                 ))}
             </div>
-
-            <div className="flex items-center space-x-7">
-                <div className="flex flex-col items-center">
-                    <div className="text-sm text-gray-500">
-                        <button className="text-gray-500 hover:text-gray-700">
-                            <i>
-                                <u onClick={logout}>Logout?</u>
-                            </i>
+            <div className="text-sm text-gray-500">
+                {mounted && userEmail ? (
+                    <>
+                        Logged in as: <b>{userEmail}</b>.{" "}
+                        <button 
+                            className="text-gray-500 hover:text-gray-700" 
+                            onClick={handleLogout}
+                        >
+                            <i><u>Logout?</u></i>
                         </button>
-                    </div>
-                </div>
+                    </>
+                ) : (
+                    <span>Loading user info...</span>
+                )}
             </div>
         </nav>
     );

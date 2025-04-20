@@ -53,7 +53,7 @@ export default function LoginPage() {
                 <CardHeader>
                     <div className="mb-6">
                         <Image
-                            src="/logo.png"
+                            src="/logo-purple-box.svg"
                             alt="Logo"
                             width={50}
                             height={50}
@@ -139,7 +139,7 @@ export default function LoginPage() {
 
             <div className="hidden md:block w-1/2 relative h-screen">
                 <img
-                    src="https://i.imgur.com/UPXZRVW.png"
+                    src="/login-image.jpg"
                     alt="Login Image"
                     className="object-cover w-full h-full"
                 />

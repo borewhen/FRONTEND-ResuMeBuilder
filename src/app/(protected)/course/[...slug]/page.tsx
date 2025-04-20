@@ -12,28 +12,47 @@ import { Chapter, Course, Unit } from "@/lib/app/course/types";
 interface Props {}
 
 const CourseDetail: FunctionComponent<Props> = () => {
-    const { slug } = useParams();
-    const [courseId, unitIndexParam, chapterIndexParam] = Array.isArray(slug)
-        ? slug
+    // Always call useParams unconditionally
+    const params = useParams();
+
+    // If params.slug is defined, cast it as a string array; otherwise use an empty array.
+    const slug: string[] = Array.isArray(params?.slug)
+        ? params.slug
+        : params?.slug
+        ? [params.slug]
         : [];
+
+    // Check if we have at least three values.
+    const hasValidSlug = slug.length >= 3;
+
+    // Destructure the values (default to empty strings if invalid)
+    const [courseId, unitIndexParam, chapterIndexParam] = hasValidSlug
+        ? slug
+        : ["", "", ""];
+
+    // Always call hooks
     const [course, setCourse] = useState<Course | null>(null);
-    // const [loading, setLoading] = useState(false);
-    const [loading] = useState(false);
-
+    const [loading, setLoading] = useState(false);
+    
     useEffect(() => {
-        const fetchCourseDetail = async () => {
-            const courseDetail = await coursegetterapi.getById(
-                parseInt(courseId)
-            );
-            setCourse(courseDetail);
-        };
+        if (courseId) {
+            const fetchCourseDetail = async () => {
+                setLoading(true);
+                const courseDetail = await coursegetterapi.getById(parseInt(courseId));
+                setCourse(courseDetail);
+                setLoading(false);
+            };
 
-        fetchCourseDetail();
+            fetchCourseDetail();
+        }
     }, [courseId]);
 
-    if (!unitIndexParam || !chapterIndexParam) {
+    // Return an error if we don't have valid slug values.
+    if (!hasValidSlug) {
         return <>Something went wrong</>;
     }
+
+    // Convert parameters to numbers.
     const unitIndex = parseInt(unitIndexParam);
     const chapterIndex = parseInt(chapterIndexParam);
 
@@ -60,7 +79,7 @@ const CourseDetail: FunctionComponent<Props> = () => {
         <>
             <div className="flex">
                 <CourseSidebar
-                    course={course || null}
+                    course={course}
                     currentChapterId={currentChapterId}
                 />
                 <div className="flex flex-1">
