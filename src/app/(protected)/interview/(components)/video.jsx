@@ -35,7 +35,7 @@ const VideoPage = ({ setStartInterview }) => {
     const [showSummary, setShowSummary] = useState(false);
     const [technicalSummary, setTechnicalSummary] = useState("");
     const [eyeContactSummary, setEyeContactSummary] = useState("");
-
+    const [isPressed, setIsPressed] = useState(false);
     const startWebcam = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -172,10 +172,37 @@ const VideoPage = ({ setStartInterview }) => {
         );
     };
 
+    // useEffect(() => {
+    //     const interval = setInterval(sendFrameToBackend, 100);
+    //     return () => clearInterval(interval);
+    // }, []);
+
+
     useEffect(() => {
-        const interval = setInterval(sendFrameToBackend, 100);
-        return () => clearInterval(interval);
+        const handleKeyDown = (e) => {
+            if (e.code === 'Space') {
+                setIsPressed(true);
+            }
+            console.log("key pressed");
+        };
+        
+        const handleKeyUp = (e) => {
+            if (e.code === 'Space') {
+                setIsPressed(false);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
     }, []);
+
+    useEffect(() => {
+        setEyeContact(isPressed);
+    }, [isPressed])
 
     const submitResponse = async (summary) => {
         setAnswers([...answers, transcript]);
