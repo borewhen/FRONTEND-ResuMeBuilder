@@ -154,10 +154,17 @@ export default function InterviewCard({ setShowPopup, subcategoryDetail }) {
                         {  status !== "not-attempted" &&
                             questions.map((bubble, index) => {
                                 return (
-                                    <div className="w-full rounded-lg px-4 py-2 mt-2 text-md text-center" key={index}>
-                                        <div><div className="font-bold italic">Question: </div><i>{bubble}</i></div>
-                                        {answers[index]? <div className="mt-8"><div className="font-bold">Your Response: </div>{answers[index]}</div> : isLoading &&  <div className="mt-8">Assessing your response...</div>}
-                                        {feedbacks[index] && <div className="mt-8"><div className="font-bold">Feedback: </div>{feedbacks[index]}</div>}
+                                    <div
+                                        className="mb-6 w-full bg-purple-100 px-7 py-5 rounded-lg shadow-sm border border-purple-200"
+                                        key={index}
+                                    >
+                                        <div className="font-medium mb-3">Question: {bubble}</div>
+                                        <div className="pl-5 pr-8 py-3 border-l-2 border-purple-300 text-gray-700 mt-2 rounded-md">
+                                            <strong>Answer:</strong> {answers[index] || (isLoading ? "Assessing your response..." : "")}
+                                        </div>
+                                        <div className="px-5 pr-8 py-5 border-l-2 bg-dip-purple/10 border-dip-purple text-gray-700 mt-2 mb-5 rounded-md">
+                                            <strong>Feedback:</strong> {feedbacks[index] || ""}
+                                        </div>
                                     </div>
                                 )
                             })

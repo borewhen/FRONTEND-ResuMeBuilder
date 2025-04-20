@@ -527,15 +527,12 @@ const VideoPage = ({ setStartInterview }) => {
                                 className="mb-6 w-full bg-purple-100 px-7 py-5 rounded-lg shadow-sm border border-purple-200"
                                 key={index}
                             >
-                                <div className="font-medium mb-3">Q: {question}</div>
-                                <div className="pl-5 border-l-2 border-purple-300 text-gray-700 mt-2">
-                                    A: {answers && index < answers.length ? answers[index] : ""}
+                                <div className="font-medium mb-3">Question: {question}</div>
+                                <div className="pl-5 pr-8 py-3 border-l-2 border-purple-300 text-gray-700 mt-2 rounded-md">
+                                    <strong>Answer:</strong> {answers && index < answers.length ? answers[index] : ""}
                                 </div>
-                                <div className="">
-                                    F:{" "}
-                                    {feedbacks && index < feedbacks.length
-                                        ? feedbacks[index]
-                                        : ""}
+                                <div className="px-5 pr-8 py-5 border-l-2 bg-dip-purple/10 border-dip-purple text-gray-700 mt-2 mb-5 rounded-md">
+                                    <strong>Feedback:</strong> {feedbacks && index < feedbacks.length ? feedbacks[index] : ""}
                                 </div>
                             </div>
                         );
