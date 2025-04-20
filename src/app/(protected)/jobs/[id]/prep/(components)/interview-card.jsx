@@ -132,7 +132,7 @@ export default function InterviewCard({ setShowPopup, subcategoryDetail }) {
             <div className="absolute w-4/5 h-4/5 bg-white rounded-lg px-8 py-8 flex flex-col" onClick={()=>{}}>
                 <div className="overflow-y-scroll flex-1">
                     <div className="text-2xl font-bold text-center">{categoryName}: {subcategoryName}</div>
-                    { status === "not-attempted" && !isLoading &&
+                    { status === "not-attempted" && !isLoading && (
                         <div className="w-full h-full text-dip-blk/80 text-center rounded-lg py-5 mt-3">
                             <div className="text-xl font-bold mb-2">Not Attempted Yet</div>
                             <div className="mb-2 text-sm w-1/2 mx-auto italic">Speak to answer the questions given to you on this topic.</div>

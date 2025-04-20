@@ -480,8 +480,8 @@ const VideoPage = ({ setStartInterview }) => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )
+                    }
                     {questions.map((question, index) => {
                         return (
                             <div
