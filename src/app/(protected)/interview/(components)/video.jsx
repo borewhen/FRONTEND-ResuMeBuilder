@@ -255,6 +255,7 @@ const VideoPage = ({ setStartInterview }) => {
     };
 
     const handleClickLeft = async () => {
+        setIsReviewing(true);
         if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
@@ -274,9 +275,11 @@ const VideoPage = ({ setStartInterview }) => {
             setEyeContactSummary(res.data.eye_contact_feedback);
         }
         setShowSummary(true);
+        setIsReviewing(false);
     };
 
     const handleClickRight = async () => {
+        setIsReviewing(true);
         if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
@@ -296,6 +299,7 @@ const VideoPage = ({ setStartInterview }) => {
             setEyeContactSummary(res.data.eye_contact_feedback);
         }
         setShowSummary(true);
+        setIsReviewing(false);
     };
 
     const handleNewInterview = () => {
@@ -419,23 +423,31 @@ const VideoPage = ({ setStartInterview }) => {
                 <div className="sticky top-0 w-full h-14 flex items-center justify-end bg-white shadow-sm z-10 px-6 mb-4">
                     <div className="flex items-center">
                         <span className="text-gray-600 mr-3 font-medium">Done practicing?</span>
+                        
                         <button 
                             className="bg-dip-purple rounded-full text-white px-4 py-2.5 font-medium transition-colors duration-200 hover:bg-dip-lightpurple relative"
                             onClick={() => {
-                                setIsReviewing(true);
-                                handleClickRight();
+                                // setIsReviewing(true);
+                                // handleClickRight();
                                 setTimeout(() => setIsReviewing(false), 3000);
                             }}
                         >
-                            <div
-                                className="text-dip-darkpurple pr-10 py-1"
-                                onClick={handleClickLeft}
-                            >
-                                .
-                            </div>
-                            <div className="text-dip-darkpurple pr-10 py-1" onClick={handleClickRight}>
-                                .
-                            </div>
+                            <div 
+                                className="absolute inset-y-0 left-0 w-1/3 h-full opacity-0 cursor-pointer" 
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent triggering the main button
+                                    handleClickLeft();
+                                }}
+                            />
+                            
+                            <div 
+                                className="absolute inset-y-0 right-0 w-1/3 h-full opacity-0 cursor-pointer" 
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent triggering the main button
+                                    handleClickRight();
+                                }}
+                            />
+                            
                             {isReviewing ? (
                                 <>
                                     <span className="opacity-0">Review</span>
@@ -482,7 +494,7 @@ const VideoPage = ({ setStartInterview }) => {
                             </div>
                         )
                     }
-                    {questions.map((question, index) => {
+                    {questions && questions.map((question, index) => {
                         return (
                             <div
                                 className="mb-6 w-full bg-purple-100 px-7 py-5 rounded-lg shadow-sm border border-purple-200"
@@ -490,11 +502,11 @@ const VideoPage = ({ setStartInterview }) => {
                             >
                                 <div className="font-medium mb-3">Q: {question}</div>
                                 <div className="pl-5 border-l-2 border-purple-300 text-gray-700 mt-2">
-                                    A: {index < answers.length ? answers[index] : ""}
+                                    A: {answers && index < answers.length ? answers[index] : ""}
                                 </div>
                                 <div className="">
                                     F:{" "}
-                                    {index < feedbacks.length
+                                    {feedbacks && index < feedbacks.length
                                         ? feedbacks[index]
                                         : ""}
                                 </div>
