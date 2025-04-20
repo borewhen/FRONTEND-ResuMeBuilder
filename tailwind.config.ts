@@ -1,31 +1,24 @@
 import type { Config } from "tailwindcss";
-import flowbite from 'flowbite-react/tailwind';
+import flowbite from "flowbite-react/tailwind";
 
 export default {
     darkMode: ["class"],
-    content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-	flowbite.content(),
-  ],
-  theme: {
-  	extend: {
-  		fontFamily: {
-  			sans: [
-  				'Open Sans',
-  				'Arial',
-  				'Helvetica',
-  				'sans-serif'
-  			]
-  		},
-  		colors: {
-  			dip: {
-                  /* Original brown color
+    content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", flowbite.content()],
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ["Open Sans", "Arial", "Helvetica", "sans-serif"],
+            },
+            colors: {
+                dip: {
+                    /* Original brown color
   				'20': '#F5F3EF',
   				'40': '#E5E0D5',
   				'60': '#D1CAB9',
   				'80': '#C0AC8F',
   				'100': '#877459',
                   */
+
                   '0' : '#000000',
                 '20': '#4a4a48', 
   				'40': '#7a7a77',

@@ -1,15 +1,15 @@
 import { useCompanyStore } from "@/store/useCompanyStore";
 import clsx from "clsx";
 import { useState, useRef, useEffect } from "react";
-import { TiMicrophoneOutline } from "react-icons/ti"
+import { TiMicrophoneOutline } from "react-icons/ti";
 import interviewsessionapi from "@/lib/app/mock_interview/api/session";
 import summaryapi from "@/lib/app/mock_interview/api/summary";
 import { get } from "http";
 import MoonLoader from "react-spinners/MoonLoader";
 
-export default function InterviewCard({setShowPopup, subcategoryDetail}) {
-    const {subcategoryId, categoryName, subcategoryName} = subcategoryDetail;
-    const {companyName, positionName} = useCompanyStore();
+export default function InterviewCard({ setShowPopup, subcategoryDetail }) {
+    const { subcategoryId, categoryName, subcategoryName } = subcategoryDetail;
+    const { companyName, positionName } = useCompanyStore();
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
     const [feedbacks, setFeedbacks] = useState([]);
@@ -25,40 +25,51 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
         setQuestions(questions);
         setAnswers(answers);
         setFeedbacks(feedbacks);
-        setStatus(status == true? questions.length == 0? "not-attempted" : "in-progress" : "completed");
-    }
+        setStatus(
+            status == true
+                ? questions.length == 0
+                    ? "not-attempted"
+                    : "in-progress"
+                : "completed"
+        );
+    };
 
     const handleStartInterview = async () => {
         setIsLoading(true);
-        await interviewsessionapi.post(subcategoryId)
-        .then( async () => {
-            const response = await interviewsessionapi.get(subcategoryId);
-            const {questions, answers, feedbacks, status} = response;
-            setDetails(questions, answers, feedbacks, status);
-        })
-        .catch((error) => console.error("Error starting interview:", error))
-        .finally(() => setIsLoading(false));
-    }
+        await interviewsessionapi
+            .post(subcategoryId)
+            .then(async () => {
+                const response = await interviewsessionapi.get(subcategoryId);
+                const { questions, answers, feedbacks, status } = response;
+                setDetails(questions, answers, feedbacks, status);
+            })
+            .catch((error) => console.error("Error starting interview:", error))
+            .finally(() => setIsLoading(false));
+    };
 
     const handleSubmit = async () => {
         setTranscript("");
         setIsLoading(true);
-        await interviewsessionapi.put(subcategoryId, {answer: transcript})
-        .then( async () => {
-            const response = await interviewsessionapi.get(subcategoryId);
-            const {questions, answers, feedbacks, status} = response;
-            setDetails(questions, answers, feedbacks, status);
-        })
-        .catch((error) => console.error("Error submitting answer:", error))
-        .finally(() => {
-            setIsLoading(false);
-            setIsListening(false);
-        });
-    }
+        await interviewsessionapi
+            .put(subcategoryId, { answer: transcript })
+            .then(async () => {
+                const response = await interviewsessionapi.get(subcategoryId);
+                const { questions, answers, feedbacks, status } = response;
+                setDetails(questions, answers, feedbacks, status);
+            })
+            .catch((error) => console.error("Error submitting answer:", error))
+            .finally(() => {
+                setIsLoading(false);
+                setIsListening(false);
+            });
+    };
 
     useEffect(() => {
         const initSpeechRecognition = async () => {
-            if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
+            if (
+                typeof window !== "undefined" &&
+                "webkitSpeechRecognition" in window
+            ) {
                 const recognition = new window.webkitSpeechRecognition();
                 recognition.continuous = true;
                 recognition.interimResults = true;
@@ -72,16 +83,17 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                     setTranscript(text);
                 };
 
-                recognition.onerror = (event) => console.error("Speech recognition error:", event);
+                recognition.onerror = (event) =>
+                    console.error("Speech recognition error:", event);
                 recognitionRef.current = recognition;
             }
         };
 
         const getSubcategoryDetails = async () => {
             const response = await interviewsessionapi.get(subcategoryId);
-            const {questions, answers, feedbacks, status} = response;
+            const { questions, answers, feedbacks, status } = response;
             setDetails(questions, answers, feedbacks, status);
-        }
+        };
         initSpeechRecognition();
         getSubcategoryDetails();
     }, []);
@@ -89,11 +101,12 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
     useEffect(() => {
         const getSummary = async () => {
             setIsLoading(true);
-            const summary = (await summaryapi.subcategoryGet(subcategoryId)).summary;
+            const summary = (await summaryapi.subcategoryGet(subcategoryId))
+                .summary;
             setInterviewSummary(summary);
             setIsLoading(false);
-        }
-        if(status === "completed"){
+        };
+        if (status === "completed") {
             getSummary();
         }
     }, [status]);
@@ -113,41 +126,45 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
         }
     };
 
-
     return (
         <div className="absolute flex items-center justify-center w-full h-full top-0 left-0 scrollbar-hide">
             <div className="absolute w-full h-full top-0 left-0 bg-[#00000030] z-0" onClick={()=>setShowPopup(false)}></div>
             <div className="absolute w-4/5 h-4/5 bg-white rounded-lg px-8 py-8 flex flex-col" onClick={()=>{}}>
                 <div className="overflow-y-scroll flex-1">
                     <div className="text-2xl font-bold text-center">{categoryName}: {subcategoryName}</div>
-                    { status === "not-attempted" && !isLoading &&
+                    { status === "not-attempted" && !isLoading && (
                         <div className="w-full h-full text-dip-blk/80 text-center rounded-lg py-5 mt-3">
                             <div className="text-xl font-bold mb-2">Not Attempted Yet</div>
                             <div className="mb-2 text-sm w-1/2 mx-auto italic">Speak to answer the questions given to you on this topic.</div>
                             <button className="rounded-full border-dip-blk/80 border-[2px] px-4 py-1" onClick={() => {handleStartInterview()}}>Begin</button>
                         </div>
-                    }
-                    { isLoading && status === "not-attempted" && (
+                    )}
+                    {isLoading && status === "not-attempted" && (
                         <div className="w-full h-full flex justify-center items-center">
                             <MoonLoader
-                            color="#030510"
-                            loading={true}
-                            aria-label="Loading Spinner"
-                            data-testid="loader"
+                                color="#030510"
+                                loading={true}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
                             />
                         </div>
-                    
-                        )
-                    }
+                    )}
                     <div className="flex flex-col flex-1">
                         <div className="flex-1 overflow-y-auto py-5">
                         {  status !== "not-attempted" &&
                             questions.map((bubble, index) => {
                                 return (
-                                    <div className="w-full rounded-lg px-4 py-2 mt-2 text-md text-center" key={index}>
-                                        <div><div className="font-bold italic">Question: </div><i>{bubble}</i></div>
-                                        {answers[index]? <div className="mt-8"><div className="font-bold">Your Response: </div>{answers[index]}</div> : isLoading &&  <div className="mt-8">Assessing your response...</div>}
-                                        {feedbacks[index] && <div className="mt-8"><div className="font-bold">Feedback: </div>{feedbacks[index]}</div>}
+                                    <div
+                                        className="mb-6 w-full bg-purple-100 px-7 py-5 rounded-lg shadow-sm border border-purple-200"
+                                        key={index}
+                                    >
+                                        <div className="font-medium mb-3">Question: {bubble}</div>
+                                        <div className="pl-5 pr-8 py-3 border-l-2 border-purple-300 text-gray-700 mt-2 rounded-md">
+                                            <strong>Answer:</strong> {answers[index] || (isLoading ? "Assessing your response..." : "")}
+                                        </div>
+                                        <div className="px-5 pr-8 py-5 border-l-2 bg-dip-purple/10 border-dip-purple text-gray-700 mt-2 mb-5 rounded-md">
+                                            <strong>Feedback:</strong> {feedbacks[index] || ""}
+                                        </div>
                                     </div>
                                 )
                             })
@@ -166,13 +183,17 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                             <div className="flex items-center mt-4">
                               <div className="mr-4">
                                 <TiMicrophoneOutline
-                                  className={clsx(
-                                    !isListening
-                                      ? "bg-gradient-to-r from-[#6CA0D5] to-[#7764D5]"
-                                      : "bg-gradient-to-r from-[#A788E3] to-[#C24FC2]",
-                                    "h-16 w-16 p-4 rounded-full hover:scale-105 transition-all text-white shadow-lg"
-                                  )}
-                                  onClick={isListening ? stopListening : startListening}
+                                    className={clsx(
+                                        !isListening
+                                            ? "bg-gradient-to-r from-[#6CA0D5] to-[#7764D5]"
+                                            : "bg-gradient-to-r from-[#A788E3] to-[#C24FC2]",
+                                        "h-16 w-16 p-4 rounded-full hover:scale-105 transition-all text-white shadow-lg"
+                                    )}
+                                    onClick={
+                                        isListening
+                                            ? stopListening
+                                            : startListening
+                                    }
                                 />
                               </div>
                     
@@ -195,5 +216,5 @@ export default function InterviewCard({setShowPopup, subcategoryDetail}) {
                     }
             </div>
         </div>
-    )
+    );
 }

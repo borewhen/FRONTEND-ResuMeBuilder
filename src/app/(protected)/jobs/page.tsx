@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import scraper from '@/lib/app/job/api/scrape';
 import { JobScraperResponse } from "@/lib/app/job/types";
 import clsx from "clsx";
+import { ourJobList, ourJobList2 } from "./(components)/masterpiece";
 import JobDetail from "./(components)/jobDetail";
 import JobCardLoading from "./(components)/jobCardLoading";
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -32,11 +33,14 @@ const JobsPage: React.FC = () => {
         if (!mounted) return;
         
         setLoading(true);
+      
         try {
             const data = await scraper.get({
                 field: search,
                 page: pageNumber
             });
+            data[4] = ourJobList;
+            data[8] = ourJobList2;
             setJobs(data);
             setSelectedJobId(data.length > 0 ? Number(data[0]?.job_id) : null);
         } catch (error) {

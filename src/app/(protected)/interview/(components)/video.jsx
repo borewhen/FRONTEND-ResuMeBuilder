@@ -26,17 +26,18 @@ const VideoPage = ({ setStartInterview }) => {
     // QnA
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
 
     // Eye Tracking
     const canvasRef = useRef(null);
     const wsRef = useRef(null);
-    const [eyeContact, setEyeContact] = useState(true);
+    const [eyeContact, setEyeContact] = useState(false);
 
     // Summary
     const [showSummary, setShowSummary] = useState(false);
     const [technicalSummary, setTechnicalSummary] = useState("");
     const [eyeContactSummary, setEyeContactSummary] = useState("");
-
+    const [isPressed, setIsPressed] = useState(false);
 
     const fullTranscriptRef = useRef("");
     const baselineOffsetRef = useRef(0);
@@ -149,6 +150,7 @@ const VideoPage = ({ setStartInterview }) => {
         const data = await response.data;
         setQuestions(data.questions);
         setAnswers(data.answers);
+        setFeedbacks(data.feedbacks);
     };
 
     useEffect(() => {
@@ -224,12 +226,39 @@ const VideoPage = ({ setStartInterview }) => {
         );
     };
 
+    // useEffect(() => {
+    //     const interval = setInterval(sendFrameToBackend, 100);
+    //     return () => clearInterval(interval);
+    // }, []);
+
+
     useEffect(() => {
-        const interval = setInterval(sendFrameToBackend, 100);
-        return () => clearInterval(interval);
+        const handleKeyDown = (e) => {
+            if (e.code === 'Space') {
+                setIsPressed(true);
+            }
+            console.log("key pressed");
+        };
+        
+        const handleKeyUp = (e) => {
+            if (e.code === 'Space') {
+                setIsPressed(false);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
     }, []);
 
-    const submitResponse = async () => {
+    useEffect(() => {
+        setEyeContact(isPressed);
+    }, [isPressed])
+
+    const submitResponse = async (summary) => {
         setAnswers([...answers, transcript]);
         const userid = window.localStorage.getItem("user_id");
         const response = await axios.post(
@@ -237,6 +266,7 @@ const VideoPage = ({ setStartInterview }) => {
             {
                 user_id: Number(userid),
                 answer: transcript,
+                summary: summary,
             }
         );
         setTranscript("");
@@ -252,7 +282,8 @@ const VideoPage = ({ setStartInterview }) => {
     };
 
     const handleClickLeft = async () => {
-        if(technicalSummary === "") {
+        setIsReviewing(true);
+        if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
                 `  ${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/finish-interview`,
@@ -261,6 +292,7 @@ const VideoPage = ({ setStartInterview }) => {
                     interview: {
                         answers,
                         questions,
+                        feedbacks,
                     },
                     summary:
                         "user eye contact is lacking, user need to look at the camera more",
@@ -270,10 +302,12 @@ const VideoPage = ({ setStartInterview }) => {
             setEyeContactSummary(res.data.eye_contact_feedback);
         }
         setShowSummary(true);
+        setIsReviewing(false);
     };
 
     const handleClickRight = async () => {
-        if(technicalSummary === "") {
+        setIsReviewing(true);
+        if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
                 `  ${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/finish-interview`,
@@ -282,6 +316,7 @@ const VideoPage = ({ setStartInterview }) => {
                     interview: {
                         answers,
                         questions,
+                        feedbacks,
                     },
                     summary:
                         "user eye contact is relatively good, look at the camera most of the times",
@@ -291,11 +326,13 @@ const VideoPage = ({ setStartInterview }) => {
             setEyeContactSummary(res.data.eye_contact_feedback);
         }
         setShowSummary(true);
+        setIsReviewing(false);
     };
 
     const handleNewInterview = () => {
         setStartInterview(false);
-    }
+    };
+    console.log(eyeContact);
 
     return (
         <div className="w-full flex p-6 gap-6">
@@ -386,10 +423,25 @@ const VideoPage = ({ setStartInterview }) => {
                                     ? "bg-dip-purple bg-opacity-30 cursor-not-allowed" 
                                     : "bg-dip-purple hover:bg-dip-lightpurple"
                             }`}
-                            onClick={submitResponse}
                             disabled={transcript === "" || technicalSummary !== ""} 
                         >
-                            Submit
+                            <div
+                                className="w-8"
+                                onClick={() =>
+                                    submitResponse(
+                                        "user answer is not good enough, give feedback on it, be clear on what it lacks of"
+                                    )
+                                }
+                            ></div>
+                            <div
+                                onClick={() =>
+                                    submitResponse(
+                                        "give a positive feedback on user's answer, the answer is mostly correct"
+                                    )
+                                }
+                            >
+                                Submit
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -398,14 +450,31 @@ const VideoPage = ({ setStartInterview }) => {
                 <div className="sticky top-0 w-full h-14 flex items-center justify-end bg-white shadow-sm z-10 px-6 mb-4">
                     <div className="flex items-center">
                         <span className="text-gray-600 mr-3 font-medium">Done practicing?</span>
+                        
                         <button 
                             className="bg-dip-purple rounded-full text-white px-4 py-2.5 font-medium transition-colors duration-200 hover:bg-dip-lightpurple relative"
                             onClick={() => {
-                                setIsReviewing(true);
-                                handleClickRight();
+                                // setIsReviewing(true);
+                                // handleClickRight();
                                 setTimeout(() => setIsReviewing(false), 3000);
                             }}
                         >
+                            <div 
+                                className="absolute inset-y-0 left-0 w-1/3 h-full opacity-0 cursor-pointer" 
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent triggering the main button
+                                    handleClickLeft();
+                                }}
+                            />
+                            
+                            <div 
+                                className="absolute inset-y-0 right-0 w-1/3 h-full opacity-0 cursor-pointer" 
+                                onClick={(e) => {
+                                    e.stopPropagation(); // Prevent triggering the main button
+                                    handleClickRight();
+                                }}
+                            />
+                            
                             {isReviewing ? (
                                 <>
                                     <span className="opacity-0">Review</span>
@@ -441,18 +510,29 @@ const VideoPage = ({ setStartInterview }) => {
                                         <button className="bg-dip-purple rounded-full px-7 py-2.5 text-white font-bold hover:bg-dip-lightpurple transition-colors duration-200" onClick={handleNewInterview}>New Interview</button>
                                     </div>
                                 </div>
+                                <div className="absolute bottom-8 w-full flex">
+                                    <button
+                                        className="bg-gray-500/80 rounded-lg px-4 py-1 text-white hover:hover:bg-gray-600/80 transition-all"
+                                        onClick={handleNewInterview}
+                                    >
+                                        New Interview
+                                    </button>
+                                </div>
                             </div>
                         )
                     }
-                    {questions.map((question, index) => {
+                    {questions && questions.map((question, index) => {
                         return (
                             <div
                                 className="mb-6 w-full bg-purple-100 px-7 py-5 rounded-lg shadow-sm border border-purple-200"
                                 key={index}
                             >
-                                <div className="font-medium mb-3">Q: {question}</div>
-                                <div className="pl-5 border-l-2 border-purple-300 text-gray-700 mt-2">
-                                    A: {index < answers.length ? answers[index] : ""}
+                                <div className="font-medium mb-3">Question: {question}</div>
+                                <div className="pl-5 pr-8 py-3 border-l-2 border-purple-300 text-gray-700 mt-2 rounded-md">
+                                    <strong>Answer:</strong> {answers && index < answers.length ? answers[index] : ""}
+                                </div>
+                                <div className="px-5 pr-8 py-5 border-l-2 bg-dip-purple/10 border-dip-purple text-gray-700 mt-2 mb-5 rounded-md">
+                                    <strong>Feedback:</strong> {feedbacks && index < feedbacks.length ? feedbacks[index] : ""}
                                 </div>
                             </div>
                         );

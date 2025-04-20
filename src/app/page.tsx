@@ -29,23 +29,29 @@ export default function LandingPage() {
     });
 
     // Smoother opacity transitions with more overlap
-    /* Original opacity settings
-    const opacity1 = useTransform(smoothProgress, [0, 0.15, 0.25], [1, 1, 0]);
-    const opacity2 = useTransform(
-        smoothProgress,
-        [0.15, 0.25, 0.4, 0.5],
-        [0, 1, 1, 0]
-    );
-    const opacity3 = useTransform(
-        smoothProgress,
-        [0.4, 0.5, 0.65, 0.75],
-        [0, 1, 1, 0]
-    );
-    const opacity4 = useTransform(
-        smoothProgress,
-        [0.6, 0.75, 0.9, 1],
-        [0, 1, 1, 1]
-    ); */
+    /* 
+    
+    ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣤⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀ 
+⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀ 
+⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀ 
+⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀ 
+⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀ 
+⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀ 
+⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ 
+⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀ 
+⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀ 
+⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀ 
+⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀ 
+⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    
+    */
 
     const opacity1 = useTransform(smoothProgress, [0, 0.15, 0.25], [1, 1, 0]);
 
@@ -353,16 +359,6 @@ export default function LandingPage() {
                 style={{ opacity: opacity1, y: y1 }}
             >
                 <div className="max-w-4xl w-full text-center">
-                    {/* Logo */}
-                    {/* <div className="mb-12 flex justify-center">
-                        <img
-                            src="/logo-purple-text.svg"
-                            alt="uHired.ai Logo"
-                            className="w-60 h-30"
-                        />
-                    </div> */}
-
-                    {/* Main Slogan */}
                     <motion.h2
                         className="mb-12 flex justify-center"
                         initial={{ opacity: 0, y: 20 }}
@@ -374,15 +370,6 @@ export default function LandingPage() {
                             alt="uHired.ai Logo"
                         />
                     </motion.h2>
-                    {/* <motion.h2
-                        className="text-dip-blk text-5xl md:text-7xl font-bold mb-8 max-w-5xl mx-auto"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                    >
-                        Practice. Review. <br className="hidden sm:block" />
-                        Interview. Succeed.
-                    </motion.h2> */}
 
                     {/* Subheading */}
                     <motion.p
@@ -1044,8 +1031,8 @@ export default function LandingPage() {
                         >
                             <p className="text-dip-blk/90 text-lg italic mb-6">
                                 &quot;The job matching feature connected me with
-                                opportunities I wouldn&apos;t have found otherwise.
-                                Landed my dream job in weeks!&quot;
+                                opportunities I wouldn&apos;t have found
+                                otherwise. Landed my dream job in weeks!&quot;
                             </p>
                             <div className="flex items-center">
                                 <div>

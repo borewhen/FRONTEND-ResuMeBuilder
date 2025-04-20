@@ -1,12 +1,12 @@
 "use client";
 
-import React from 'react';
+import React from "react";
 import * as pdfjs from "pdfjs-dist";
 import "pdfjs-dist/build/pdf.worker.entry";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import { FaCloudUploadAlt, FaRegTrashAlt } from "react-icons/fa";
-import VideoPage from '@/app/(protected)/interview/(components)/video';
-import axios from 'axios';
+import VideoPage from "@/app/(protected)/interview/(components)/video";
+import axios from "axios";
 
 const UploadResumePage = () => {
     const [startInterview, setStartInterview] = useState(false);
@@ -22,32 +22,52 @@ const UploadResumePage = () => {
 
     useEffect(() => {
         setUserid(window.localStorage.getItem('user_id'));
+        const getQuestion = async () => {
+            const userid = window.localStorage.getItem("user_id");
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/get-question`,
+                {
+                    user_id: Number(userid),
+                }
+            );
+            const data = await response.data.questions;
+            setStartInterview(data.length > 0);
+            setIsLoading(false);
+        };
+        getQuestion();
+        return () => {
+            setFile(null);
+            setFileUrl(null);
+            setFileName(null);
+            setShowFile(false);
+        };
     }, []);
+
 
     useEffect(() => {
         if (fileUrl && showFile) {
-          const renderPDF = async () => {
-            const loadingTask = pdfjs.getDocument(fileUrl);
-            const pdf = await loadingTask.promise;
-            const page = await pdf.getPage(1);
-    
-            const canvas = canvasRef.current;
-            const context = canvas.getContext("2d");
-    
-            const viewport = page.getViewport({ scale: 0.9});
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-    
-            const renderContext = {
-              canvasContext: context,
-              viewport: viewport,
+            const renderPDF = async () => {
+                const loadingTask = pdfjs.getDocument(fileUrl);
+                const pdf = await loadingTask.promise;
+                const page = await pdf.getPage(1);
+
+                const canvas = canvasRef.current;
+                const context = canvas.getContext("2d");
+
+                const viewport = page.getViewport({ scale: 0.9 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport,
+                };
+                await page.render(renderContext).promise;
             };
-            await page.render(renderContext).promise;
-          };
-    
-          renderPDF();
+
+            renderPDF();
         }
-      }, [fileUrl, showFile]);
+    }, [fileUrl, showFile]);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
@@ -91,7 +111,7 @@ const UploadResumePage = () => {
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
-    }
+    };
 
     return (
         isLoading ? 
@@ -118,8 +138,8 @@ const UploadResumePage = () => {
                       />
                       {
                           showFile &&
-                          <div className='fixed w-screen h-screen bg-black bg-opacity-30 top-0 left-0 mx-auto flex justify-center items-center' onClick={()=>setShowFile(false)}>
-                              <canvas ref={canvasRef} className="border rounded-lg shadow-md mx-auto overflow-scroll" />
+                          <div className='fixed w-screen h-screen bg-black bg-opacity-30 top-0 left-0 mx-auto flex justify-center items-center z-10' onClick={()=>setShowFile(false)}>
+                              <canvas ref={canvasRef} className="border rounded-lg shadow-md mx-auto overflow-scroll z-20" />
                           </div>
                           
                       }
@@ -168,7 +188,7 @@ const UploadResumePage = () => {
             }
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default UploadResumePage;
