@@ -58,7 +58,9 @@ const CourseDetail: FunctionComponent<Props> = () => {
 
     const unit = course?.units[unitIndex];
     const chapter = unit?.chapters[chapterIndex];
-    const currentChapterId = chapter?.chapter_id ? String(chapter.chapter_id) : null;
+    const currentChapterId = chapter?.chapter_id
+        ? String(chapter.chapter_id)
+        : null;
 
     if (loading) {
         return (

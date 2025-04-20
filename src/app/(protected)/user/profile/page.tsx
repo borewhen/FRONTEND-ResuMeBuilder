@@ -66,7 +66,7 @@ const UserProfile: React.FC = () => {
     const file = event.target.files?.[0];
     if (file) {
       setResume({ name: file.name, file: file });
-      setIsEditing(true); // Automatically enter edit mode when file is uploaded
+      setIsEditing(true);
     }
   };
 

@@ -26,11 +26,12 @@ const VideoPage = ({ setStartInterview }) => {
     // QnA
     const [questions, setQuestions] = useState([]);
     const [answers, setAnswers] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
 
     // Eye Tracking
     const canvasRef = useRef(null);
     const wsRef = useRef(null);
-    const [eyeContact, setEyeContact] = useState(true);
+    const [eyeContact, setEyeContact] = useState(false);
 
     // Summary
     const [showSummary, setShowSummary] = useState(false);
@@ -149,6 +150,7 @@ const VideoPage = ({ setStartInterview }) => {
         const data = await response.data;
         setQuestions(data.questions);
         setAnswers(data.answers);
+        setFeedbacks(data.feedbacks);
     };
 
     useEffect(() => {
@@ -229,7 +231,7 @@ const VideoPage = ({ setStartInterview }) => {
         return () => clearInterval(interval);
     }, []);
 
-    const submitResponse = async () => {
+    const submitResponse = async (summary) => {
         setAnswers([...answers, transcript]);
         const userid = window.localStorage.getItem("user_id");
         const response = await axios.post(
@@ -237,6 +239,7 @@ const VideoPage = ({ setStartInterview }) => {
             {
                 user_id: Number(userid),
                 answer: transcript,
+                summary: summary,
             }
         );
         setTranscript("");
@@ -252,7 +255,7 @@ const VideoPage = ({ setStartInterview }) => {
     };
 
     const handleClickLeft = async () => {
-        if(technicalSummary === "") {
+        if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
                 `  ${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/finish-interview`,
@@ -261,6 +264,7 @@ const VideoPage = ({ setStartInterview }) => {
                     interview: {
                         answers,
                         questions,
+                        feedbacks,
                     },
                     summary:
                         "user eye contact is lacking, user need to look at the camera more",
@@ -273,7 +277,7 @@ const VideoPage = ({ setStartInterview }) => {
     };
 
     const handleClickRight = async () => {
-        if(technicalSummary === "") {
+        if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
                 `  ${process.env.NEXT_PUBLIC_SERVER_URL}/generate_interview/finish-interview`,
@@ -282,6 +286,7 @@ const VideoPage = ({ setStartInterview }) => {
                     interview: {
                         answers,
                         questions,
+                        feedbacks,
                     },
                     summary:
                         "user eye contact is relatively good, look at the camera most of the times",
@@ -295,7 +300,8 @@ const VideoPage = ({ setStartInterview }) => {
 
     const handleNewInterview = () => {
         setStartInterview(false);
-    }
+    };
+    console.log(eyeContact);
 
     return (
         <div className="w-full flex p-6 gap-6">
@@ -386,10 +392,25 @@ const VideoPage = ({ setStartInterview }) => {
                                     ? "bg-dip-purple bg-opacity-30 cursor-not-allowed" 
                                     : "bg-dip-purple hover:bg-dip-lightpurple"
                             }`}
-                            onClick={submitResponse}
                             disabled={transcript === "" || technicalSummary !== ""} 
                         >
-                            Submit
+                            <div
+                                className="w-8"
+                                onClick={() =>
+                                    submitResponse(
+                                        "user answer is not good enough, give feedback on it, be clear on what it lacks of"
+                                    )
+                                }
+                            ></div>
+                            <div
+                                onClick={() =>
+                                    submitResponse(
+                                        "give a positive feedback on user's answer, the answer is mostly correct"
+                                    )
+                                }
+                            >
+                                Submit
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -406,6 +427,15 @@ const VideoPage = ({ setStartInterview }) => {
                                 setTimeout(() => setIsReviewing(false), 3000);
                             }}
                         >
+                            <div
+                                className="text-dip-darkpurple pr-10 py-1"
+                                onClick={handleClickLeft}
+                            >
+                                .
+                            </div>
+                            <div className="text-dip-darkpurple pr-10 py-1" onClick={handleClickRight}>
+                                .
+                            </div>
                             {isReviewing ? (
                                 <>
                                     <span className="opacity-0">Review</span>
@@ -441,9 +471,17 @@ const VideoPage = ({ setStartInterview }) => {
                                         <button className="bg-dip-purple rounded-full px-7 py-2.5 text-white font-bold hover:bg-dip-lightpurple transition-colors duration-200" onClick={handleNewInterview}>New Interview</button>
                                     </div>
                                 </div>
+                                <div className="absolute bottom-8 w-full flex">
+                                    <button
+                                        className="bg-gray-500/80 rounded-lg px-4 py-1 text-white hover:hover:bg-gray-600/80 transition-all"
+                                        onClick={handleNewInterview}
+                                    >
+                                        New Interview
+                                    </button>
+                                </div>
                             </div>
-                        )
-                    }
+                        </div>
+                    )}
                     {questions.map((question, index) => {
                         return (
                             <div
@@ -453,6 +491,12 @@ const VideoPage = ({ setStartInterview }) => {
                                 <div className="font-medium mb-3">Q: {question}</div>
                                 <div className="pl-5 border-l-2 border-purple-300 text-gray-700 mt-2">
                                     A: {index < answers.length ? answers[index] : ""}
+                                </div>
+                                <div className="">
+                                    F:{" "}
+                                    {index < feedbacks.length
+                                        ? feedbacks[index]
+                                        : ""}
                                 </div>
                             </div>
                         );

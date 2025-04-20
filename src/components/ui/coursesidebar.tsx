@@ -31,7 +31,7 @@ const CourseSidebar: FunctionComponent<CourseSidebarProps> = ({
                             <div key={unit.unit_id}>
                                 <Sidebar.Collapse
                                     label={`Section ${unitIndex + 1}: ${
-                                        unit.unit_name
+                                        unit.unit_name.length > 20? unit.unit_name.slice(0, 20) + "..." : unit.unit_name
                                     }`}
                                     className="font-bold text-md text-dip-purple border-b-2 py-3 rounded-none"
                                 >
