@@ -110,7 +110,7 @@ const UploadResumePage = () => {
         <></>
     ) : (
         <div className="w-full flex min-h-screen">
-            <div className="w-[80rem] ml-20 flex items-center justify-center flex-col">
+            <div className="w-full flex items-center justify-center flex-col px-6">
                 {startInterview ? (
                     <VideoPage setStartInterview={setStartInterview} />
                 ) : (

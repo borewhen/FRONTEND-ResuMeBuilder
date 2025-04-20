@@ -358,21 +358,13 @@ export default function LandingPage() {
             >
                 <div className="max-w-4xl w-full text-center">
                     {/* Logo */}
-                    <div className="mb-12">
-                        <h1 className="text-dip-blk text-4xl font-bold">
-                            UHired.ai
-                        </h1>
-                    </div>
-
-                    {/* Main Slogan */}
                     <motion.h2
                         className="text-dip-blk text-5xl md:text-7xl font-bold mb-8 max-w-5xl mx-auto"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        Practice. Review. <br className="hidden sm:block" />
-                        Interview. Succeed.
+                        <img src="/logo.svg" alt="Uhired logo" />
                     </motion.h2>
 
                     {/* Subheading */}
@@ -409,7 +401,7 @@ export default function LandingPage() {
                                 }}
                             />
                             <Button
-                                className="w-[140px] border border-4 border-dip-0 bg-dip-0 text-dip-100 hover:bg-dip-0/90 text-lg font-bold py-6 px-10 rounded-full transition-all"
+                                className="w-[140px] border border-4 border-dip-darkpurple bg-dip-darkpurple text-dip-100 hover:bg-dip-purple hover:border-dip-purple text-lg font-bold py-6 px-10 rounded-full transition-all"
                                 onMouseEnter={() => setHoverSignup(true)}
                                 onMouseLeave={() => setHoverSignup(false)}
                                 onClick={() => router.push("/register")}
@@ -434,7 +426,7 @@ export default function LandingPage() {
                             />
                             <Button
                                 variant="outline"
-                                className="w-[140px] border border-4 border-dip-0 text-dip-0/80 hover:bg-dip-0/10 px-10 py-6 text-lg font-bold rounded-full transition-all"
+                                className="w-[140px] border border-4 border-dip-darkpurple text-dip-0/80 hover:bg-dip-0/10 px-10 py-6 text-lg font-bold rounded-full transition-all hover:border-dip-purple"
                                 onMouseEnter={() => setHoverLogin(true)}
                                 onMouseLeave={() => setHoverLogin(false)}
                                 onClick={() => router.push("/login")}

@@ -196,7 +196,7 @@ const VideoPage = ({ setStartInterview }) => {
         if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
-                "  http://localhost:8000/generate_interview/finish-interview",
+                "http://localhost:8000/generate_interview/finish-interview",
                 {
                     user_id: Number(userid),
                     interview: {
@@ -218,12 +218,13 @@ const VideoPage = ({ setStartInterview }) => {
         if (technicalSummary === "") {
             const userid = window.localStorage.getItem("user_id");
             const res = await axios.post(
-                "  http://localhost:8000/generate_interview/finish-interview",
+                "http://localhost:8000/generate_interview/finish-interview",
                 {
                     user_id: Number(userid),
                     interview: {
                         answers,
                         questions,
+                        feedbacks,
                     },
                     summary:
                         "user eye contact is relatively good, look at the camera most of the times",
@@ -241,11 +242,11 @@ const VideoPage = ({ setStartInterview }) => {
 
     return (
         <div className="w-full flex">
-            <div className="w-1/2 h-[42.5rem] border-r">
-                <div className="w-full h-96 bg-dip-blk items-center justify-center">
+            <div className="w-1/2 h-[42.5rem] pr-6">
+                <div className="w-full h-96 items-center justify-center rounded-lg">
                     <video
                         ref={videoRef}
-                        className="w-full h-full transform scale-x-[-1]"
+                        className="w-full h-full transform scale-x-[-1] object-cover rounded-lg"
                         autoPlay
                         playsInline
                     ></video>
@@ -292,30 +293,30 @@ const VideoPage = ({ setStartInterview }) => {
                         )}
                     </div>
                 </div>
-                <div className="mt-2 px-2 w-full">
-                    <div className="font-bold">Response</div>
-                    <div className="w-full h-44 overflow-scroll">
+                <div className="px-2 w-full">
+                    <div className="font-bold text-lg mt-6 mb-2">
+                        🧾 Your Response
+                    </div>
+                    <div className="w-full h-44 overflow-auto rounded-lg border border-gray-200 p-4 bg-white shadow-inner scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
                         {transcript}
                     </div>
-                    <div className="w-full flex justify-end mt-2">
+                    <div className="w-full flex justify-end mt-4">
                         <button
                             className={clsx(
-                                "bg-dip-purple  px-6 py-1 rounded-lg mx-2 text-white",
-                                micOn
-                                    ? "bg-opacity-30"
-                                    : "hover:bg-dip-lightpurple"
+                                "bg-gray-500/80 px-6 py-1 rounded-lg mx-2 text-white transition-all",
+                                micOn ? "bg-opacity-30" : "hover:bg-gray-600/80"
                             )}
                             onClick={() => setTranscript("")}
                             disabled={micOn}
                         >
-                            Restart
+                            Clear Response
                         </button>
                         <button
                             className={clsx(
-                                "bg-dip-purple py-1 rounded-lg mx-2 text-white flex pr-8",
+                                "bg-dip-darkpurple py-1 rounded-lg mx-2 text-white flex pr-8",
                                 transcript == "" || technicalSummary !== ""
                                     ? "bg-opacity-30"
-                                    : "hover:bg-dip-lightpurple"
+                                    : "hover:bg-dip-purple"
                             )}
                         >
                             <div
@@ -339,21 +340,24 @@ const VideoPage = ({ setStartInterview }) => {
                     </div>
                 </div>
             </div>
-            <div className="w-1/2 max-h-[40rem] overflow-y-scroll">
-                <div className="absolute w-[40rem] h-12 flex items-center justify-end bg-white shadow-md">
+            <div className="w-1/2 max-h-[40rem] overflow-y-scroll rounded-md border">
+                <div className="h-12 flex justify-between items-center bg-[#F9F9F9] shadow-md">
+                    <div className="font-bold ml-4 text-lg">
+                        ⭐ AI Interview
+                    </div>
                     <button
                         className={clsx(
-                            "bg-dip-purple rounded-lg mx-2 text-white flex w-32 hover:bg-dip-lightpurple"
+                            "bg-dip-darkpurple rounded-lg mx-2 text-white flex w-32 hover:bg-dip-darkpurple"
                         )}
                     >
                         <div
-                            className="w-1/2 text-dip-purple px-[0.8rem] py-1"
+                            className="text-dip-darkpurple pr-10 py-1"
                             onClick={handleClickLeft}
                         >
                             .
                         </div>
-                        <div className="pr-16 pt-1" onClick={handleClickRight}>
-                            Summary
+                        <div className="pr-8 pt-1" onClick={handleClickRight}>
+                            Finish
                         </div>
                     </button>
                 </div>
@@ -381,13 +385,7 @@ const VideoPage = ({ setStartInterview }) => {
                                 </div>
                                 <div className="absolute bottom-8 w-full flex">
                                     <button
-                                        className="bg-dip-purple rounded-lg px-4 py-1 text-white hover:bg-dip-lightpurple mr-4"
-                                        onClick={() => setShowSummary(false)}
-                                    >
-                                        Back
-                                    </button>
-                                    <button
-                                        className="bg-dip-purple rounded-lg px-4 py-1 text-white hover:bg-dip-lightpurple"
+                                        className="bg-gray-500/80 rounded-lg px-4 py-1 text-white hover:hover:bg-gray-600/80 transition-all"
                                         onClick={handleNewInterview}
                                     >
                                         New Interview
@@ -399,7 +397,7 @@ const VideoPage = ({ setStartInterview }) => {
                     {questions.map((question, index) => {
                         return (
                             <div
-                                className="mt-4 w-full bg-purple-300 px-4 py-2 rounded-md"
+                                className="mt-4 w-full bg-purple-100 px-4 py-2 rounded-md"
                                 key={index}
                             >
                                 <div className="">Q: {question}</div>

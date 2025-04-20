@@ -13,16 +13,20 @@ interface Props {}
 
 const CourseDetail: FunctionComponent<Props> = () => {
     const { slug } = useParams();
-    const [courseId, unitIndexParam, chapterIndexParam] = Array.isArray(slug) ? slug : [];
+    const [courseId, unitIndexParam, chapterIndexParam] = Array.isArray(slug)
+        ? slug
+        : [];
     const [course, setCourse] = useState<Course | null>(null);
     // const [loading, setLoading] = useState(false);
     const [loading] = useState(false);
-    
+
     useEffect(() => {
         const fetchCourseDetail = async () => {
-            const courseDetail = await coursegetterapi.getById(parseInt(courseId));
-            setCourse(courseDetail)
-        }
+            const courseDetail = await coursegetterapi.getById(
+                parseInt(courseId)
+            );
+            setCourse(courseDetail);
+        };
 
         fetchCourseDetail();
     }, [courseId]);
@@ -35,7 +39,9 @@ const CourseDetail: FunctionComponent<Props> = () => {
 
     const unit = course?.units[unitIndex];
     const chapter = unit?.chapters[chapterIndex];
-    const currentChapterId = chapter?.chapter_id ? String(chapter.chapter_id) : null;
+    const currentChapterId = chapter?.chapter_id
+        ? String(chapter.chapter_id)
+        : null;
 
     if (loading) {
         return (
@@ -67,12 +73,6 @@ const CourseDetail: FunctionComponent<Props> = () => {
                     />
                 </div>
             </div>
-            
-            {currentChapterId && (
-                <div className="text-center mt-4 text-gray-500">
-                    Current Chapter ID: {currentChapterId}
-                </div>
-            )}
         </>
     );
 };

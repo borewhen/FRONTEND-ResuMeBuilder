@@ -3,9 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell } from "lucide-react"; // Icons from Lucide
 import Image from "next/image";
-import UserAvatar from "./avatar";
+import { useRouter } from "next/navigation";
 
 const navItems = [
     { name: "Jobs", href: "/jobs" },
@@ -15,6 +14,12 @@ const navItems = [
 
 export default function Navbar() {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const logout = () => {
+        localStorage.removeItem("access_token");
+        router.push("/");
+    };
 
     return (
         <nav className="flex items-center justify-between px-[80px] py-4 bg-white shadow-sm border border-b-[#A8A8A8]">
@@ -28,11 +33,8 @@ export default function Navbar() {
                     data-nimg="1"
                     className="dark:invert"
                     style={{ color: "transparent" }}
-                    src="/logo.svg"
+                    src="/logo.png"
                 />
-                <div className="text-[22px] font-semibold text-gray-900">
-                    <span className="text-gray-900">UHired.ai</span>
-                </div>
             </div>
 
             <div className="flex space-x-10">
@@ -55,11 +57,15 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center space-x-7">
-                <div className="relative">
-                    <Bell className="w-6 h-6 text-gray-500 cursor-pointer" />
-                    <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                <div className="flex flex-col items-center">
+                    <div className="text-sm text-gray-500">
+                        <button className="text-gray-500 hover:text-gray-700">
+                            <i>
+                                <u onClick={logout}>Logout?</u>
+                            </i>
+                        </button>
+                    </div>
                 </div>
-                <UserAvatar />
             </div>
         </nav>
     );
