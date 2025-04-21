@@ -441,7 +441,7 @@ export default function LandingPage() {
                     </motion.div>
                 </div>
 
-                <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 animate-bounce">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-8 w-8 text-dip-purple/80"
